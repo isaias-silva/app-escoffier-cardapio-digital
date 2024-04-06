@@ -4,6 +4,7 @@ import { RestaurantModule } from './modules/restaurant/restaurant.module';
 import { DisheModule } from './modules/dishe/dishe.module';
 import { MenuModule } from './modules/menu/menu.module';
 import { CategoryModule } from './modules/category/category.module';
+import { PrismaService } from './services/prisma/prisma.service';
 
 
 
@@ -13,7 +14,8 @@ import { CategoryModule } from './modules/category/category.module';
     DisheModule,
     MenuModule,
     CategoryModule],
+    
   controllers: [],
-  providers: [],
+  providers: [PrismaService],
 })
 export class AppModule { }
