@@ -29,12 +29,17 @@ model Category {
 }
 
 model Dishe {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  menuId String
-  name   String
-  price Float
-  image Bytes?
-  mode String
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  menuId      String
+  name        String
+  price       Float
+  image       Bytes?
+  mode        Mode     @default(MORNNING)
   description String
-  categories String[]
+  categories  String[]
+}
+
+enum Mode {
+  NIGHT
+  MORNNING
 }
