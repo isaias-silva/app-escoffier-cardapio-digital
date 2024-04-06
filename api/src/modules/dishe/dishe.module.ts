@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { DisheService } from '../../services/dishe/dishe.service';
-import { PrismaModule } from '../prisma/prisma.module';
+import { OrmModule } from '../orm/orm.module';
 
 
 @Module({
-    imports:[PrismaModule],
+    imports:[OrmModule],
     providers: [DisheService],
     exports: [DisheService]
 })

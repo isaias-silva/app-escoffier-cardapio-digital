@@ -3,15 +3,15 @@ import { PrismaClient } from '@prisma/client';
 
 @Global()
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit {
-  private logger = new Logger(PrismaService.name)
+export class OrmService extends PrismaClient implements OnModuleInit {
+  private logger = new Logger(OrmService.name)
   async onModuleInit() {
     try{
       await this.$connect();
-      this.logger.verbose('prisma connection successful')
+      this.logger.verbose('Orm connection successful')
 
     }catch(err){
-      this.logger.error('error in prisma connection:',err)
+      this.logger.error('error in Orm connection:',err)
     }
    
   }

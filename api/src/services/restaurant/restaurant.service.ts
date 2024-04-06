@@ -1,18 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { OrmService } from '../orm/orm.service';
 
 @Injectable()
 export class RestaurantService {
-    constructor(private prismaService:PrismaService){}
+    constructor(private OrmService:OrmService){}
 
-    async register(){}
+    async register(){
+
+    }
    
-    async validateMail(){}
+    async validateMail(){
+
+    }
     
-    async update(){}
+    async update(){
+
+    }
    
-    async updateProfile(){}
+    async updateProfile(){
+
+    }
    
+    async changePassword(){
+
+    }
+    async confirmChangePassword(){
+
+    }
+
     async delete(){}
 
     

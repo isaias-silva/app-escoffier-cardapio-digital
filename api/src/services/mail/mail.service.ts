@@ -6,8 +6,7 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport';
 @Injectable()
 export class MailService implements OnModuleInit {
     private logger = new Logger(MailService.name)
-
-    transport: nodemailer.Transporter<SMTPTransport.SentMessageInfo>
+    private transport: nodemailer.Transporter<SMTPTransport.SentMessageInfo>
 
     async onModuleInit() {
         try {
@@ -16,7 +15,7 @@ export class MailService implements OnModuleInit {
             const clientSecret = process.env.OAUTH_CLIENT_SECRET
             const refreshToken = process.env.OAUTH_REFRESH_TOKEN
 
-            if(!user || !clientId || !refreshToken || !clientSecret){
+            if (!user || !clientId || !refreshToken || !clientSecret) {
                 throw new Error('invalid credentials')
             }
             this.transport = nodemailer.createTransport({
@@ -39,4 +38,18 @@ export class MailService implements OnModuleInit {
 
 
     }
+
+    async sendHtmlMail(to: string, subject: string, htmlContent: string) {
+        try {
+            if (!this.transport) {
+                return
+            }
+            
+            await this.transport.sendMail({ to, subject, html: htmlContent })
+
+        } catch (err) {
+            this.logger.error(`error in send htmlContent mail: ${err}`)
+        }
+    }
+   
 }
