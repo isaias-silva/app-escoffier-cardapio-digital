@@ -6,6 +6,7 @@ import { MailModule } from '../mail/mail.module';
 import { OrmModule } from '../orm/orm.module';
 import { JwtModule } from '@nestjs/jwt';
 import { FileModule } from '../file/file.module';
+import { RestaurantController } from '../../controllers/restaurant/restaurant.controller';
 
 @Module({
     imports: [OrmModule,
@@ -18,6 +19,7 @@ import { FileModule } from '../file/file.module';
 
         })],
     providers: [RestaurantService],
-    exports: [RestaurantService]
+    exports: [RestaurantService],
+    controllers:[RestaurantController]
 })
 export class RestaurantModule { }

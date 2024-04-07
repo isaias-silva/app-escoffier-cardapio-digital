@@ -31,14 +31,15 @@ export class CacheService implements OnModuleInit {
     }
 
     async setCache(key: string, value: any) {
-        this.logger.debug('set cache data')
+        this.logger.debug(`set cache data [key=${key.substring(0,3)}*****]`)
         this.client.set(key, JSON.stringify(value))
     }
     async getCache(key: string) {
-        this.logger.debug('cache data')
+        this.logger.debug(`get cache data [key=${key.substring(0,3)}*****]`)
         return await this.client.get(key)
     }
     async clearCache(key: string) {
+        this.logger.debug(`clear cache data [key=${key.substring(0,3)}*****]`)
         this.client.del(key);
     }
 

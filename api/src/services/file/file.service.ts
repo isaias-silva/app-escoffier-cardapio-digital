@@ -21,7 +21,10 @@ export class FileService implements OnModuleInit {
         this.logger.debug(`write file ${name}`)
 
         fs.writeFile(resolve(this.pathTemp, name), data, (err) => {
-            this.logger.error(err)
+            if (err) {
+                this.logger.error(err)
+
+            }
         })
     }
 
@@ -29,7 +32,9 @@ export class FileService implements OnModuleInit {
         this.logger.debug(`delete file ${name}`)
 
         fs.unlink(resolve(this.pathTemp, name), (err) => {
-            this.logger.error(err)
+            if (err) {
+                this.logger.error(err)
+            }
         })
 
     }

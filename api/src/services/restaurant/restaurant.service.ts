@@ -1,6 +1,6 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { OrmService } from '../orm/orm.service';
-import { CreateRestaurantDto, LoginRestaurantDto, UpdateRestaurantDto } from '../../dtos/restaurant.dtos';
+import { ConfirmCodeRestaurantDto, CreateRestaurantDto, LoginRestaurantDto, UpdatePasswordRestaurantForgottenDto, UpdateRestaurantDto } from '../../dtos/restaurant.dtos';
 import { ResponsesEnum } from '../../enums/responses.enum';
 import * as bcrypt from 'bcrypt';
 import { MailService } from '../mail/mail.service';
@@ -23,19 +23,19 @@ export class RestaurantService {
 
     async login(dto: LoginRestaurantDto) {
         const { password, email } = dto
-        const exist = await this.model.findFirst({
+        const restaurantRegisterInDb = await this.model.findFirst({
             where: {
                 email
             }
         })
-        if (!exist) {
+        if (!restaurantRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
 
-        const correctPassword = bcrypt.compareSync(password, exist.password)
+        const correctPassword = bcrypt.compareSync(password, restaurantRegisterInDb.password)
 
         if (correctPassword) {
-            const token = await this.jwtService.signAsync({ id: exist.id })
+            const token = await this.jwtService.signAsync({ payload: { id: restaurantRegisterInDb.id } })
 
             return { message: ResponsesEnum.LOGIN_SUCCESSFUL, token }
         } else {
@@ -46,7 +46,7 @@ export class RestaurantService {
 
     async register(dto: CreateRestaurantDto) {
         const { name, email } = dto
-        const exist = await this.model.findFirst({
+        const restaurantRegisterInDb = await this.model.findFirst({
             where: {
                 OR: [
                     { name },
@@ -54,7 +54,7 @@ export class RestaurantService {
                 ]
             }
         })
-        if (exist) {
+        if (restaurantRegisterInDb) {
             throw new BadRequestException(ResponsesEnum.RESTAURANT_ALREADY_EXISTS)
         }
 
@@ -64,13 +64,13 @@ export class RestaurantService {
 
         const { id } = restaurant
 
-        const token = await this.jwtService.signAsync({ id })
+        const token = await this.jwtService.signAsync({ payload: { id } })
 
         this.mailService.makeHtmlMailAndSend('default',
             restaurant.name,
             restaurant.email,
-            SubjectMailEnum.WELLCOME,
-            MessageMailEnum.WELLCOME)
+            SubjectMailEnum.WELCOME,
+            MessageMailEnum.WELCOME)
 
         return { message: ResponsesEnum.REGISTERED_RESTAURANT, token }
 
@@ -82,6 +82,7 @@ export class RestaurantService {
         if (!restaurant) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
+
         let profile
         if (restaurant.profile) {
 
@@ -96,34 +97,39 @@ export class RestaurantService {
     }
 
     async update(id: string, dto: UpdateRestaurantDto) {
-        const exist = await this.model.findFirst({
+        const restaurantRegisterInDb = await this.model.findFirst({
             where: {
                 id
             }
         })
-        if (!exist) {
+        if (!restaurantRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
-        const { email, name, resume, password } = dto
-
-        const updatedInfo = { name, resume }
+        const { email, password } = dto
 
 
-        if (updatedInfo['name'] || updatedInfo['resume']) {
 
-            this.model.update({
+        const data = {
+            name: dto.name != restaurantRegisterInDb.name ? dto.name : undefined,
+            resume: dto.resume != restaurantRegisterInDb.resume ? dto.resume : undefined
+        }
+
+        if (data.name || data.resume) {
+            await this.model.update({
                 where: {
                     id
                 },
-                data: updatedInfo
-            })
+                data
 
+            })
         }
+
         if (password) {
             this.changePassword(id, password)
         }
-        if (email) {
-            this.changeMail(exist.id, email)
+
+        if (email && email != restaurantRegisterInDb.email) {
+            this.changeMail(restaurantRegisterInDb.id, email)
             return { message: ResponsesEnum.VERIFY_CODE_TO_NEW_EMAIL }
         }
 
@@ -133,14 +139,14 @@ export class RestaurantService {
     }
 
     async updateProfile(id: string, data: Buffer) {
-        const exist = await this.model.findFirst({
+        const restaurantRegisterInDb = await this.model.findFirst({
             where: { id }
         })
-        if (!exist) {
+        if (!restaurantRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
 
-        this.model.update({
+        await this.model.update({
             where: { id }, data: {
                 profile: data
             }
@@ -151,36 +157,37 @@ export class RestaurantService {
     }
 
     async changePassword(id: string, new_password: string) {
-        const exist = await this.model.findFirst({
+        const restaurantRegisterInDb = await this.model.findFirst({
             where: { id }
         })
-        if (!exist) {
+        if (!restaurantRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
         const password = bcrypt.hashSync(new_password, 10)
 
-        this.model.update({
+        await this.model.update({
             where: { id }, data: {
                 password
             }
         })
     }
 
-    async changePasswordForbidden(email: string, new_password: string) {
-        const exist = await this.model.findFirst({
+    async changePasswordForgotten(dto: UpdatePasswordRestaurantForgottenDto) {
+        const { new_password, email } = dto
+        const restaurantRegisterInDb = await this.model.findFirst({
             where: { email }
         })
-        if (!exist) {
+        if (!restaurantRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
         const code = Math.random().toString(27).replace(/0./g, 'ESC')
         const password = bcrypt.hashSync(new_password, 10)
 
-        this.cacheService.setCache(exist.id, { password, code: bcrypt.hashSync(code, 10) })
+        this.cacheService.setCache(restaurantRegisterInDb.id, { password, code: bcrypt.hashSync(code, 10) })
 
-        this.mailService.makeHtmlMailAndSend('default',
-            exist.name,
-            exist.email,
+        this.mailService.makeHtmlMailAndSend('code',
+            restaurantRegisterInDb.name,
+            restaurantRegisterInDb.email,
             SubjectMailEnum.CODE,
             MessageMailEnum.CODE_NEW_MAIL,
             code)
@@ -192,36 +199,39 @@ export class RestaurantService {
     }
 
     async changeMail(id: string, email: string) {
-        const exist = await this.model.findFirst({
-            where: { email }
+        const restaurantRegisterInDb = await this.model.findFirst({
+            where: { id }
         })
-        if (!exist) {
-            throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
+
+        if (!restaurantRegisterInDb) {
+            return
         }
+
         const code = Math.random().toString(27).replace(/0./g, 'ESC')
 
         this.cacheService.setCache(id, { email, code: bcrypt.hashSync(code, 10) })
 
         this.mailService.makeHtmlMailAndSend('code',
-            exist.name,
-            exist.email,
+            restaurantRegisterInDb.name,
+            email,
             SubjectMailEnum.CODE,
             MessageMailEnum.CODE_NEW_MAIL,
             code)
     }
 
-    async confirmChange(email: string, code: string) {
-        const exist = await this.model.findFirst({
+    async confirmChange(dto: ConfirmCodeRestaurantDto) {
+        const { code, email } = dto
+        const restaurantRegisterInDb = await this.model.findFirst({
             where: {
                 email
             }
         })
 
-        if (!exist) {
+        if (!restaurantRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
 
-        const changesString = await this.cacheService.getCache(exist.id)
+        const changesString = await this.cacheService.getCache(restaurantRegisterInDb.id)
 
         if (!changesString) {
             throw new BadRequestException(ResponsesEnum.NOT_HAVE_CHANGES)
@@ -231,10 +241,10 @@ export class RestaurantService {
 
         if (bcrypt.compareSync(code, objectChanges.code)) {
             if (objectChanges['email']) {
-                this.model.update({ where: { id: exist.id }, data: { email: objectChanges['email'] } })
+                await this.model.update({ where: { id: restaurantRegisterInDb.id }, data: { email: objectChanges['email'] } })
 
                 this.mailService.makeHtmlMailAndSend('default',
-                    exist.name,
+                    restaurantRegisterInDb.name,
                     objectChanges['email'],
                     SubjectMailEnum.NEW_MAIL,
                     MessageMailEnum.NEW_MAIL,)
@@ -243,16 +253,16 @@ export class RestaurantService {
 
             if (objectChanges['password']) {
 
-                this.model.update({ where: { id: exist.id }, data: { password: objectChanges['password'] } })
+                await this.model.update({ where: { id: restaurantRegisterInDb.id }, data: { password: objectChanges['password'] } })
 
                 this.mailService.makeHtmlMailAndSend('default',
-                    exist.name,
-                    exist.email,
+                    restaurantRegisterInDb.name,
+                    restaurantRegisterInDb.email,
                     SubjectMailEnum.NEW_PASSWORD,
                     MessageMailEnum.NEW_PASSWORD,)
 
             }
-            this.cacheService.clearCache(exist.id)
+            this.cacheService.clearCache(restaurantRegisterInDb.id)
 
             return { message: ResponsesEnum.UPDATED_INFO }
 
@@ -265,19 +275,20 @@ export class RestaurantService {
 
     async delete(id: string) {
 
-        const exist = await this.model.findFirst({
+        const restaurantRegisterInDb = await this.model.findFirst({
             where: {
                 id
             }
         })
 
-        if (!exist) {
+        if (!restaurantRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
 
-        this.model.delete({ where: { id } })
-
-        //deletes de todos cardapios
+        this.fileService.unlinkImage(`${id}.png`)
+        
+        await this.model.delete({ where: { id } })
+        
 
         return { message: ResponsesEnum.DELETED_RESTAURANT }
     }
