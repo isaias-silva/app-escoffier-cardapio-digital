@@ -7,13 +7,13 @@ export class CreateRestaurantDto {
     readonly email: string;
 
     @IsNotEmpty({ message: ResponsesEnum.NAME_REQUIRED })
-    @MaxLength(20, { message: ResponsesEnum.NAME_IS_LONG })
+    @MaxLength(30, { message: ResponsesEnum.NAME_IS_LONG })
     @MinLength(4, { message: ResponsesEnum.NAME_IS_SHORT })
     readonly name: string;
 
 
     @IsNotEmpty({ message: ResponsesEnum.PASSWORD_REQUIRED })
-    @MaxLength(10, { message: ResponsesEnum.PASSWORD_IS_LONG })
+    @MaxLength(20, { message: ResponsesEnum.PASSWORD_IS_LONG })
     @MinLength(4, { message: ResponsesEnum.PASSWORD_IS_SHORT })
     readonly password: string;
 }
@@ -26,7 +26,7 @@ export class LoginRestaurantDto {
 
 
     @IsNotEmpty({ message: ResponsesEnum.PASSWORD_REQUIRED })
-    @MaxLength(10, { message: ResponsesEnum.PASSWORD_IS_LONG })
+    @MaxLength(20, { message: ResponsesEnum.PASSWORD_IS_LONG })
     @MinLength(4, { message: ResponsesEnum.PASSWORD_IS_SHORT })
     readonly password: string;
 
@@ -40,7 +40,7 @@ export class UpdateRestaurantDto {
     readonly email?: string;
 
     @IsOptional()
-    @MaxLength(40, { message: ResponsesEnum.NAME_IS_LONG })
+    @MaxLength(30, { message: ResponsesEnum.NAME_IS_LONG })
     @MinLength(4, { message: ResponsesEnum.NAME_IS_SHORT })
     readonly name?: string;
 
@@ -50,7 +50,7 @@ export class UpdateRestaurantDto {
     readonly resume?: string;
 
     @IsOptional({ message: ResponsesEnum.PASSWORD_REQUIRED })
-    @MaxLength(10, { message: ResponsesEnum.PASSWORD_IS_LONG })
+    @MaxLength(20, { message: ResponsesEnum.PASSWORD_IS_LONG })
     @MinLength(4, { message: ResponsesEnum.PASSWORD_IS_SHORT })
     readonly password?: string;
 }
@@ -63,7 +63,7 @@ export class UpdatePasswordRestaurantForgottenDto {
 
 
     @IsNotEmpty({ message: ResponsesEnum.PASSWORD_REQUIRED })
-    @MaxLength(10, { message: ResponsesEnum.PASSWORD_IS_LONG })
+    @MaxLength(20, { message: ResponsesEnum.PASSWORD_IS_LONG })
     @MinLength(4, { message: ResponsesEnum.PASSWORD_IS_SHORT })
     readonly new_password: string;
 
