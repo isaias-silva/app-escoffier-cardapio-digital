@@ -6,7 +6,7 @@ import { Redis } from 'ioredis';
 @Injectable()
 export class CacheService implements OnModuleInit {
     private logger = new Logger(CacheService.name)
-     client: Redis
+    private client: Redis
     async onModuleInit() {
         try {
             const port = parseInt(process.env.REDIS_PORT)
@@ -23,13 +23,23 @@ export class CacheService implements OnModuleInit {
                 password,
             })
 
-        this.logger.verbose('redis connection successful')
+            this.logger.verbose('redis connection successful')
         } catch (err) {
             this.logger.error(`error in redis connection: ${err}`)
 
         }
     }
 
-
+    async setCache(key: string, value: any) {
+        this.logger.debug('set cache data')
+        this.client.set(key, JSON.stringify(value))
+    }
+    async getCache(key: string) {
+        this.logger.debug('cache data')
+        return await this.client.get(key)
+    }
+    async clearCache(key: string) {
+        this.client.del(key);
+    }
 
 }

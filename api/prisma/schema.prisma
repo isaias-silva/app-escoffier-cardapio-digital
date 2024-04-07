@@ -12,6 +12,7 @@ model Restaurant {
   email    String @unique
   name     String
   password String
+  resume   String?
   profile  Bytes?
 }
 

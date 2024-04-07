@@ -18,6 +18,20 @@ export class CreateRestaurantDto {
     readonly password: string;
 }
 
+ export class LoginRestaurantDto{
+    @IsEmail({}, { message: ResponsesEnum.INVALID_MAIL })
+    @IsNotEmpty({ message: ResponsesEnum.MAIL_REQUIRED })
+    readonly email: string;
+
+
+
+    @IsNotEmpty({ message: ResponsesEnum.PASSWORD_REQUIRED })
+    @Max(10, { message: ResponsesEnum.PASSWORD_IS_LONG })
+    @Min(4, { message: ResponsesEnum.PASSWORD_IS_SHORT })
+    readonly password: string;
+
+ }
+
 export class UpdateRestaurantDto {
 
     @IsOptional()
@@ -31,6 +45,11 @@ export class UpdateRestaurantDto {
     readonly name?: string;
     
     @IsOptional()
+    @Max(300, { message: ResponsesEnum.RESUME_IS_LONG })
+    @Min(10, { message: ResponsesEnum.RESUME_IS_SHORT })
+    readonly resume?: string;
+
+    @IsNotEmpty({ message: ResponsesEnum.PASSWORD_REQUIRED })
     @Max(10, { message: ResponsesEnum.PASSWORD_IS_LONG })
     @Min(4, { message: ResponsesEnum.PASSWORD_IS_SHORT })
     readonly password?: string;
