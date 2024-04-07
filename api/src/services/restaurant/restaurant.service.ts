@@ -6,13 +6,18 @@ import * as bcrypt from 'bcrypt';
 import { MailService } from '../mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
 import { CacheService } from '../cache/cache.service';
+import { FileService } from '../file/file.service';
+import { MessageMailEnum, SubjectMailEnum } from '../../enums/email.templates.enum';
 
 @Injectable()
 export class RestaurantService {
-    constructor(private OrmService: OrmService,
+    constructor(
+        private OrmService: OrmService,
         private mailService: MailService,
         private jwtService: JwtService,
-        private cacheService: CacheService) { }
+        private cacheService: CacheService,
+        private fileService: FileService
+    ) { }
 
     private model = this.OrmService.restaurant
 
@@ -55,23 +60,41 @@ export class RestaurantService {
 
         const password = bcrypt.hashSync(dto.password, 10)
 
-        const user = await this.model.create({ data: { name, email, password } })
-        const { id } = user
+        const restaurant = await this.model.create({ data: { name, email, password } })
+
+        const { id } = restaurant
 
         const token = await this.jwtService.signAsync({ id })
-        
+
+        this.mailService.makeHtmlMailAndSend('default',
+            restaurant.name,
+            restaurant.email,
+            SubjectMailEnum.WELLCOME,
+            MessageMailEnum.WELLCOME)
+
         return { message: ResponsesEnum.REGISTERED_RESTAURANT, token }
 
 
     }
 
-    async get(id: string) {
+    async get(id: string, host: string) {
         const restaurant = await this.model.findFirst({ where: { id } })
         if (!restaurant) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
-        return restaurant
+        let profile
+        if (restaurant.profile) {
+
+            profile = await this.fileService.getImage(`${id}.png`, host)
+
+            if (!profile) {
+                await this.fileService.writeImage(`${id}.png`, restaurant.profile)
+            }
+        }
+        const { name, resume, email } = restaurant
+        return { profile, name, resume, email }
     }
+
     async update(id: string, dto: UpdateRestaurantDto) {
         const exist = await this.model.findFirst({
             where: {
@@ -107,7 +130,6 @@ export class RestaurantService {
 
         return { message: ResponsesEnum.UPDATED_INFO }
 
-
     }
 
     async updateProfile(id: string, data: Buffer) {
@@ -123,6 +145,8 @@ export class RestaurantService {
                 profile: data
             }
         })
+        this.fileService.writeImage(`${id}.png`, data)
+
         return { message: ResponsesEnum.PROFILE_UPDATED }
     }
 
@@ -154,6 +178,14 @@ export class RestaurantService {
 
         this.cacheService.setCache(exist.id, { password, code: bcrypt.hashSync(code, 10) })
 
+        this.mailService.makeHtmlMailAndSend('default',
+            exist.name,
+            exist.email,
+            SubjectMailEnum.CODE,
+            MessageMailEnum.CODE_NEW_MAIL,
+            code)
+
+
         return {
             message: ResponsesEnum.VERIFY_CODE_TO_EMAIL
         }
@@ -169,8 +201,14 @@ export class RestaurantService {
         const code = Math.random().toString(27).replace(/0./g, 'ESC')
 
         this.cacheService.setCache(id, { email, code: bcrypt.hashSync(code, 10) })
-    }
 
+        this.mailService.makeHtmlMailAndSend('code',
+            exist.name,
+            exist.email,
+            SubjectMailEnum.CODE,
+            MessageMailEnum.CODE_NEW_MAIL,
+            code)
+    }
 
     async confirmChange(email: string, code: string) {
         const exist = await this.model.findFirst({
@@ -193,23 +231,37 @@ export class RestaurantService {
 
         if (bcrypt.compareSync(code, objectChanges.code)) {
             if (objectChanges['email']) {
-                await this.model.update({ where: { id: exist.id }, data: { email: objectChanges['email'] } })
+                this.model.update({ where: { id: exist.id }, data: { email: objectChanges['email'] } })
+
+                this.mailService.makeHtmlMailAndSend('default',
+                    exist.name,
+                    objectChanges['email'],
+                    SubjectMailEnum.NEW_MAIL,
+                    MessageMailEnum.NEW_MAIL,)
+
             }
 
             if (objectChanges['password']) {
-                await this.model.update({ where: { id: exist.id }, data: { password: objectChanges['password'] } })
+
+                this.model.update({ where: { id: exist.id }, data: { password: objectChanges['password'] } })
+
+                this.mailService.makeHtmlMailAndSend('default',
+                    exist.name,
+                    exist.email,
+                    SubjectMailEnum.NEW_PASSWORD,
+                    MessageMailEnum.NEW_PASSWORD,)
 
             }
             this.cacheService.clearCache(exist.id)
 
+            return { message: ResponsesEnum.UPDATED_INFO }
+
         } else {
+
             throw new ForbiddenException(ResponsesEnum.INVALID_CODE)
         }
 
     }
-
-
-
 
     async delete(id: string) {
 
@@ -224,9 +276,9 @@ export class RestaurantService {
         }
 
         this.model.delete({ where: { id } })
-    
+
         //deletes de todos cardapios
-    
+
         return { message: ResponsesEnum.DELETED_RESTAURANT }
     }
 
