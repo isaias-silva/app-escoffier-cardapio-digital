@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, ParseFilePipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { RestaurantService } from '../../services/restaurant/restaurant.service';
 import { ConfirmCodeRestaurantDto, CreateRestaurantDto, LoginRestaurantDto, UpdatePasswordRestaurantForgottenDto, UpdateRestaurantDto } from '../../dtos/restaurant.dtos';
 import { Request } from 'express';
@@ -16,6 +16,13 @@ export class RestaurantController {
     async getMyRestaurant(@Req() req: Request) {
 
         return await this.restaurantService.get(req['auth'].id, req['apiurl'])
+    }
+
+    @Get('/:id')
+
+    async getRestaurant(@Req() req: Request, @Param('id') id: string) {
+
+        return await this.restaurantService.get(id, req['apiurl'])
     }
 
     @Put('update')
@@ -72,7 +79,7 @@ export class RestaurantController {
     @Delete('cancel/account')
     @UseGuards(JwtGuard)
     async deleteRestaurantAccount(@Req() req: Request) {
-     
+
         return await this.restaurantService.delete(req['auth'].id)
     }
 

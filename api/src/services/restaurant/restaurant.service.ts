@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { OrmService } from '../orm/orm.service';
 import { ConfirmCodeRestaurantDto, CreateRestaurantDto, LoginRestaurantDto, UpdatePasswordRestaurantForgottenDto, UpdateRestaurantDto } from '../../dtos/restaurant.dtos';
 import { ResponsesEnum } from '../../enums/responses.enum';
@@ -8,15 +8,19 @@ import { JwtService } from '@nestjs/jwt';
 import { CacheService } from '../cache/cache.service';
 import { FileService } from '../file/file.service';
 import { MessageMailEnum, SubjectMailEnum } from '../../enums/email.templates.enum';
+import { MenuService } from '../menu/menu.service';
 
 @Injectable()
 export class RestaurantService {
     constructor(
         private OrmService: OrmService,
+
         private mailService: MailService,
         private jwtService: JwtService,
         private cacheService: CacheService,
-        private fileService: FileService
+        private fileService: FileService,
+
+        private menuService: MenuService
     ) { }
 
     private model = this.OrmService.restaurant
@@ -93,8 +97,9 @@ export class RestaurantService {
             }
         }
         const { name, resume, email } = restaurant
-        return { profile, name, resume, email }
+        return { profile, name, resume, email, id }
     }
+
 
     async update(id: string, dto: UpdateRestaurantDto) {
         const restaurantRegisterInDb = await this.model.findFirst({
@@ -105,13 +110,26 @@ export class RestaurantService {
         if (!restaurantRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
-        const { email, password } = dto
+
+        const { email, password, name, resume } = dto
 
 
+        const infosInUse = await this.model.findFirst({
+            where: {
+                OR: [
+                    { name },
+                    { email }
+                ]
+            }
+        })
 
+        if(infosInUse){
+            throw new BadRequestException(ResponsesEnum.EMAIL_OR_NAME_ALREADY_EXISTS)
+        }
+        
         const data = {
-            name: dto.name != restaurantRegisterInDb.name ? dto.name : undefined,
-            resume: dto.resume != restaurantRegisterInDb.resume ? dto.resume : undefined
+            name: name != restaurantRegisterInDb.name ? dto.name : undefined,
+            resume: resume != restaurantRegisterInDb.resume ? dto.resume : undefined
         }
 
         if (data.name || data.resume) {
@@ -286,9 +304,10 @@ export class RestaurantService {
         }
 
         this.fileService.unlinkImage(`${id}.png`)
-        
+
         await this.model.delete({ where: { id } })
-        
+
+        this.menuService.deleteMenu(id, { many: true })
 
         return { message: ResponsesEnum.DELETED_RESTAURANT }
     }

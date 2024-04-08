@@ -7,12 +7,14 @@ import { OrmModule } from '../orm/orm.module';
 import { JwtModule } from '@nestjs/jwt';
 import { FileModule } from '../file/file.module';
 import { RestaurantController } from '../../controllers/restaurant/restaurant.controller';
+import { MenuModule } from '../menu/menu.module';
 
 @Module({
     imports: [OrmModule,
         CacheModule,
         MailModule,
         FileModule,
+        MenuModule,
         JwtModule.register({
             global: true,
             secret: process.env.SECRET,
