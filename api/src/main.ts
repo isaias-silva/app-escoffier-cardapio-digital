@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { config } from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 config()
 async function bootstrap() {
@@ -9,6 +10,19 @@ async function bootstrap() {
   app.enableCors()
   app.useGlobalPipes(new ValidationPipe());
   
+ const config = new DocumentBuilder()
+    .setTitle("Escoffier api")
+    .setDescription('rest api for digital menus.')
+    .setVersion('1.0')
+    
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+ 
+  SwaggerModule.setup('documentation', app, document)
+
+
+
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

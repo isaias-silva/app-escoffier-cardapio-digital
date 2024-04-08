@@ -4,8 +4,10 @@ import { ConfirmCodeRestaurantDto, CreateRestaurantDto, LoginRestaurantDto, Upda
 import { Request } from 'express';
 import { JwtGuard } from '../../guards/jwt/jwt.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('restaurant')
+@ApiTags('restaurant auth and management')
 export class RestaurantController {
 
     constructor(private readonly restaurantService: RestaurantService) {
@@ -13,6 +15,7 @@ export class RestaurantController {
 
     @Get()
     @UseGuards(JwtGuard)
+    @ApiBearerAuth()
     async getMyRestaurant(@Req() req: Request) {
 
         return await this.restaurantService.get(req['auth'].id, req['apiurl'])
@@ -27,6 +30,7 @@ export class RestaurantController {
 
     @Put('update')
     @UseGuards(JwtGuard)
+    @ApiBearerAuth()
     async updateRestaurant(@Body() dto: UpdateRestaurantDto, @Req() req: Request) {
         return await this.restaurantService.update(req['auth'].id, dto)
     }
@@ -35,6 +39,7 @@ export class RestaurantController {
     @Put('update/profile')
     @UseGuards(JwtGuard)
     @UseInterceptors(FileInterceptor('file'))
+    @ApiBearerAuth()
 
     async updateRestaurantProfile(@Req() req: Request, @UploadedFile(new ParseFilePipe({
         validators: [
@@ -78,6 +83,8 @@ export class RestaurantController {
 
     @Delete('cancel/account')
     @UseGuards(JwtGuard)
+    @ApiBearerAuth()
+
     async deleteRestaurantAccount(@Req() req: Request) {
 
         return await this.restaurantService.delete(req['auth'].id)
