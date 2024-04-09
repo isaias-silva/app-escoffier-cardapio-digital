@@ -1,13 +1,14 @@
 import { Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { RestaurantService } from '../../services/restaurant/restaurant.service';
-import { ConfirmCodeRestaurantDto, CreateRestaurantDto, LoginRestaurantDto, UpdatePasswordRestaurantForgottenDto, UpdateRestaurantDto } from '../../dtos/restaurant.dtos';
+import { ConfirmCodeRestaurantDto, CreateRestaurantDto, LoginRestaurantDto, ResponseRestaurantDto, UpdatePasswordRestaurantForgottenDto, UpdateRestaurantDto } from '../../dtos/restaurant.dtos';
 import { Request } from 'express';
 import { JwtGuard } from '../../guards/jwt/jwt.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthResponseDto, BasicResponseDto } from '../../dtos/basic.response.dto';
 
 @Controller('restaurant')
-@ApiTags('restaurant auth and management')
+@ApiTags('Restaurant Auth and Management')
 export class RestaurantController {
 
     constructor(private readonly restaurantService: RestaurantService) {
@@ -16,79 +17,117 @@ export class RestaurantController {
     @Get()
     @UseGuards(JwtGuard)
     @ApiBearerAuth()
-    async getMyRestaurant(@Req() req: Request) {
 
-        return await this.restaurantService.get(req['auth'].id, req['apiurl'])
+    @ApiOperation({ summary: 'Get your restaurant.', description: 'Retrieve information about the authenticated restaurant.' })
+    @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 200, description: 'restaurant info.', type: ResponseRestaurantDto })
+
+    async getMyRestaurant(@Req() req: Request) {
+        return await this.restaurantService.get(req['auth'].id, req['apiurl']);
     }
 
     @Get('/:id')
 
-    async getRestaurant(@Req() req: Request, @Param('id') id: string) {
+    @ApiOperation({ summary: 'Get a specific restaurant.', description: 'Retrieve information about a specific restaurant.' })
+    @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 200, description: 'restaurant info.', type: ResponseRestaurantDto })
 
-        return await this.restaurantService.get(id, req['apiurl'])
+    async getRestaurant(@Req() req: Request, @Param('id') id: string) {
+        return await this.restaurantService.get(id, req['apiurl']);
     }
 
     @Put('update')
     @UseGuards(JwtGuard)
     @ApiBearerAuth()
-    async updateRestaurant(@Body() dto: UpdateRestaurantDto, @Req() req: Request) {
-        return await this.restaurantService.update(req['auth'].id, dto)
-    }
 
+    @ApiOperation({ summary: 'Update restaurant information.', description: 'Update the information of the authenticated restaurant.' })
+    @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 200, description: 'restaurant updated.', type: BasicResponseDto })
+
+    async updateRestaurant(@Body() dto: UpdateRestaurantDto, @Req() req: Request) {
+        return await this.restaurantService.update(req['auth'].id, dto);
+    }
 
     @Put('update/profile')
     @UseGuards(JwtGuard)
     @UseInterceptors(FileInterceptor('file'))
     @ApiBearerAuth()
 
+    @ApiOperation({ summary: 'Update restaurant profile image.', description: 'Update the profile image of the authenticated restaurant.' })
+    @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 200, description: 'restaurant profile updated', type: BasicResponseDto })
+
     async updateRestaurantProfile(@Req() req: Request, @UploadedFile(new ParseFilePipe({
         validators: [
             new FileTypeValidator({ fileType: 'image' }),
-            new MaxFileSizeValidator({ maxSize: 2e+7, message: 'imagem muito grande' })
-        ],
-
+            new MaxFileSizeValidator({ maxSize: 2e+7, message: 'Image too large' })
+        ]
     })) file?: Express.Multer.File) {
-
-        return await this.restaurantService.updateProfile(req['auth'].id, file.buffer)
+        return await this.restaurantService.updateProfile(req['auth'].id, file.buffer);
     }
 
     @Put('update/password/forgotten')
 
-    async forgottenPassword(@Body() body: UpdatePasswordRestaurantForgottenDto) {
+    @ApiOperation({ summary: 'Update forgotten password', description: 'Update the forgotten password of the restaurant.' })
+    @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 200, description: 'email sent to reset password', type: BasicResponseDto })
 
-        return await this.restaurantService.changePasswordForgotten(body)
+    async forgottenPassword(@Body() body: UpdatePasswordRestaurantForgottenDto) {
+        return await this.restaurantService.changePasswordForgotten(body);
     }
 
     @Put('confirm/code')
 
+    @ApiOperation({ summary: 'Confirm change with code.', description: 'Confirm a change using a code.' })
+    @ApiResponse({ status: 401, description: 'incorrect code', type: BasicResponseDto })
+    @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 200, description: 'changes have been confirmed', type: BasicResponseDto })
+
     async confirmChangeWithCode(@Body() body: ConfirmCodeRestaurantDto) {
-
-        return this.restaurantService.confirmChange(body)
+        return this.restaurantService.confirmChange(body);
     }
-
 
     @Post('/register')
 
-    async register(@Body() dto: CreateRestaurantDto) {
-        return await this.restaurantService.register(dto)
+    @ApiOperation({ summary: 'Register a new restaurant.', description: 'Register a new restaurant account.' })
 
+    @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 201, description: 'restaurant registed', type: AuthResponseDto })
+
+    async register(@Body() dto: CreateRestaurantDto) {
+        return await this.restaurantService.register(dto);
     }
 
     @Post('/login')
+
+    @ApiOperation({ summary: 'Login to a restaurant account.', description: 'Authenticate and login to a restaurant account.' })
+    @ApiResponse({ status: 401, description: 'incorrect password', type: BasicResponseDto })
+    @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 201, description: 'login successful', type: AuthResponseDto })
+
     async login(@Body() dto: LoginRestaurantDto) {
-
-        return await this.restaurantService.login(dto)
-
+        return await this.restaurantService.login(dto);
     }
 
     @Delete('cancel/account')
     @UseGuards(JwtGuard)
     @ApiBearerAuth()
 
+    @ApiOperation({ summary: 'Delete restaurant account.', description: 'Delete the authenticated restaurant account.' })
+    @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
+    @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 200, description: 'account deleted', type: AuthResponseDto })
+
     async deleteRestaurantAccount(@Req() req: Request) {
-
-        return await this.restaurantService.delete(req['auth'].id)
+        return await this.restaurantService.delete(req['auth'].id);
     }
-
-
 }
