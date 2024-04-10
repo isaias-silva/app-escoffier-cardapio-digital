@@ -1,17 +1,15 @@
 generator client {
   provider = "prisma-client-js"
-
 }
 
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
-  
 }
 
 model Restaurant {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  email    String @unique
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  email    String  @unique
   name     String
   password String
   resume   String?
@@ -32,14 +30,15 @@ model Category {
 }
 
 model Dishe {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  menuId      String
-  name        String
-  price       Float
-  image       Bytes?
-  mode        Mode     @default(MORNNING)
-  description String
-  categories  String[]
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  menuId       String
+  restaurantId String
+  name         String
+  price        Float
+  image        Bytes?
+  mode         Mode     @default(MORNNING)
+  description  String
+  categories   String[]
 }
 
 enum Mode {

@@ -25,8 +25,8 @@ export class CategoryService {
         return { message: ResponsesEnum.CATEGORY_CREATED }
     }
 
-    async getCategory(restaurantId: string, dto: CommonCategoryDto) {
-        const categoryMenuRegisterInDb = await this.model.findFirst({ where: {restaurantId, ...dto } })
+    async getCategory(restaurantId: string, id:string) {
+        const categoryMenuRegisterInDb = await this.model.findFirst({ where: {restaurantId, id} })
 
         if (!categoryMenuRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.CATEGORY_NOT_FOUND)

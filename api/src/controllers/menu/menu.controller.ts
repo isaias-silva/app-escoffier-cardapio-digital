@@ -7,7 +7,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 import { BasicResponseDto } from '../../dtos/basic.response.dto';
 
 @Controller('menu')
-@ApiTags('menu management')
+@ApiTags('Menu management')
 
 export class MenuController {
 

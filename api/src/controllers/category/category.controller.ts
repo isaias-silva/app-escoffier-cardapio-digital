@@ -33,8 +33,8 @@ export class CategoryController {
     @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
     @ApiResponse({ status: 404, description: 'Category not found' })
 
-    async getCategory(@Req() req: Request, @Body() getCategoryDto: CommonCategoryDto) {
-        return await this.categoryService.getCategory(req['auth'].id, getCategoryDto)
+    async getCategory(@Req() req: Request, @Param('id') id:string) {
+        return await this.categoryService.getCategory(req['auth'].id,id )
     }
 
     @Get('my')
