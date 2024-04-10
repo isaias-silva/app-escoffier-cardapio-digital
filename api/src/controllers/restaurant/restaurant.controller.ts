@@ -46,6 +46,7 @@ export class RestaurantController {
     @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 200, description: 'restaurant updated.', type: BasicResponseDto })
+    @ApiResponse({ status: 400, description: 'error in request body', type: BasicResponseDto })
 
     async updateRestaurant(@Body() dto: UpdateRestaurantDto, @Req() req: Request) {
         return await this.restaurantService.update(req['auth'].id, dto);
@@ -60,6 +61,7 @@ export class RestaurantController {
     @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 200, description: 'restaurant profile updated', type: BasicResponseDto })
+    @ApiResponse({ status: 400, description: 'error in upload image', type: BasicResponseDto })
 
     async updateRestaurantProfile(@Req() req: Request, @UploadedFile(new ParseFilePipe({
         validators: [
@@ -76,7 +78,9 @@ export class RestaurantController {
     @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 200, description: 'email sent to reset password', type: BasicResponseDto })
+    @ApiResponse({ status: 400, description: 'error in request body', type: BasicResponseDto })
 
+    
     async forgottenPassword(@Body() body: UpdatePasswordRestaurantForgottenDto) {
         return await this.restaurantService.changePasswordForgotten(body);
     }
@@ -88,6 +92,7 @@ export class RestaurantController {
     @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 200, description: 'changes have been confirmed', type: BasicResponseDto })
+    @ApiResponse({ status: 400, description: 'error in request body', type: BasicResponseDto })
 
     async confirmChangeWithCode(@Body() body: ConfirmCodeRestaurantDto) {
         return this.restaurantService.confirmChange(body);
@@ -100,6 +105,7 @@ export class RestaurantController {
     @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 201, description: 'restaurant registed', type: AuthResponseDto })
+    @ApiResponse({ status: 400, description: 'error in request body', type: BasicResponseDto })
 
     async register(@Body() dto: CreateRestaurantDto) {
         return await this.restaurantService.register(dto);
@@ -112,6 +118,7 @@ export class RestaurantController {
     @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 201, description: 'login successful', type: AuthResponseDto })
+    @ApiResponse({ status: 400, description: 'error in request body', type: BasicResponseDto })
 
     async login(@Body() dto: LoginRestaurantDto) {
         return await this.restaurantService.login(dto);
@@ -126,7 +133,7 @@ export class RestaurantController {
     @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 200, description: 'account deleted', type: AuthResponseDto })
-
+   
     async deleteRestaurantAccount(@Req() req: Request) {
         return await this.restaurantService.delete(req['auth'].id);
     }

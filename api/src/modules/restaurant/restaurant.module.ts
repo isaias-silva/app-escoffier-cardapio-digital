@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { FileModule } from '../file/file.module';
 import { RestaurantController } from '../../controllers/restaurant/restaurant.controller';
 import { MenuModule } from '../menu/menu.module';
+import { CategoryModule } from '../category/category.module';
 
 @Module({
     imports: [OrmModule,
@@ -15,6 +16,7 @@ import { MenuModule } from '../menu/menu.module';
         MailModule,
         FileModule,
         MenuModule,
+        CategoryModule,
         JwtModule.register({
             global: true,
             secret: process.env.SECRET,

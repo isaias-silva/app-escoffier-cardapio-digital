@@ -73,11 +73,11 @@ export class UpdatePasswordRestaurantForgottenDto {
     @IsNotEmpty({ message: ResponsesEnum.MAIL_REQUIRED })
     readonly email: string;
 
-
-
+    @ApiProperty()
     @IsNotEmpty({ message: ResponsesEnum.PASSWORD_REQUIRED })
     @MaxLength(20, { message: ResponsesEnum.PASSWORD_IS_LONG })
     @MinLength(4, { message: ResponsesEnum.PASSWORD_IS_SHORT })
+
     readonly new_password: string;
 
 }

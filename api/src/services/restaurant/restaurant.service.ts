@@ -9,6 +9,7 @@ import { CacheService } from '../cache/cache.service';
 import { FileService } from '../file/file.service';
 import { MessageMailEnum, SubjectMailEnum } from '../../enums/email.templates.enum';
 import { MenuService } from '../menu/menu.service';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class RestaurantService {
@@ -20,7 +21,8 @@ export class RestaurantService {
         private cacheService: CacheService,
         private fileService: FileService,
 
-        private menuService: MenuService
+        private menuService: MenuService,
+        private categoryService: CategoryService
     ) { }
 
     private model = this.OrmService.restaurant
@@ -123,10 +125,10 @@ export class RestaurantService {
             }
         })
 
-        if(infosInUse){
+        if (infosInUse) {
             throw new BadRequestException(ResponsesEnum.EMAIL_OR_NAME_ALREADY_EXISTS)
         }
-        
+
         const data = {
             name: name != restaurantRegisterInDb.name ? dto.name : undefined,
             resume: resume != restaurantRegisterInDb.resume ? dto.resume : undefined
@@ -307,7 +309,11 @@ export class RestaurantService {
 
         await this.model.delete({ where: { id } })
 
-        this.menuService.deleteMenu(id, { many: true })
+        Promise.all([
+            this.categoryService.deleteCategory(id,{ many: true}),
+            
+            this.menuService.deleteMenu(id, { many: true })
+        ])
 
         return { message: ResponsesEnum.DELETED_RESTAURANT }
     }
