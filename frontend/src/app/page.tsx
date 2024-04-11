@@ -1,15 +1,20 @@
-"use client"
 
-import { useState } from "react";
+
+import IsAuth from "../providers/is.auth";
+import LoginForm from "./components/login.form";
+
+
 
 
 export default function Home() {
 
-  
+
   return (
-    <main className="">
-      <h1>hello world</h1>
-   
-    </main>
+    <IsAuth>
+      <main className="bg-login">
+
+        <LoginForm></LoginForm>
+      </main>
+    </IsAuth>
   );
 }

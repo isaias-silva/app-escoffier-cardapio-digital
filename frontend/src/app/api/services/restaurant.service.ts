@@ -24,10 +24,10 @@ async function register(name: string, email: string, password: string) {
 }
 
 async function logout() {
-    localStorage.removeItem('jwt-auth')
+    if (localStorage){ localStorage.removeItem('jwt-auth')}
 }
 
-function getToken() :string{
+function getToken(): string {
     return localStorage.geItem('jwt-auth')
 }
 async function updateRestaurant(updateDto: RestaurantUpdate) {
