@@ -33,13 +33,19 @@ export class MenuService {
 
     }
 
-    async getMenu(id: string, countDishes: number, pageDishes: number, host: string,date:moment.Moment) {
-        const hour=date.hours()
-        const mode:Mode=hour >= 18 || hour < 4?Mode.NIGHT:Mode.MORNNING
-       
+    async getMenu(id: string,
+        countDishes: number,
+        pageDishes: number,
+        host: string,
+        date?: moment.Moment,
+        categoryId?: string) {
+
+        const hour = date ? date.hours() : null
+        const mode = hour ? (hour >= 18 || hour < 4 ? Mode.NIGHT : Mode.MORNNING) : undefined
+
         const [menu, dishes] = await Promise.all([
             this.model.findFirst({ where: { id } }),
-            this.disheService.getMenuDishes(id, countDishes, pageDishes, host, mode)
+            this.disheService.getMenuDishes(id, countDishes, pageDishes, host, mode, categoryId)
         ]
         )
         if (!menu) {
@@ -103,7 +109,7 @@ export class MenuService {
             if (!menuInDb) {
                 throw new NotFoundException(ResponsesEnum.MENU_NOT_FOUND)
             }
-        
+
             await this.model.delete({ where: { id } })
 
         } else {

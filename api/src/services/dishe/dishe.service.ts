@@ -78,15 +78,21 @@ export class DisheService {
 
         const { name, price, description, mode } = disheInDb
 
-        return { name, price, description, mode, image,  category: category ? { name: category.name, keywords: category.keywords } : 'N/A'}
+        return { name, price, description, mode, image, category: category ? { name: category.name, keywords: category.keywords } : 'N/A' }
 
     }
 
-    async getMenuDishes(menuId: string, count: number, page: number, host: string, mode: Mode) {
+    async getMenuDishes(menuId: string,
+        count: number,
+        page: number,
+        host: string,
+        mode?: Mode,
+        categoryId?: string
+    ) {
 
 
         const dishesDb = await this.model.findMany({
-            where: { menuId, mode },
+            where: { menuId, mode, categoryId },
             take: count,
             skip: (page - 1) * count
         })

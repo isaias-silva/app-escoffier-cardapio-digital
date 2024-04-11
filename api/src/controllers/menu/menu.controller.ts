@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { MenuService } from '../../services/menu/menu.service';
 import { Request } from 'express';
 import { JwtGuard } from '../../guards/jwt/jwt.guard';
@@ -15,16 +15,42 @@ export class MenuController {
 
     }
 
-    @Get('/all/:id/:page/:count')
+    @Get('/realtime/:id/:page/:count')
+
+    @ApiOperation({ summary: 'get a menu', description: 'get a menu by ID and your dishes in realtime' })
+
+    @ApiResponse({ status: 404, description: 'menu not found.', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 200, description: 'menu object.', type: ResponseMenuDto })
+
+    async getMenuInRealTime(@Req() req: Request, @Param('id') id: string, @Param('count') count: string, @Param('page') page: string) {
+        return await this.menuService.getMenu(id,
+            parseInt(count),
+            parseInt(page),
+            req['apiurl'],
+            req['access_time'],)
+    }
+
+
+    @Get('dishes/:id/:page/:count')
 
     @ApiOperation({ summary: 'get a menu', description: 'get a menu by ID' })
 
     @ApiResponse({ status: 404, description: 'menu not found.', type: BasicResponseDto })
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 200, description: 'menu object.', type: ResponseMenuDto })
-   
-    async getMenu(@Req() req: Request, @Param('id') id: string, @Param('count') count: string, @Param('page') page: string) {
-        return await this.menuService.getMenu(id, parseInt(count), parseInt(page), req['apiurl'],req['access_time'])
+
+    async getMenu(@Req() req: Request,
+        @Param('id') id: string,
+        @Param('count') count: string,
+        @Param('page') page: string,
+        @Query('category') categoryId?: string) {
+        return await this.menuService.getMenu(id,
+            parseInt(count),
+            parseInt(page),
+            req['apiurl'],
+            undefined,
+            categoryId)
     }
 
 
