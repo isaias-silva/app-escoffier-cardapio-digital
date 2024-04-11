@@ -40,8 +40,8 @@ export class CategoryService {
         return await this.model.findMany({ where: { restaurantId } })
     }
 
-    async updateCategory(id: string, dto: UpdateCategoryDto) {
-        const categoryMenuRegisterInDb = await this.model.findFirst({ where: { id } })
+    async updateCategory( restaurantId:string, id: string,dto: UpdateCategoryDto) {
+        const categoryMenuRegisterInDb = await this.model.findFirst({ where: { id,restaurantId } })
 
         if (!categoryMenuRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.CATEGORY_NOT_FOUND)

@@ -15,7 +15,7 @@ export class DisheController {
     constructor(private disheService: DisheService) {
     }
 
-    @Post()
+    @Post('create')
     @UseGuards(JwtGuard)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Create a new dish' })

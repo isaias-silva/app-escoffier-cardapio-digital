@@ -53,8 +53,8 @@ export class CategoryController {
     @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
     @ApiResponse({ status: 400, description: 'error in request body', type: BasicResponseDto })
 
-    async updateCategory(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-        return await this.categoryService.updateCategory(id, updateCategoryDto);
+    async updateCategory(@Req() req:Request,@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
+        return await this.categoryService.updateCategory(req['auth'].id,id, updateCategoryDto);
     }
 
     @Delete('delete')

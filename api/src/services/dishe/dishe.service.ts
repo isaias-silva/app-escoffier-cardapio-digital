@@ -76,12 +76,9 @@ export class DisheService {
         }
 
 
-
-
-
         const { name, price, description, mode } = disheInDb
 
-        return { name, price, description, mode, image, category }
+        return { name, price, description, mode, image,  category: category ? { name: category.name, keywords: category.keywords } : 'N/A'}
 
     }
 
@@ -112,7 +109,7 @@ export class DisheService {
                 this.removeInvalidCategory(disheInDb.id, disheInDb.categoryId)
             }
 
-            return { name, price, description, mode, image, category }
+            return { name, price, description, mode, image, category: category ? { name: category.name, keywords: category.keywords } : 'N/A' }
         })
 
         return await Promise.all(responseDishes)
