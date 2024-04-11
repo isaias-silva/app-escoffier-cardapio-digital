@@ -76,19 +76,20 @@ export class CategoryService {
         await this.model.delete({ where: { id } })
         return { message: ResponsesEnum.CATEGORY_DELETED }
     }
-    async validCategories(restaurantId: string, ids: string[]) {
+    async validCategories(restaurantId: string, id: string) {
         let valid: boolean = true
-        for (let i = 0; i < ids.length; i++) {
+       
             try {
-                console.log(i)
-                await this.getCategory(restaurantId, ids[i])
+           
+                await this.getCategory(restaurantId, id)
             }
             catch (err) {
                 valid = false
-                break
+              
+                
             }
+            return valid
         }
-        return valid
-    }
+    
 
 }

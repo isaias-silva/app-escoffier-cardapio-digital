@@ -33,7 +33,7 @@ export class CreateDisheDto {
 
   @ApiProperty()
   @IsNotEmpty({ message: ResponsesEnum.CATEGORIES_REQUIRED })
-  readonly categories: string[];
+  readonly categoryId: string;
 }
 
 export class UpdateDisheDto {
@@ -61,7 +61,7 @@ export class UpdateDisheDto {
 
   @ApiProperty()
   @IsOptional()
-  readonly categories?: string[];
+  readonly categoryId?: string;
 }
 
 

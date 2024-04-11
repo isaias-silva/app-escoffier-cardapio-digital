@@ -6,6 +6,7 @@ import { ResponsesEnum } from '../../enums/responses.enum';
 import { CategoryService } from '../category/category.service';
 import { Mode } from '../../enums/mode.dishe.enum';
 import { MenuService } from '../menu/menu.service';
+import { Category } from '@prisma/client';
 
 @Injectable()
 export class DisheService {
@@ -18,7 +19,7 @@ export class DisheService {
     private model = this.ormService.dishe
 
     async createDishe(restaurantId: string, dto: CreateDisheDto) {
-        const { name, price, description, mode, categories, menuId } = dto
+        const { name, price, description, mode, categoryId, menuId } = dto
 
 
         const disheInDb = await this.model.findFirst({ where: { restaurantId, name } })
@@ -28,7 +29,7 @@ export class DisheService {
         }
 
 
-        let validCategories: boolean = await this.categoryService.validCategories(restaurantId, categories)
+        let validCategories: boolean = await this.categoryService.validCategories(restaurantId, categoryId)
 
         if (!validCategories) {
             throw new BadRequestException(ResponsesEnum.INVALID_CATEGORIES)
@@ -42,7 +43,7 @@ export class DisheService {
             price,
             description,
             mode,
-            categories
+            categoryId
 
         }
         await this.model.create({ data: { restaurantId, ...data, menuId } })
@@ -65,22 +66,22 @@ export class DisheService {
                 image = await this.fileService.getImage(`${id}.png`, host)
             }
         }
+        let category: Category
+        try {
 
-        const categoriesPromise = disheInDb.categories.map(async (category) => {
-            try {
-                const categoryDb = await this.categoryService.getCategory(disheInDb.restaurantId, category)
-                return categoryDb.name
+            category = await this.categoryService.getCategory(disheInDb.restaurantId, disheInDb.categoryId)
 
-            } catch (err) {
-                this.removeInvalidCategory(disheInDb.id, category, disheInDb.categories)
-            }
-        })
-        const categories = await Promise.all(categoriesPromise)
+        } catch (err) {
+            this.removeInvalidCategory(disheInDb.id, disheInDb.categoryId)
+        }
+
+
+
 
 
         const { name, price, description, mode } = disheInDb
 
-        return { name, price, description, mode, image, categories }
+        return { name, price, description, mode, image, category }
 
     }
 
@@ -103,9 +104,15 @@ export class DisheService {
                     image = await this.fileService.getImage(`${disheInDb.id}.png`, host)
                 }
             }
-            const { name, price, description, mode } = disheInDb
+            const { name, price, description, mode, categoryId } = disheInDb
+            let category: Category
+            try {
+                category = await this.categoryService.getCategory(disheInDb.restaurantId, categoryId)
+            } catch (err) {
+                this.removeInvalidCategory(disheInDb.id, disheInDb.categoryId)
+            }
 
-            return { name, price, description, mode, image }
+            return { name, price, description, mode, image, category }
         })
 
         return await Promise.all(responseDishes)
@@ -118,9 +125,9 @@ export class DisheService {
             throw new NotFoundException(ResponsesEnum.DISHE_NOT_FOUND)
         }
 
-        const { name, price, description, mode, categories } = dto
+        const { name, price, description, mode, categoryId } = dto
 
-        let validCategories: boolean = await this.categoryService.validCategories(restaurantId, categories)
+        let validCategories: boolean = await this.categoryService.validCategories(restaurantId, categoryId)
 
         if (!validCategories) {
             throw new BadRequestException(ResponsesEnum.INVALID_CATEGORIES)
@@ -134,7 +141,7 @@ export class DisheService {
             price,
             description,
             mode,
-            categories
+            categoryId
 
         }
         await this.model.update({ where: { id: disheInDb.id }, data })
@@ -179,12 +186,13 @@ export class DisheService {
 
     }
 
-    private async removeInvalidCategory(id: string, categoryInvalid: string, categories: string[]) {
-        categories.splice(categories.indexOf(categoryInvalid), 1)
+    private async removeInvalidCategory(id: string, categoryInvalid: string) {
+
 
         await this.model.updateMany({
-            where: { id }, data: {
-                categories
+            where: { id, categoryId: categoryInvalid },
+            data: {
+                categoryId: undefined
             }
         })
 

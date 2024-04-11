@@ -38,6 +38,6 @@ model Dishe {
   image        Bytes?
   mode         String   @default("MORNNING")
   description  String
-  categories   String[]
+  categoryId   String?
 }
 
