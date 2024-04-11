@@ -2,11 +2,16 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { OrmService } from '../orm/orm.service';
 import { CommonMenuDto, DeleteMenuDto } from '../../dtos/menu.dtos';
 import { ResponsesEnum } from '../../enums/responses.enum';
+import { DisheService } from '../dishe/dishe.service';
+import { Mode } from '../../enums/mode.dishe.enum';
 
 @Injectable()
 export class MenuService {
 
-    constructor(private ormService: OrmService) { }
+    constructor(private ormService: OrmService,
+        private disheService: DisheService) {
+
+    }
     private model = this.ormService.menu
 
 
@@ -27,14 +32,18 @@ export class MenuService {
 
     }
 
-    async getMenu(id: string) {
-        const [menu] = await Promise.all([this.model.findFirst({ where: { id } })]
+    async getMenu(id: string, countDishes: number, pageDishes: number, host: string) {
+        const [menu, dishes] = await Promise.all([
+            this.model.findFirst({ where: { id } }),
+            this.disheService.getMenuDishes(id, countDishes, pageDishes, host, Mode.MORNNING)
+        ]
         )
         if (!menu) {
             throw new NotFoundException(ResponsesEnum.MENU_NOT_FOUND)
         }
 
-        return { ...menu }
+
+        return { ...menu, dishes }
     }
     async getRestaurantMenus(restaurantId: string, count: number, page: number) {
         return await this.model.findMany({

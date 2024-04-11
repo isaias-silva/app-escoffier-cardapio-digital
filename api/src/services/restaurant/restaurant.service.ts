@@ -96,6 +96,7 @@ export class RestaurantService {
 
             if (!profile) {
                 await this.fileService.writeImage(`${id}.png`, restaurant.profile)
+                profile = await this.fileService.getImage(`${id}.png`, host)
             }
         }
         const { name, resume, email } = restaurant
@@ -310,8 +311,8 @@ export class RestaurantService {
         await this.model.delete({ where: { id } })
 
         Promise.all([
-            this.categoryService.deleteCategory(id,{ many: true}),
-            
+            this.categoryService.deleteCategory(id, { many: true }),
+
             this.menuService.deleteMenu(id, { many: true })
         ])
 

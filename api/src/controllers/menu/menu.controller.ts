@@ -15,15 +15,16 @@ export class MenuController {
 
     }
 
-    @Get('/all/:id')
- 
+    @Get('/all/:id/:page/:count')
+
     @ApiOperation({ summary: 'get a menu', description: 'get a menu by ID' })
 
     @ApiResponse({ status: 404, description: 'menu not found.', type: BasicResponseDto })
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 200, description: 'menu object.', type: ResponseMenuDto })
-    async getMenu(@Param('id') id: string) {
-        return await this.menuService.getMenu(id)
+   
+    async getMenu(@Req() req: Request, @Param('id') id: string, @Param('count') count: string, @Param('page') page: string) {
+        return await this.menuService.getMenu(id, parseInt(count), parseInt(page), req['apiurl'])
     }
 
 
@@ -63,7 +64,7 @@ export class MenuController {
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 400, description: 'error in json of body`s request.', type: BasicResponseDto })
     @ApiResponse({ status: 200, description: 'updated menu', type: BasicResponseDto })
-   
+
     async updateRestaurantMenu(@Req() req: Request, @Param('id') id: string, @Body() body: CommonMenuDto) {
         return await this.menuService.updateMenu(req['auth'].id, id, body)
     }
@@ -77,7 +78,7 @@ export class MenuController {
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 400, description: 'error in json of body`s request.', type: BasicResponseDto })
     @ApiResponse({ status: 200, description: 'deleted menu', type: BasicResponseDto })
-   
+
     async deleteRestaurantMenu(@Req() req: Request, @Body() body: DeleteMenuDto) {
         return await this.menuService.deleteMenu(req['auth'].id, body)
     }

@@ -12,7 +12,7 @@ export class DisheService {
     constructor(private ormService: OrmService,
         private fileService: FileService,
         private categoryService: CategoryService,
-        private menuService: MenuService
+      
     ) {
     }
     private model = this.ormService.dishe
@@ -20,16 +20,13 @@ export class DisheService {
     async createDishe(restaurantId: string, dto: CreateDisheDto) {
         const { name, price, description, mode, categories, menuId } = dto
 
-        
-        const [disheInDb, menuInDb] = await Promise.all([this.model.findFirst({ where: { restaurantId, name } }), this.menuService.getMenu(menuId)])
+
+        const disheInDb = await this.model.findFirst({ where: { restaurantId, name } })
 
         if (disheInDb) {
             throw new BadRequestException(ResponsesEnum.DISHE_ALREADY_EXISTS)
         }
-        if(!menuInDb){
-            throw new BadRequestException(ResponsesEnum.MENU_NOT_FOUND)
-
-        }
+       
 
         let validCategories: boolean = await this.categoryService.validCategories(restaurantId, categories)
 
@@ -53,23 +50,52 @@ export class DisheService {
         return { message: ResponsesEnum.DISHE_CREATED }
     }
 
-    async getDishe(id: string) {
+    async getDishe(id: string, host: string) {
         const disheInDb = await this.model.findFirst({ where: { id } })
         if (!disheInDb) {
             throw new NotFoundException(ResponsesEnum.DISHE_NOT_FOUND)
         }
-        return disheInDb
+        let image: string
+        if (disheInDb.image) {
+
+            image = await this.fileService.getImage(`${id}.png`, host)
+
+            if (!image) {
+                await this.fileService.writeImage(`${id}.png`, disheInDb.image)
+                image = await this.fileService.getImage(`${id}.png`, host)
+            }
+        }
+        const { name, price, description, mode } = disheInDb
+
+        return { name, price, description, mode, image }
 
     }
 
-    async getMenuDishes(menuId: string, count: number, page: number) {
-        await this.menuService.getMenu(menuId)
-       
-        return await this.model.findMany({
-            where: { menuId },
+    async getMenuDishes(menuId: string, count: number, page: number, host:string,mode:Mode) {
+      
+
+        const dishesDb = await this.model.findMany({
+            where: { menuId,mode },
             take: count,
             skip: (page - 1) * count
         })
+        const responseDishes= dishesDb.map(async(disheInDb)=>{
+            let image: string
+            if (disheInDb.image) {
+    
+                image = await this.fileService.getImage(`${disheInDb.id}.png`, host)
+    
+                if (!image) {
+                    await this.fileService.writeImage(`${disheInDb.id}.png`, disheInDb.image)
+                    image = await this.fileService.getImage(`${disheInDb.id}.png`, host)
+                }
+            }
+            const { name, price, description, mode } = disheInDb
+    
+            return { name, price, description, mode, image }
+        })
+        
+        return await Promise.all(responseDishes)
     }
 
     async updateDishe(restaurantId: string, id: string, dto: UpdateDisheDto) {

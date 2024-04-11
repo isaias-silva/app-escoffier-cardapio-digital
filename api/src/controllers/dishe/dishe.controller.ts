@@ -31,17 +31,8 @@ export class DisheController {
     @ApiResponse({ status: 200, description: 'Dish retrieved successfully', type: BasicResponseDto })
     @ApiResponse({ status: 404, description: 'Dish not found', type: BasicResponseDto })
     @ApiParam({ name: 'id', type: String, required: true })
-    async getDishe(@Param('id') id: string) {
-        return await this.disheService.getDishe(id);
-    }
-
-    @Get('menu/:menuId/:page/:count')
-    @ApiOperation({ summary: 'Get dishes for a menu' })
-    @ApiResponse({ status: 200, description: 'Dishes retrieved successfully' })
-    @ApiParam({ name: 'menuId', type: String, required: true })
-
-    async getMenuDishes(@Param('menuId') menuId: string, @Param('count') count: string, @Param('page') page: string) {
-        return await this.disheService.getMenuDishes(menuId, parseInt(count), parseInt(page));
+    async getDishe(@Req() req: Request, @Param('id') id: string) {
+        return await this.disheService.getDishe(req["apiurl"], id);
     }
 
     @Put('update/:id')
