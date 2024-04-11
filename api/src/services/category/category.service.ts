@@ -17,7 +17,7 @@ export class CategoryService {
         const categoryInDb = await this.model.findFirst({ where: { name, restaurantId } })
 
         if (categoryInDb) {
-            throw new BadRequestException(ResponsesEnum.CATEGORY_ALREADY_EXISTS_IN_MENU)
+            throw new BadRequestException(ResponsesEnum.CATEGORY_ALREADY_EXISTS_IN_RESTAURANT)
         }
 
         await this.model.create({ data: { restaurantId, ...dto } })
@@ -25,15 +25,17 @@ export class CategoryService {
         return { message: ResponsesEnum.CATEGORY_CREATED }
     }
 
-    async getCategory(restaurantId: string, id:string) {
-        const categoryMenuRegisterInDb = await this.model.findFirst({ where: {restaurantId, id} })
+    async getCategory(restaurantId: string, id: string) {
+        const categoryMenuRegisterInDb = await this.model.findFirst({ where: { restaurantId, id } })
 
         if (!categoryMenuRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.CATEGORY_NOT_FOUND)
         }
         return categoryMenuRegisterInDb
     }
+
     async getMyCategories(restaurantId: string) {
+     
         return await this.model.findMany({ where: { restaurantId } })
     }
 
@@ -72,6 +74,20 @@ export class CategoryService {
         }
         await this.model.delete({ where: { id } })
         return { message: ResponsesEnum.CATEGORY_DELETED }
+    }
+    async validCategories(restaurantId: string, ids: string[]) {
+        let valid: boolean = true
+        for (let i = 0; i < ids.length; i++) {
+            try {
+                console.log(i)
+                await this.getCategory(restaurantId, ids[i])
+            }
+            catch (err) {
+                valid = false
+                break
+            }
+        }
+        return valid
     }
 
 }

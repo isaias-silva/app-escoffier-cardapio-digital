@@ -25,9 +25,7 @@ export class CategoryController {
         return await this.categoryService.createCategory(req['auth'].id, createCategoryDto);
     }
 
-    @Get(':id')
-
-
+    @Get('my/:id')
     @ApiOperation({ summary: 'Get a category by ID' })
     @ApiResponse({ status: 200, description: 'Category retrieved successfully' })
     @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
@@ -37,9 +35,7 @@ export class CategoryController {
         return await this.categoryService.getCategory(req['auth'].id,id )
     }
 
-    @Get('my')
-
-
+    @Get('categories')
     @ApiOperation({ summary: 'Get categories for the authenticated user' })
     @ApiResponse({ status: 200, description: 'Categories retrieved successfully' })
     @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
