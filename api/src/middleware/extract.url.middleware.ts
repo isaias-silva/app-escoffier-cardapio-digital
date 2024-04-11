@@ -11,7 +11,7 @@ export class ExtractURLMiddleware implements NestMiddleware {
     const domain = `${protocol}://${host}`;
     
     req["apiurl"] = domain
-    console.log('hello')
+   
 
     next();
   }

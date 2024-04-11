@@ -27,7 +27,7 @@ async function logout() {
     localStorage.removeItem('jwt-auth')
 }
 
-function getToken() {
+function getToken() :string{
     return localStorage.geItem('jwt-auth')
 }
 async function updateRestaurant(updateDto: RestaurantUpdate) {
