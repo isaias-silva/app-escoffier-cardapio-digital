@@ -8,6 +8,7 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MulterModule } from '@nestjs/platform-express';
 import { ExtractURLMiddleware } from './middleware/extract.url.middleware';
+import { ExtractDateAccessMiddleware } from './middleware/extract.date.access.middleware';
 
 
 
@@ -39,6 +40,6 @@ import { ExtractURLMiddleware } from './middleware/extract.url.middleware';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(ExtractURLMiddleware).forRoutes('*')
+      .apply(ExtractURLMiddleware,ExtractDateAccessMiddleware).forRoutes('*')
   }
 }

@@ -4,6 +4,7 @@ import { CommonMenuDto, DeleteMenuDto } from '../../dtos/menu.dtos';
 import { ResponsesEnum } from '../../enums/responses.enum';
 import { DisheService } from '../dishe/dishe.service';
 import { Mode } from '../../enums/mode.dishe.enum';
+import * as moment from "moment-timezone"
 
 @Injectable()
 export class MenuService {
@@ -32,10 +33,13 @@ export class MenuService {
 
     }
 
-    async getMenu(id: string, countDishes: number, pageDishes: number, host: string) {
+    async getMenu(id: string, countDishes: number, pageDishes: number, host: string,date:moment.Moment) {
+        const hour=date.hours()
+        const mode:Mode=hour >= 18 || hour < 4?Mode.NIGHT:Mode.MORNNING
+       
         const [menu, dishes] = await Promise.all([
             this.model.findFirst({ where: { id } }),
-            this.disheService.getMenuDishes(id, countDishes, pageDishes, host, Mode.MORNNING)
+            this.disheService.getMenuDishes(id, countDishes, pageDishes, host, mode)
         ]
         )
         if (!menu) {

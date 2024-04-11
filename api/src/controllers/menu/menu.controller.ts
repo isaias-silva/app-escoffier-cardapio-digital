@@ -24,7 +24,7 @@ export class MenuController {
     @ApiResponse({ status: 200, description: 'menu object.', type: ResponseMenuDto })
    
     async getMenu(@Req() req: Request, @Param('id') id: string, @Param('count') count: string, @Param('page') page: string) {
-        return await this.menuService.getMenu(id, parseInt(count), parseInt(page), req['apiurl'])
+        return await this.menuService.getMenu(id, parseInt(count), parseInt(page), req['apiurl'],req['access_time'])
     }
 
 
