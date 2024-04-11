@@ -1,7 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { OrmService } from '../orm/orm.service';
 import { CommonCategoryDto, CreateCategoryDto, DeleteCategoryDto, UpdateCategoryDto } from '../../dtos/category.dto';
 import { ResponsesEnum } from '../../enums/responses.enum';
+
 
 @Injectable()
 export class CategoryService {
@@ -35,7 +36,7 @@ export class CategoryService {
     }
 
     async getMyCategories(restaurantId: string) {
-     
+
         return await this.model.findMany({ where: { restaurantId } })
     }
 

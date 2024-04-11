@@ -12,7 +12,7 @@ export class DisheService {
     constructor(private ormService: OrmService,
         private fileService: FileService,
         private categoryService: CategoryService,
-      
+
     ) {
     }
     private model = this.ormService.dishe
@@ -26,7 +26,7 @@ export class DisheService {
         if (disheInDb) {
             throw new BadRequestException(ResponsesEnum.DISHE_ALREADY_EXISTS)
         }
-       
+
 
         let validCategories: boolean = await this.categoryService.validCategories(restaurantId, categories)
 
@@ -65,36 +65,49 @@ export class DisheService {
                 image = await this.fileService.getImage(`${id}.png`, host)
             }
         }
+
+        const categoriesPromise = disheInDb.categories.map(async (category) => {
+            try {
+                const categoryDb = await this.categoryService.getCategory(disheInDb.restaurantId, category)
+                return categoryDb.name
+
+            } catch (err) {
+                this.removeInvalidCategory(disheInDb.id, category, disheInDb.categories)
+            }
+        })
+        const categories = await Promise.all(categoriesPromise)
+
+
         const { name, price, description, mode } = disheInDb
 
-        return { name, price, description, mode, image }
+        return { name, price, description, mode, image, categories }
 
     }
 
-    async getMenuDishes(menuId: string, count: number, page: number, host:string,mode:Mode) {
-      
+    async getMenuDishes(menuId: string, count: number, page: number, host: string, mode: Mode) {
+
 
         const dishesDb = await this.model.findMany({
-            where: { menuId,mode },
+            where: { menuId, mode },
             take: count,
             skip: (page - 1) * count
         })
-        const responseDishes= dishesDb.map(async(disheInDb)=>{
+        const responseDishes = dishesDb.map(async (disheInDb) => {
             let image: string
             if (disheInDb.image) {
-    
+
                 image = await this.fileService.getImage(`${disheInDb.id}.png`, host)
-    
+
                 if (!image) {
                     await this.fileService.writeImage(`${disheInDb.id}.png`, disheInDb.image)
                     image = await this.fileService.getImage(`${disheInDb.id}.png`, host)
                 }
             }
             const { name, price, description, mode } = disheInDb
-    
+
             return { name, price, description, mode, image }
         })
-        
+
         return await Promise.all(responseDishes)
     }
 
@@ -163,6 +176,17 @@ export class DisheService {
         }
         await this.model.delete({ where: { id } })
         return { message: ResponsesEnum.DISHE_DELETED }
+
+    }
+
+    private async removeInvalidCategory(id: string, categoryInvalid: string, categories: string[]) {
+        categories.splice(categories.indexOf(categoryInvalid), 1)
+
+        await this.model.updateMany({
+            where: { id }, data: {
+                categories
+            }
+        })
 
     }
 }

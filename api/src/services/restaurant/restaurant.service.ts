@@ -10,6 +10,7 @@ import { FileService } from '../file/file.service';
 import { MessageMailEnum, SubjectMailEnum } from '../../enums/email.templates.enum';
 import { MenuService } from '../menu/menu.service';
 import { CategoryService } from '../category/category.service';
+import { DisheService } from '../dishe/dishe.service';
 
 @Injectable()
 export class RestaurantService {
@@ -22,7 +23,8 @@ export class RestaurantService {
         private fileService: FileService,
 
         private menuService: MenuService,
-        private categoryService: CategoryService
+        private categoryService: CategoryService,
+        private dishesService: DisheService
     ) { }
 
     private model = this.OrmService.restaurant
@@ -312,8 +314,8 @@ export class RestaurantService {
 
         Promise.all([
             this.categoryService.deleteCategory(id, { many: true }),
-
-            this.menuService.deleteMenu(id, { many: true })
+            this.menuService.deleteMenu(id, { many: true }),
+            this.dishesService.deleteDishe(id, { many: true })
         ])
 
         return { message: ResponsesEnum.DELETED_RESTAURANT }

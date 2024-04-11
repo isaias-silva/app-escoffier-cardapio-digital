@@ -8,7 +8,8 @@ import { CategoryModule } from '../category/category.module';
 
 
 @Module({
-    imports: [OrmModule,
+    imports: [
+        OrmModule,
         FileModule,
         CategoryModule,
      

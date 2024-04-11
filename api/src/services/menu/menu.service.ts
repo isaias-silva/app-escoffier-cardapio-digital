@@ -103,6 +103,7 @@ export class MenuService {
             if (!menuInDb) {
                 throw new NotFoundException(ResponsesEnum.MENU_NOT_FOUND)
             }
+        
             await this.model.delete({ where: { id } })
 
         } else {
