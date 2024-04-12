@@ -1,6 +1,6 @@
 
 import { setCookie ,getCookie,deleteCookie} from "cookies-next";
-import { AuthResponse } from "../../../interfaces/response.interfaces";
+import { AuthResponse, BasicResponses } from "../../../interfaces/response.interfaces";
 import { Restaurant, RestaurantUpdate } from "../../../interfaces/restaurant.interface";
 import axiosConfig from "../axiosConfig";
 
@@ -38,7 +38,7 @@ async function updateRestaurant(updateDto: RestaurantUpdate) {
     if (!token) {
         return
     }
-    const res = await axiosConfig.put<Restaurant>('/restaurant/update', updateDto, { headers: { 'Authorization': `Bearer ${token}` } })
+    const res = await axiosConfig.put<BasicResponses>('/restaurant/update', updateDto, { headers: { 'Authorization': `Bearer ${token}` } })
     return res
 }
 async function updateProfile(data: File) {
@@ -72,7 +72,7 @@ async function confirmCode(code: string, email: string) {
     if (!token) {
         return
     }
-    const res = await axiosConfig.put<Restaurant>('/restaurant/confirm/code', { email, code }, { headers: { 'Authorization': `Bearer ${token}` } })
+    const res = await axiosConfig.put<BasicResponses>('/restaurant/confirm/code', { email, code }, { headers: { 'Authorization': `Bearer ${token}` } })
     return res
 }
 async function getMyRestaurant() {

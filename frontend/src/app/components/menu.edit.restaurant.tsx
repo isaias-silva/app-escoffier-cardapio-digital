@@ -1,24 +1,33 @@
-import { Modal } from '@mui/material'
-import React, { useState } from 'react'
+import { CircularProgress, Modal } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit';
+import { Restaurant } from '../../interfaces/restaurant.interface';
+import { updateProfile, updateRestaurant } from '../api/services/restaurant.service';
 
 
-export default function MenuEditRestaurant() {
+export default function MenuEditRestaurant({ restaurant, callback }: { restaurant?: Restaurant, callback: Function }) {
     const [open, setOpen] = useState<boolean>(false);
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [resume, setResume] = useState<string>('');
     const [image, setImage] = useState<File | null>(null);
-    const [previewImage, setPreviewImage] = useState<string | null>(null);
+    const [previewImage, setPreviewImage] = useState<string | null>(restaurant?.profile || null);
+    const [message, setMessage] = useState<{ type: 'error' | 'warn', text: string }>()
+    useEffect(() => {
+        if (restaurant) {
+          
+            setName(restaurant.name)
+            setEmail(restaurant.email)
+            setResume(restaurant?.resume || '')
+            setPreviewImage(restaurant.profile || null)
+        }
+
+    }, [restaurant])
 
     const handleClose = () => {
+        setMessage(undefined)
         setOpen(false);
-        // Limpar campos do formulário ao fechar o modal
-        setName('');
-        setEmail('');
-        setResume('');
-        setImage(null);
-        setPreviewImage(null);
+
     }
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,12 +42,37 @@ export default function MenuEditRestaurant() {
         }
     }
 
+    const sendUpdatedRestaurant = async () => {
+        setMessage(undefined)
+        try {
+
+            if (image) {
+                await updateProfile(image)
+
+            }
+            const objectUpdate = {
+                name: name != restaurant?.name ? name : undefined,
+                email: email != restaurant?.email ? email : undefined,
+                resume: resume != restaurant?.resume ? resume : undefined,
+
+            }
+            const res = await updateRestaurant(objectUpdate)
+            setMessage({ type: 'warn', text: res?.data.message || 'dados atualizados' })
+
+            callback()
+        } catch (err: any) {
+            console.log(err)
+
+            setMessage({ type: 'error', text: err.response.data.message })
+        }
+    }
     return (
         <>
             <Modal open={open} onClose={handleClose}>
                 <div className="sm:p-6 p-2 bg-white w-full sm:w-1/3 sm:mt-10  m-auto rounded-lg adapt">
                     <h2 className="text-2xl mb-4 text-center">Editar Restaurante</h2>
-                    <form>
+                    {message && <p className={message.type == 'error' ? 'bg-red-300 text-red-600 p-2 m-auto rounded-lg' : 'bg-green-300 text-green-600 p-2 m-auto rounded-lg'}>{message?.text}</p>}
+                    <form action={sendUpdatedRestaurant}>
 
                         <div className="mb-4">
 
@@ -49,8 +83,8 @@ export default function MenuEditRestaurant() {
                                 onChange={handleImageChange}
                                 className=" hidden"
                             />
-                            <label htmlFor="image" className=' w-full flex justify-center items-center'>                            
-                             <img src={previewImage || "https://cdn-icons-png.flaticon.com/512/433/433087.png"} alt="Preview" className=" w-[200px] h-[200px] mt-2 rounded-full duration-200 transition-all hover:cursor-pointer hover:scale-110" />
+                            <label htmlFor="image" className=' w-full flex justify-center items-center'>
+                                <img src={previewImage || "https://cdn-icons-png.flaticon.com/512/433/433087.png"} alt="Preview" className=" w-[200px] h-[200px] mt-2 rounded-full duration-200 transition-all hover:cursor-pointer hover:scale-110" />
                             </label>
 
                         </div>
