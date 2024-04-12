@@ -1,7 +1,7 @@
 "use client"
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
-import { confirmCode } from '../api/services/restaurant.service';
+import { confirmCode } from '../../app/api/services/restaurant.service';
 
 export default function page() {
     const [code, setCode] = useState('');

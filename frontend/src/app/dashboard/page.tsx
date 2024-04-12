@@ -1,11 +1,11 @@
 "use client"
 import React, { useEffect, useMemo, useState } from 'react'
-import { getMyRestaurant, getRestaurant, logout } from '../api/services/restaurant.service'
+import { getMyRestaurant, getRestaurant, logout } from '../../app/api/services/restaurant.service'
 import { Restaurant } from '../../interfaces/restaurant.interface'
 import { useRouter, useSearchParams } from 'next/navigation'
-import MenusList from '../components/menus.list'
-import CategoryList from '../components/category.list'
-import MenuEditRestaurant from '../components/menu.edit.restaurant'
+import MenusList from '../../app/components/menus.list'
+import CategoryList from '../../app/components/category.list'
+import MenuEditRestaurant from '../../app/components/menu.edit.restaurant'
 import LogoutIcon from '@mui/icons-material/Logout';
 import Link from 'next/link'
 
@@ -20,7 +20,7 @@ export default function () {
   }, [router])
 
   const refreshRestaurant = () => {
-    let restaurantId = params.get('restaurant')
+    let restaurantId = params?.get('restaurant')
     if (restaurantId) {
 
       getRestaurant(restaurantId).then(res => setRestaurant(res?.data)).catch(() => router.replace('/error'))
@@ -29,7 +29,7 @@ export default function () {
 
     } else {
       setIsMe(true)
-      getMyRestaurant().then(res => setRestaurant(res?.data)).catch(err => setRestaurant(undefined))
+      getMyRestaurant().then(res => setRestaurant(res?.data)).catch(()=>{logout(); router.replace('/')})
 
     }
   }

@@ -1,3 +1,5 @@
+import { Dishe } from "./dishe.interface"
+
 export interface MenuData {
     name: string
 }
@@ -6,5 +8,6 @@ export interface MenuData {
 export interface MenuResponse {
     "id": string,
     "restaurantId": string,
-    "name": string
+    "name": string,
+    dishes?: Dishe[]
 }

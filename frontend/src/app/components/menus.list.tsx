@@ -15,7 +15,7 @@ export default function MenusList({ id, isMe }: { id?: string, isMe: boolean }) 
         
     }, [id]);
 
-    const refreshMenus = () => getAllRestaurantMenus(1, 10, id).then((res) => setMenus(res))
+    const refreshMenus = () => getAllRestaurantMenus(1, 99, id).then((res) => setMenus(res))
     return (
 
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -26,7 +26,7 @@ export default function MenusList({ id, isMe }: { id?: string, isMe: boolean }) 
                 callback={refreshMenus} />
 
             {menus.map((menuData) =>
-                <Link href={`dishe/${menuData.id}`} className="bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-110">
+                <Link href={`menu/${menuData.id}`} className="bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-110">
                     <div className="text-gray-800 font-semibold">{menuData.name}</div>
                 </Link>
 
