@@ -16,27 +16,34 @@ export async function getMenu(id: string, page: number, count: number, category?
     });
     return response.data;
 }
-export async function getAllRestaurantMenus(page: number, count: number): Promise<MenuResponse[]> {
- 
- 
-    const response = await axiosConfig.get(`/menu/my/${page}/${count}`);
+export async function getAllRestaurantMenus(page: number, count: number, id?: string): Promise<MenuResponse[]> {
+
+    if (!id) {
+        return []
+    }
+    const response = await axiosConfig.get(`/menu/get/${id}/${page}/${count}`);
     return response.data;
 }
 
 export async function createRestaurantMenu(menuData: MenuData) {
     const token = getToken()
-    const response = await axiosConfig.post('/menu/create', menuData,{headers:{'Authorization':`Bearer ${token}`}});
-    return response.data;
+    const response = await axiosConfig.post('/menu/create', menuData, { headers: { 'Authorization': `Bearer ${token}` } });
+    if(response.status==201){
+
+        return response.data;
+    }else{
+        return response
+    }
 }
 
 export async function updateRestaurantMenu(id: string, menuData: MenuData) {
     const token = getToken()
-    const response = await axiosConfig.put(`/menu/${id}/update`, menuData,{headers:{'Authorization':`Bearer ${token}`}});
+    const response = await axiosConfig.put(`/menu/${id}/update`, menuData, { headers: { 'Authorization': `Bearer ${token}` } });
     return response.data;
 }
 
 export async function deleteRestaurantMenu(id: string) {
     const token = getToken()
-    const response = await axiosConfig.delete('/menu/delete', { data: { id, many: false } ,headers:{'Authorization':`Bearer ${token}`}})
+    const response = await axiosConfig.delete('/menu/delete', { data: { id, many: false }, headers: { 'Authorization': `Bearer ${token}` } })
     return response.data;
 }

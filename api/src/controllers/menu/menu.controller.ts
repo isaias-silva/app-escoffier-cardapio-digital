@@ -54,17 +54,16 @@ export class MenuController {
     }
 
 
-    @Get('/my/:page/:count')
-    @UseGuards(JwtGuard)
-    @ApiBearerAuth()
+    @Get('get/:id/:page/:count')
+
 
     @ApiOperation({ summary: 'get your menus', description: 'get all menus of a restaurant' })
-    @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
+ 
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 200, description: 'menus array.', type: ResponseMenuDto, isArray: true })
 
-    async getAllRestaurantMenus(@Req() req: Request, @Param('count') count: string, @Param('page') page: string) {
-        return await this.menuService.getRestaurantMenus(req['auth'].id, parseInt(count), parseInt(page))
+    async getAllRestaurantMenus(@Param('id') id:string, @Param('count') count: string, @Param('page') page: string) {
+        return await this.menuService.getRestaurantMenus(id, parseInt(count), parseInt(page))
     }
 
     @Post('/create')

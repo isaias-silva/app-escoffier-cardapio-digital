@@ -1,6 +1,9 @@
+
+import { setCookie ,getCookie,deleteCookie} from "cookies-next";
 import { AuthResponse } from "../../../interfaces/response.interfaces";
 import { Restaurant, RestaurantUpdate } from "../../../interfaces/restaurant.interface";
 import axiosConfig from "../axiosConfig";
+
 
 async function login(email: string, password: string) {
 
@@ -8,7 +11,7 @@ async function login(email: string, password: string) {
 
     if (res.data && res.status == 201) {
 
-        localStorage.setItem('jwt-auth', res.data.token)
+        setCookie('jwt-auth', res.data.token)
     }
     return res
 }
@@ -18,17 +21,17 @@ async function register(name: string, email: string, password: string) {
 
     if (res.data && res.status == 201) {
 
-        localStorage.setItem('jwt-auth', res.data.token)
+        setCookie('jwt-auth', res.data.token)
     }
     return res
 }
 
 async function logout() {
-    if (localStorage){ localStorage.removeItem('jwt-auth')}
+    deleteCookie('jwt-auth')
 }
 
-function getToken(): string {
-    return localStorage.geItem('jwt-auth')
+function getToken(): string | undefined {
+    return getCookie('jwt-auth')
 }
 async function updateRestaurant(updateDto: RestaurantUpdate) {
     const token = getToken()

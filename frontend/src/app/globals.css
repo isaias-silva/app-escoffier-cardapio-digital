@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-.bg-login{
+.bg-login {
     background-image: url('../../public/banner.jpeg');
 }
+
+html, body {
+    width: 100%;
+}
+
