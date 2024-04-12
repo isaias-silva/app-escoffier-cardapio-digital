@@ -15,7 +15,7 @@ export default function MenuEditRestaurant({ restaurant, callback }: { restauran
     const [message, setMessage] = useState<{ type: 'error' | 'warn', text: string }>()
     useEffect(() => {
         if (restaurant) {
-          
+
             setName(restaurant.name)
             setEmail(restaurant.email)
             setResume(restaurant?.resume || '')
@@ -46,10 +46,7 @@ export default function MenuEditRestaurant({ restaurant, callback }: { restauran
         setMessage(undefined)
         try {
 
-            if (image) {
-                await updateProfile(image)
 
-            }
             const objectUpdate = {
                 name: name != restaurant?.name ? name : undefined,
                 email: email != restaurant?.email ? email : undefined,
@@ -58,8 +55,12 @@ export default function MenuEditRestaurant({ restaurant, callback }: { restauran
             }
             const res = await updateRestaurant(objectUpdate)
             setMessage({ type: 'warn', text: res?.data.message || 'dados atualizados' })
-
+            if (image) {
+                await updateProfile(image)
+               location.reload()
+            }
             callback()
+
         } catch (err: any) {
             console.log(err)
 

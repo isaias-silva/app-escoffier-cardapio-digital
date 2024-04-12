@@ -13,7 +13,7 @@ export default function page() {
         const mail = params.get('email')
 
         if (!mail) {
-            router.replace('/dashboard')
+            router.replace('/')
         }
     }, [router])
 
@@ -34,7 +34,7 @@ export default function page() {
                 setVerificationStatus(res?.data.message || 'código validado!');
 
 
-                router.replace('/dashboard')
+                router.replace('/')
 
             } catch (err: any) {
                 console.log(err)

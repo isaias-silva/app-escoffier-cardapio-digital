@@ -60,11 +60,8 @@ async function updateProfile(data: File) {
 }
 
 async function updatePasswordForgotten(new_password: string, email: string) {
-    const token = getToken()
-    if (!token) {
-        return
-    }
-    const res = await axiosConfig.put<Restaurant>('/restaurant/update/password/forgotten', { email, new_password }, { headers: { 'Authorization': `Bearer ${token}` } })
+    
+    const res = await axiosConfig.put<BasicResponses>('/restaurant/update/password/forgotten', { email, new_password } )
     return res
 }
 async function confirmCode(code: string, email: string) {

@@ -239,7 +239,8 @@ export class RestaurantService {
             email,
             SubjectMailEnum.CODE,
             MessageMailEnum.CODE_NEW_MAIL,
-            code)
+            code,
+            restaurantRegisterInDb.email)
     }
 
     async confirmChange(dto: ConfirmCodeRestaurantDto) {

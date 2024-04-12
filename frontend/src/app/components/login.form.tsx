@@ -1,8 +1,9 @@
 "use client"
 
 import React, { useState } from 'react';
-import { login, register } from '../api/services/restaurant.service';
+import { login, register, updatePasswordForgotten } from '../api/services/restaurant.service';
 import { useRouter } from 'next/navigation';
+import { Modal } from '@mui/material';
 
 const LoginForm = () => {
 
@@ -12,6 +13,22 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [registerForm, setRegisterForm] = useState(false)
+
+    const [open, setOpen] = useState<boolean>(false)
+
+    const handlerNewPassword = async () => {
+        if (email && password && password.length > 4 && password.length < 20) {
+            try {
+                const res = await updatePasswordForgotten(password, email)
+
+                alert(res?.data.message)
+                setOpen(false)
+            } catch (err: any) {
+                alert(err.response.data.message)
+            }
+        }
+
+    }
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
@@ -55,6 +72,49 @@ const LoginForm = () => {
 
     return (
         <div className="flex justify-center items-center h-screen">
+            <Modal
+
+                open={open}
+                onClose={() => setOpen(false)}>
+                <div className="flex items-center justify-center min-h-screen">
+                    <div className="fixed inset-0 bg-black opacity-30"></div>
+                    <div className="bg-orange-200 rounded-lg overflow-hidden shadow-xl transform transition-all max-w-sm w-full">
+                        <div className="px-6 py-4">
+                            <h2 className="text-lg font-semibold mb-4 text-center">Digite seu e-mail e sua nova senha</h2>
+
+                            <form>
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    value={email}
+                                    onChange={(ev) => setEmail(ev.target.value)}
+                                    className="border border-gray-300 px-3 py-2 w-full rounded-lg mb-2 focus:outline-none focus:ring-orange-400"
+                                />
+                                <input
+                                    type="password"
+                                    placeholder="sua nova senha"
+                                    value={password}
+                                    onChange={(ev) => setPassword(ev.target.value)}
+                                    className="border border-gray-300 px-3 py-2 w-full rounded-lg mb-2 focus:outline-none focus:ring-orange-400"
+                                />
+                                <div className="flex justify-center">
+                                    <button
+                                        onClick={() => handlerNewPassword()}
+
+                                        type="button"
+                                        className="bg-orange-500 text-white px-4 py-2 rounded-lg mr-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50"
+                                    >
+                                        Solicitar redefinição de senha
+                                    </button>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </Modal>
+
             <div className="bg-gray-100 p-8 rounded shadow-md duration-300 transition-all ">
                 <h2 className="text-xl font-bold mb-4 text-orange-700">{registerForm ? "Cadastre-se para editar seus cardápios" : "Entre para editar seus cardápios"}</h2>
                 {error && <p className="text-red-500 text-center mb-4 bg-red-300 rounded-lg">{error}</p>}
@@ -100,7 +160,8 @@ const LoginForm = () => {
 
                         <ul className='flex justify-center items-center flex-col'>
                             <li><span>{registerForm ? "já possui cadastro?" : "é novo aqui?"} <span onClick={() => { setRegisterForm(!registerForm); setError('') }} className='duration-300 transition-all hover:cursor-pointer text-orange-500 underline hover:text-orange-700'>{registerForm ? "entre" : "cadastre-se"}</span></span></li>
-                       </ul>
+                            {registerForm ? null : <li><span onClick={() => setOpen(true)} className='duration-300 transition-all hover:cursor-pointer text-orange-500 underline hover:text-orange-700'>Esqueceu sua senha?</span></li>}
+                        </ul>
 
                     </div>
                 </form>
