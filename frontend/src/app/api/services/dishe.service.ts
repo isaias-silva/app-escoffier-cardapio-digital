@@ -1,14 +1,14 @@
 import { CreateDishe, DeleteDishe, UpdateDishe } from "../../../interfaces/dishe.interface";
-import { BasicResponses } from "../../../interfaces/response.interfaces";
+import { BasicResponses, IdResponses } from "../../../interfaces/response.interfaces";
 import axiosConfig from "../axiosConfig";
 import { getToken } from "./restaurant.service";
 
 
 
-export async function createDishe(createDisheDto: CreateDishe): Promise<BasicResponses> {
+export async function createDishe(createDisheDto: CreateDishe) {
     const token = getToken()
-    const response = await axiosConfig.post('/dishe/create', createDisheDto,{headers: { 'Authorization': `Bearer ${token}` }});
-    return response.data;
+    const response = await axiosConfig.post<IdResponses>('/dishe/create', createDisheDto,{headers: { 'Authorization': `Bearer ${token}` }});
+    return response;
 }
 
 export async function getDishe(id: string): Promise<any> {

@@ -17,6 +17,7 @@ export interface UpdateDishe {
 }
 
 export interface Dishe {
+  "id"?: string,
   "name"?: string,
   "price"?: number,
   "mode"?: 'night' | 'mornning',

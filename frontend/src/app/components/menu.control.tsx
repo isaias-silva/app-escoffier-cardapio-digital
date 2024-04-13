@@ -28,15 +28,15 @@ export default function MenuControl({ isMe, menu }: { menu?: MenuResponse, isMe:
           deleteRestaurantMenu(menu.id).then(()=>router.back())
       }}
     />
-    <div className="fixed left-0 top-0 p-4">
-      {isMe && <><button onClick={() => setEditMenu(true)} className="flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1 mb-2">
+    <div className="fixed left-0 sm:bottom-0 bg-gray-50 rounded-xl overflow-hidden border-orange-500 border-2 z-10">
+      {isMe && <><button onClick={() => setEditMenu(true)} className="w-full flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1 mb-2">
         <EditIcon className="w-4 h-4 mr-2" /> editar
       </button>
 
-        <button onClick={() => setDelete(true)} className="flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1 mb-2">
+        <button onClick={() => setDelete(true)} className="w-full flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1 mb-2">
           <DeleteIcon className="w-4 h-4 mr-2" /> excluir
         </button></>}
-      <button onClick={() => router.back()} className="flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1">
+      <button onClick={() => router.back()} className="w-full flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1">
         <ReturnIcon className="w-4 h-4 mr-2" /> retornar
       </button>
     </div>

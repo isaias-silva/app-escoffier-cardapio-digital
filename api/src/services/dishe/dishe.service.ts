@@ -46,9 +46,9 @@ export class DisheService {
             categoryId
 
         }
-        await this.model.create({ data: { restaurantId, ...data, menuId } })
+        const dishe = await this.model.create({ data: { restaurantId, ...data, menuId } })
 
-        return { message: ResponsesEnum.DISHE_CREATED }
+        return { message: ResponsesEnum.DISHE_CREATED, id: dishe.id }
     }
 
     async getDishe(id: string, host: string) {
@@ -107,7 +107,7 @@ export class DisheService {
                     image = await this.fileService.getImage(`${disheInDb.id}.png`, host)
                 }
             }
-            const { name, price, description, mode, categoryId } = disheInDb
+            const { name, price, description, mode, categoryId, id } = disheInDb
             let category: Category
             try {
                 category = await this.categoryService.getCategory(disheInDb.restaurantId, categoryId)
@@ -115,7 +115,7 @@ export class DisheService {
                 this.removeInvalidCategory(disheInDb.id, disheInDb.categoryId)
             }
 
-            return { name, price, description, mode, image, category: category ? { name: category.name, keywords: category.keywords } : 'N/A' }
+            return { id, name, price, description, mode, image, category: category ? { name: category.name, keywords: category.keywords } : 'N/A' }
         })
 
         return await Promise.all(responseDishes)

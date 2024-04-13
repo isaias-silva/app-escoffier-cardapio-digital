@@ -4,6 +4,11 @@ export interface AuthResponse {
 }
 
 export interface BasicResponses {
-   
+
+    message: string
+}
+
+export interface IdResponses {
+    id: string,
     message: string
 }

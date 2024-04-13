@@ -76,7 +76,7 @@ export default function CategoryList() {
 
             )}{
 
-                <button className='bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-110' >
+                <button className='bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-75' >
                     <h2 className='text-2xl' onClick={handleOpenCreate}>+</h2>
                 </button>}
         </div>

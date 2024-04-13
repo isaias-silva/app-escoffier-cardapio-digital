@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 import { Restaurant } from '../../interfaces/restaurant.interface';
 import { updateProfile, updateRestaurant } from '../api/services/restaurant.service';
+import invalidImage from '../../../public/invalid-image.jpg'
 
 
 export default function MenuEditRestaurant({ restaurant, callback }: { restaurant?: Restaurant, callback: Function }) {
@@ -32,13 +33,16 @@ export default function MenuEditRestaurant({ restaurant, callback }: { restauran
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) {
+        if (file && file.type.includes("image")) {
             setImage(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviewImage(reader.result as string);
             };
             reader.readAsDataURL(file);
+        }else{
+            setImage(null)
+            setPreviewImage(invalidImage.src)
         }
     }
 
