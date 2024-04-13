@@ -65,11 +65,8 @@ async function updatePasswordForgotten(new_password: string, email: string) {
     return res
 }
 async function confirmCode(code: string, email: string) {
-    const token = getToken()
-    if (!token) {
-        return
-    }
-    const res = await axiosConfig.put<BasicResponses>('/restaurant/confirm/code', { email, code }, { headers: { 'Authorization': `Bearer ${token}` } })
+    
+    const res = await axiosConfig.put<BasicResponses>('/restaurant/confirm/code', { email, code })
     return res
 }
 async function getMyRestaurant() {

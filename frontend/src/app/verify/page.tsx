@@ -10,7 +10,7 @@ export default function page() {
     const router = useRouter()
 
     useEffect(() => {
-        const mail = params.get('email')
+        const mail = params?.get('email')
 
         if (!mail) {
             router.replace('/')
@@ -25,16 +25,21 @@ export default function page() {
 
         event.preventDefault();
         setVerificationStatus('')
-        const mail = params.get('email')?.replace(" ", "+")
-      
+        const mail = params?.get('email')?.replace(" ", "+")
+
         if (mail) {
             try {
                 const res = await confirmCode(code, mail)
 
-                setVerificationStatus(res?.data.message || 'código validado!');
+                if (res?.status == 200) {
+                    setVerificationStatus(res?.data.message || 'código validado!');
 
 
-                router.replace('/')
+                    router.replace('/')
+
+                } else {
+                    console.log(res?.status)
+                }
 
             } catch (err: any) {
                 console.log(err)

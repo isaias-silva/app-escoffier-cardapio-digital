@@ -25,8 +25,8 @@ export default function MenusList({ id, isMe }: { id?: string, isMe: boolean }) 
                 setOpen={setOpen}
                 callback={refreshMenus} />
 
-            {menus.map((menuData) =>
-                <Link href={`menu/${menuData.id}`} className="bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-110">
+            {menus.map((menuData,i) =>
+                <Link key={i} href={`menu/${menuData.id}`} className="bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-110">
                     <div className="text-gray-800 font-semibold">{menuData.name}</div>
                 </Link>
 

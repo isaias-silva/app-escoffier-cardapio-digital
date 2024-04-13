@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <IsAuth>
       <main className="bg-login">
-
+        
         <LoginForm></LoginForm>
       </main>
     </IsAuth>

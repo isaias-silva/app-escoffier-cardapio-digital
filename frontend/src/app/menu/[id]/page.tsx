@@ -1,10 +1,12 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { Dishe } from '../../../interfaces/dishe.interface';
+
 import { getMenu } from '../../../app/api/services/menu.service';
 import { MenuResponse } from '../../../interfaces/menu.interface';
 import { useParams, useRouter } from 'next/navigation';
 import { getMyRestaurant } from '../../api/services/restaurant.service';
+import MenuControl from '../../components/menu.control';
+import LoadComponent from '../../components/load.component';
 
 
 export default function page() {
@@ -12,14 +14,28 @@ export default function page() {
   const route = useRouter()
   const params = useParams()
   const [isMe, setIsme] = useState<boolean>(false)
+  const [load, setLoad] = useState<boolean>(true)
+
   useEffect(() => {
     if (params?.id) {
       refreshMenu(params.id.toString())
 
     }
-  }, [route])
+  }, [route, params])
+
   const refreshMenu = (id: string) => getMenu(id, 1, 100).then(res => {
-    getMyRestaurant().then(response => { if (response?.data.id == res.restaurantId) { setIsme(true) } }).catch(() => { setIsme(false) })
+
+    getMyRestaurant().then(response => {
+      if (response?.data.id == res.restaurantId) {
+        setLoad(false)
+        setIsme(true)
+      }else{
+        setLoad(false)
+        setIsme(false)
+      }
+    }).catch(() => { 
+      setLoad(false)
+      setIsme(false) })
     setMenu(res)
 
   }).catch(() => route.replace('/error'))
@@ -29,6 +45,8 @@ export default function page() {
 
   return (
     <div className="bg-orange-100 min-h-screen py-8">
+     {load && <LoadComponent />}
+      <MenuControl isMe={isMe} menu={menu} />
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-semibold text-center mb-8">{menu?.name}</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

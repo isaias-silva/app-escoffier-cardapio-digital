@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import { login, register, updatePasswordForgotten } from '../api/services/restaurant.service';
 import { useRouter } from 'next/navigation';
 import { Modal } from '@mui/material';
+import LoadComponent from './load.component';
 
-const LoginForm = () => {
+export default function () {
 
     const router = useRouter()
     const [name, setName] = useState('');
@@ -15,16 +16,20 @@ const LoginForm = () => {
     const [registerForm, setRegisterForm] = useState(false)
 
     const [open, setOpen] = useState<boolean>(false)
+    const [load, setLoad] = useState<boolean>(false)
 
     const handlerNewPassword = async () => {
         if (email && password && password.length > 4 && password.length < 20) {
             try {
+                setLoad(true)
                 const res = await updatePasswordForgotten(password, email)
 
                 alert(res?.data.message)
                 setOpen(false)
             } catch (err: any) {
                 alert(err.response.data.message)
+            } finally {
+                setLoad(false)
             }
         }
 
@@ -57,6 +62,7 @@ const LoginForm = () => {
         setError('')
 
         try {
+            setLoad(true)
             const req = registerForm ? register(name, email, password) : login(email, password)
             const result = await req
             if (result.status == 201) {
@@ -66,12 +72,15 @@ const LoginForm = () => {
 
             console.log(error)
             setError(error.response?.data.message);
+        } finally {
+            setLoad(false)
         }
 
     };
 
     return (
         <div className="flex justify-center items-center h-screen">
+            {load && <LoadComponent />}
             <Modal
 
                 open={open}
@@ -169,5 +178,3 @@ const LoginForm = () => {
         </div>
     );
 };
-
-export default LoginForm;

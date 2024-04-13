@@ -59,7 +59,7 @@ export class DisheController {
     async updateDisheProfile(@Req() req: Request, @Param('id') id: string, @UploadedFile(new ParseFilePipe({
         validators: [
             new FileTypeValidator({ fileType: 'image' }),
-            new MaxFileSizeValidator({ maxSize: 2e+7, message: 'Image too large' })
+            new MaxFileSizeValidator({ maxSize: 1000000, message: 'Image too large, max 1mb' })
         ]
     })) file?: Express.Multer.File) {
 

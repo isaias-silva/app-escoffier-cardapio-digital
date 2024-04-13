@@ -256,13 +256,14 @@ export class RestaurantService {
         }
 
         const changesString = await this.cacheService.getCache(restaurantRegisterInDb.id)
-
+       
         if (!changesString) {
             throw new BadRequestException(ResponsesEnum.NOT_HAVE_CHANGES)
         }
 
         const objectChanges = JSON.parse(changesString)
 
+     
         if (bcrypt.compareSync(code, objectChanges.code)) {
             if (objectChanges['email']) {
                 await this.model.update({ where: { id: restaurantRegisterInDb.id }, data: { email: objectChanges['email'] } })
@@ -276,7 +277,7 @@ export class RestaurantService {
             }
 
             if (objectChanges['password']) {
-
+                console.log(objectChanges['password'])
                 await this.model.update({ where: { id: restaurantRegisterInDb.id }, data: { password: objectChanges['password'] } })
 
                 this.mailService.makeHtmlMailAndSend('default',

@@ -63,8 +63,8 @@ export default function CategoryList() {
                 message='Deseja mesmo deletar a categoria?'
                 callback={deleteCategoryCallback}
             />
-            {categories.map((category) =>
-                <div className=" relative bg-white rounded-lg shadow-md transition-all duration-300 p-6">
+            {categories.map((category,i) =>
+                <div key={i} className=" relative bg-white rounded-lg shadow-md transition-all duration-300 p-6">
                     <div className="flex absolute top-0 right-0">
                         <button onClick={() => handleOpenUpdate(category.id)} className='transition-all duration-300 hover:text-orange-300'><EditIcon /></button>
                         <button onClick={() => handleOpenDelete(category.id)} className='transition-all duration-300 hover:text-red-500'><DeleteIcon /></button>
