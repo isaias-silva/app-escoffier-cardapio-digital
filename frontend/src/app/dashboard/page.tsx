@@ -20,7 +20,8 @@ export default function () {
   const params = useSearchParams()
   useEffect(() => {
     refreshRestaurant()
-  }, [router])
+  }, [router, params])
+
 
   const refreshRestaurant = () => {
     let restaurantId = params?.get('restaurant')
@@ -30,15 +31,22 @@ export default function () {
         setRestaurant(res?.data)
         setLoad(false)
       }).catch(() => router.replace('/error'))
+    
       setIsMe(false)
 
 
     } else {
       setIsMe(true)
       getMyRestaurant().then(res => {
+        if(!res){
+          logout();
+           router.replace('/')
+        }
         setRestaurant(res?.data)
+
         setLoad(false)
-      }).catch(() => { logout(); router.replace('/') })
+      })
+      .catch(() => { logout(); router.replace('/') })
 
     }
   }
@@ -59,7 +67,7 @@ export default function () {
 
               <p className="mt-2 w-[60%] text-sm">{restaurant?.resume
                 || 'sem descrição'}</p>
-
+              {isMe ? <Link className=' font-bold hover:underline' target='_blank' href={`/dashboard?restaurant=${restaurant?.id}`}>link público</Link> : null}
 
             </div>
           </div>

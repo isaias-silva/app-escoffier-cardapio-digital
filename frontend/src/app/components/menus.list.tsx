@@ -26,14 +26,14 @@ export default function MenusList({ id, isMe }: { id?: string, isMe: boolean }) 
                 callback={refreshMenus} />
 
             {menus.map((menuData,i) =>
-                <Link key={i} href={`menu/${menuData.id}`} className="bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-110">
+                <Link key={i} href={`menu/${menuData.id}${!isMe?'?filter=realtime':''}`} className="bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-105">
                     <div className="text-gray-800 font-semibold">{menuData.name}</div>
                 </Link>
 
 
             )}{
                 isMe ?
-                    <button className='bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-75' >
+                    <button className='bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-105' >
                         <h2 className='text-2xl' onClick={handleOpen}>+</h2>
                     </button> : null}
         </div>

@@ -33,7 +33,7 @@ export default function CategoryList() {
             setOpenDelete(false)
         }
     }
-    const refreshCategories = () => getMyCategories().then((res) => setCategories(res))
+    const refreshCategories = () => getMyCategories().then((res) => setCategories(res)).catch(err=>setCategories([]))
 
     useEffect(() => {
         refreshCategories();
@@ -76,7 +76,7 @@ export default function CategoryList() {
 
             )}{
 
-                <button className='bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-75' >
+                <button className='bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-105' >
                     <h2 className='text-2xl' onClick={handleOpenCreate}>+</h2>
                 </button>}
         </div>

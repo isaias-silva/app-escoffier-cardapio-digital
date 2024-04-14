@@ -78,10 +78,7 @@ async function getMyRestaurant() {
     return res
 }
 async function getRestaurant(id: string) {
-    const token = getToken()
-    if (!token) {
-        return
-    }
+   
     const res = await axiosConfig.get<Restaurant>(`/restaurant/${id}`)
 
     return res

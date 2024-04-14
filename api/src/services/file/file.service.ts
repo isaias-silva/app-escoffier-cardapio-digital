@@ -40,7 +40,7 @@ export class FileService implements OnModuleInit {
     }
 
     async getImage(name: string, host: string) {
-        this.logger.debug(`get image file ${name}`)
+       
         try {
             fs.readFileSync(resolve(this.pathTemp, name))
 

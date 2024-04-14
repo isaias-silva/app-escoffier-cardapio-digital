@@ -20,14 +20,16 @@ export async function getCategory(id: string): Promise<{ name: string, id: strin
 
 export async function getMyCategories(): Promise<{ name: string, keywords: string[], id: string }[]> {
     const token = getToken()
-
+    if (!token) {
+        return []
+    }
     const response = await axiosConfig.get('/category/categories', { headers: { 'Authorization': `Bearer ${token}` } });
-   if(response.status==200){
-    return response.data;
+    if (response.status == 200) {
+        return response.data;
 
-   }else{
-    return []
-   }
+    } else {
+        return []
+    }
 }
 
 export async function updateCategory(id: string, updateCategoryDto: UpdateCategory) {

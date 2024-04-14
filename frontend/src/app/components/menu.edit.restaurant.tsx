@@ -73,7 +73,7 @@ export default function MenuEditRestaurant({ restaurant, callback }: { restauran
     }
     return (
         <>
-            <Modal open={open} onClose={handleClose}>
+            <Modal open={open} onClose={handleClose} className="overflow-y-scroll">
                 <div className="sm:p-6 p-2 bg-white w-full sm:w-1/3 sm:mt-10  m-auto rounded-lg adapt">
                     <h2 className="text-2xl mb-4 text-center">Editar Restaurante</h2>
                     {message && <p className={message.type == 'error' ? 'bg-red-300 text-red-600 p-2 m-auto rounded-lg' : 'bg-green-300 text-green-600 p-2 m-auto rounded-lg'}>{message?.text}</p>}
@@ -88,8 +88,8 @@ export default function MenuEditRestaurant({ restaurant, callback }: { restauran
                                 onChange={handleImageChange}
                                 className=" hidden"
                             />
-                            <label htmlFor="image" className=' w-full flex justify-center items-center'>
-                                <img src={previewImage || "https://cdn-icons-png.flaticon.com/512/433/433087.png"} alt="Preview" className=" w-[200px] h-[200px] mt-2 rounded-full duration-200 transition-all hover:cursor-pointer hover:scale-110" />
+                            <label htmlFor="image" className='m-auto mt-4 w-[200px] h-[200px] flex justify-center items-center'>
+                                <img src={previewImage || "https://cdn-icons-png.flaticon.com/512/433/433087.png"} alt="Preview" className=" w-full h-full mt-2 rounded-full duration-200 transition-all hover:cursor-pointer hover:scale-110" />
                             </label>
 
                         </div>
