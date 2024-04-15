@@ -62,7 +62,7 @@ export class MailService implements OnModuleInit {
         code?: string,
         pastMail?: string) {
 
-         
+
         const content = (await this.fileService.getMailFile(type == 'code' ? 'code.email.html' : 'default.email.html')).toString()
             .replace(/\[NAME]/g, name)
             .replace(/\[SUBJECT]/g, subject)
@@ -70,6 +70,7 @@ export class MailService implements OnModuleInit {
             .replace(/\[CODE]/g, code)
             .replace(/\[FRONT-LINK]/, process.env.FRONT_LINK + "/" + "verify?email=" + (pastMail || email))
 
+        this.logger.debug(process.env.FRONT_LINK)
         this.sendHtmlMail(email, subject, content)
     }
 }
