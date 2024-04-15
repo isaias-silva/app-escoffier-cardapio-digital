@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Modal } from '@mui/material';
 import LoadComponent from './load.component';
 
-export default function () {
+export default function LoginForm () {
 
     const router = useRouter()
     const [name, setName] = useState('');

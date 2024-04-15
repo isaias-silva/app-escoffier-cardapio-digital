@@ -10,7 +10,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import Link from 'next/link'
 import LoadComponent from '../components/load.component'
 
-export default function () {
+export default function Page() {
 
   const router = useRouter()
   const [restaurant, setRestaurant] = useState<Restaurant>()

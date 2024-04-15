@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Dishe } from "../../interfaces/dishe.interface";
 import MoonIcon from '@mui/icons-material/Bedtime';
 import SunIcon from '@mui/icons-material/Brightness7';
-export default function ({ dishe }: { dishe: Dishe }) {
+export default function DisheCard ({ dishe }: { dishe: Dishe }) {
 
     return <Link href={"dishes/" + dishe.id} className=" relative bg-white transition-all duration-300 hover:scale-105 rounded-lg shadow-md overflow-hidden">
 

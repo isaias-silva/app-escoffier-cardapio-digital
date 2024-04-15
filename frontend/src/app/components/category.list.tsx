@@ -70,7 +70,7 @@ export default function CategoryList() {
                         <button onClick={() => handleOpenDelete(category.id)} className='transition-all duration-300 hover:text-red-500'><DeleteIcon /></button>
                     </div>
                     <div className="text-gray-800 font-semibold">{category.name}</div>
-                    {category.keywords.map(key => <span className="inline-block m-1 p-1 bg-orange-300 rounded-xl text-sm">{key}</span>)}
+                    {category.keywords.map((key,index) => <span key={index} className="inline-block m-1 p-1 bg-orange-300 rounded-xl text-sm">{key}</span>)}
                 </div>
 
 

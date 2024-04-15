@@ -3,7 +3,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { confirmCode } from '../../app/api/services/restaurant.service';
 
-export default function page() {
+export default function Page() {
     const [code, setCode] = useState('');
     const [verificationStatus, setVerificationStatus] = useState('');
     const params = useSearchParams()

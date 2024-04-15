@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "@mui/material";
-import invalidImage from '../../../public/invalid-image.jpg'
 import { getMyCategories } from "../api/services/category.service";
 import { createDishe, updateDisheProfile } from "../api/services/dishe.service";
-export default function ({ open, setOpen, create, menuId, callback }: { callback?: Function, create: boolean, menuId: string, open: boolean, setOpen: Function }) {
+export default function DisheForm ({ open, setOpen, create, menuId, callback }: { callback?: Function, create: boolean, menuId: string, open: boolean, setOpen: Function }) {
     const [name, setName] = useState("");
     const [price, setPrice] = useState<number>();
     const [category, setCategory] = useState("");
@@ -73,7 +72,7 @@ export default function ({ open, setOpen, create, menuId, callback }: { callback
             reader.readAsDataURL(file);
         } else {
             setImage(null)
-            setPreviewImage(invalidImage.src)
+            setPreviewImage('./invalid-image.jpg')
         }
     }
     return (

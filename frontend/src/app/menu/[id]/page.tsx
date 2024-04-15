@@ -13,7 +13,7 @@ import DisheCard from '../../components/dishe.card';
 import Load from '../../components/load';
 
 
-export default function page() {
+export default function Page() {
 
   const route = useRouter()
   const params = useParams()
