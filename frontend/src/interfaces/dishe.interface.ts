@@ -17,12 +17,14 @@ export interface UpdateDishe {
 }
 
 export interface Dishe {
-  "id"?: string,
+  "restaurantId"?: string,
+  "menuId"?: string,
+  "id": string,
   "name"?: string,
   "price"?: number,
   "mode"?: 'night' | 'mornning',
   "description"?: string,
-  "categoryId"?: string,
+  "category"?: { name: string, id:string, keywords: string[] },
   "image": string,
 }
 export interface DeleteDishe {

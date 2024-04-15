@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "@mui/material";
 import { getMyCategories } from "../api/services/category.service";
-import { createDishe, updateDisheProfile } from "../api/services/dishe.service";
-export default function DisheForm ({ open, setOpen, create, menuId, callback }: { callback?: Function, create: boolean, menuId: string, open: boolean, setOpen: Function }) {
+import { createDishe, updateDishe, updateDisheProfile } from "../api/services/dishe.service";
+import { Dishe } from "../../interfaces/dishe.interface";
+export default function DisheForm({ open, setOpen, create, menuId, callback, disheUpdate }:
+    { callback?: Function, create: boolean, menuId: string, open: boolean, setOpen: Function, disheUpdate?: Dishe }) {
     const [name, setName] = useState("");
     const [price, setPrice] = useState<number>();
     const [category, setCategory] = useState("");
@@ -20,25 +22,24 @@ export default function DisheForm ({ open, setOpen, create, menuId, callback }: 
     const handleSave = async (e: any) => {
         e.preventDefault();
         setMessage(undefined)
+        if (!name || !price || !mode || !description || !category) {
+            setMessage({ text: 'preencha todas as informações', type: 'error' })
+            return
+        }
+
+        const data = {
+            name,
+            mode,
+            description,
+            menuId,
+            price,
+            categoryId: category
+        }
 
         if (create) {
-            if (!name || !price || !mode || !description || !category) {
-                setMessage({ text: 'preencha todas as informações', type: 'error' })
-                return
-            }
-
-
-            const data = {
-                name,
-                mode,
-                description,
-                menuId,
-                price,
-                categoryId: category
-            }
 
             createDishe(data).then((res) => {
-               
+
                 if (image) {
                     updateDisheProfile(res.data.id, image)
                 }
@@ -50,17 +51,50 @@ export default function DisheForm ({ open, setOpen, create, menuId, callback }: 
                 }
                 setOpen(false)
             }).catch((err: any) => {
-                setMessage({ type: 'error', text: typeof(err.response.data.message)=='string'?err.response.data.message:err.response.data.message.join(', ') })
+                setMessage({ type: 'error', text: typeof (err.response.data.message) == 'string' ? err.response.data.message : err.response.data.message.join(', ') })
             })
 
 
 
 
+        } else {
+         
+            console.log(disheUpdate)
+            if (disheUpdate)
+                updateDishe(disheUpdate?.id, data).then((res) => {
+
+                    if (image) {
+                        updateDisheProfile(disheUpdate?.id, image)
+                    }
+
+                    setMessage({ type: 'warn', text: res.data.message })
+
+                    if (callback) {
+                        callback()
+                    }
+                  
+                }).catch((err: any) => {
+                    setMessage({ type: 'error', text: typeof (err.response.data.message) == 'string' ? err.response.data.message : err.response.data.message.join(', ') })
+                })
         }
     }
     useEffect(() => {
         getMyCategories().then(res => setCategories(res))
+
     }, [])
+    useEffect(() => {
+
+        if (disheUpdate) {
+            setName(disheUpdate?.name || "")
+            setPrice(disheUpdate?.price || 0)
+            setDescription(disheUpdate?.description || "")
+            setCategory(disheUpdate?.category?.id||"")
+          
+            setPreviewImage(disheUpdate?.image || null)
+
+
+        }
+    }, [disheUpdate])
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && file.type.includes("image")) {
@@ -72,7 +106,7 @@ export default function DisheForm ({ open, setOpen, create, menuId, callback }: 
             reader.readAsDataURL(file);
         } else {
             setImage(null)
-            setPreviewImage('./invalid-image.jpg')
+            setPreviewImage('/invalid-image.jpg')
         }
     }
     return (

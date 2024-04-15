@@ -4,7 +4,7 @@ import MoonIcon from '@mui/icons-material/Bedtime';
 import SunIcon from '@mui/icons-material/Brightness7';
 export default function DisheCard ({ dishe }: { dishe: Dishe }) {
 
-    return <Link href={"dishes/" + dishe.id} className=" relative bg-white transition-all duration-300 hover:scale-105 rounded-lg shadow-md overflow-hidden">
+    return <Link href={"/dishe/" + dishe.id} className=" relative bg-white transition-all duration-300 hover:scale-105 rounded-lg shadow-md overflow-hidden">
 
         <img src={dishe.image || "https://cdn-icons-png.flaticon.com/512/433/433087.png"} alt={dishe.name} className="w-full h-40 object-cover object-center" />
         <div className="p-6">

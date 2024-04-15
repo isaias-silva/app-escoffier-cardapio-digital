@@ -32,7 +32,8 @@ export class DisheController {
     @ApiResponse({ status: 404, description: 'Dish not found', type: BasicResponseDto })
     @ApiParam({ name: 'id', type: String, required: true })
     async getDishe(@Req() req: Request, @Param('id') id: string) {
-        return await this.disheService.getDishe(req["apiurl"], id);
+        console.log(id)
+        return await this.disheService.getDishe(id,req["apiurl"]);
     }
 
     @Put('update/:id')
@@ -66,7 +67,7 @@ export class DisheController {
         return await this.disheService.updateDisheProfile(req['auth'].id, id, file.buffer);
     }
 
-    @Delete('delete/:id')
+    @Delete('delete')
     @UseGuards(JwtGuard)
 
     @ApiBearerAuth()

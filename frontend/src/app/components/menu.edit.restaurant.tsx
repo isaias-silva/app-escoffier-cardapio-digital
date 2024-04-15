@@ -1,4 +1,4 @@
-import { CircularProgress, Modal } from '@mui/material'
+import { Modal } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 import { Restaurant } from '../../interfaces/restaurant.interface';
@@ -42,7 +42,7 @@ export default function MenuEditRestaurant({ restaurant, callback }: { restauran
             reader.readAsDataURL(file);
         }else{
             setImage(null)
-            setPreviewImage('./invalid-image.jpg')
+            setPreviewImage('/invalid-image.jpg')
         }
     }
 

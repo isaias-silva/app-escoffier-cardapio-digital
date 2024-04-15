@@ -68,7 +68,7 @@ export class MailService implements OnModuleInit {
             .replace(/\[SUBJECT]/g, subject)
             .replace(/\[MESSAGE]/g, message)
             .replace(/\[CODE]/g, code)
-            .replace(/\[FRONT-LINK]/, process.env.FRONT_LINK + "/" + "verify?email=" + (pastMail || email))
+            .replace(/\[FRONT-LINK]/, process.env.FRONT_LINK + "verify?email=" + (pastMail || email))
 
         this.logger.debug(process.env.FRONT_LINK)
         this.sendHtmlMail(email, subject, content)

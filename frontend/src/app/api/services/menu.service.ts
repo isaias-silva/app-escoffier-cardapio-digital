@@ -10,7 +10,7 @@ export async function getMenuInRealTime(id: string, page: number, count: number)
     return response.data;
 }
 
-export async function getMenu(id: string, page: number, count: number, category?: string): Promise<MenuResponse> {
+export async function getMenu(id: string, page: number, count: number, category?: string|null): Promise<MenuResponse> {
     const response = await axiosConfig.get(`/menu/dishes/${id}/${page}/${count}`, {
         params: { category }
     });

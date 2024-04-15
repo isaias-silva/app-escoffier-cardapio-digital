@@ -1,4 +1,4 @@
-import { CreateDishe, DeleteDishe, UpdateDishe } from "../../../interfaces/dishe.interface";
+import { CreateDishe, DeleteDishe, Dishe, UpdateDishe } from "../../../interfaces/dishe.interface";
 import { BasicResponses, IdResponses } from "../../../interfaces/response.interfaces";
 import axiosConfig from "../axiosConfig";
 import { getToken } from "./restaurant.service";
@@ -11,15 +11,15 @@ export async function createDishe(createDisheDto: CreateDishe) {
     return response;
 }
 
-export async function getDishe(id: string): Promise<any> {
-    const response = await axiosConfig.get(`/dishe/${id}`);
+export async function getDishe(id: string) {
+    const response = await axiosConfig.get<Dishe>(`/dishe/${id}`);
     return response.data;
 }
 
-export async function updateDishe(id: string, updateDisheDto: UpdateDishe): Promise<BasicResponses> {
+export async function updateDishe(id: string, updateDisheDto: UpdateDishe) {
     const token = getToken()
-    const response = await axiosConfig.put(`/dishe/update/${id}`, updateDisheDto,{headers: { 'Authorization': `Bearer ${token}` }});
-    return response.data;
+    const response = await axiosConfig.put<BasicResponses>(`/dishe/update/${id}`, updateDisheDto,{headers: { 'Authorization': `Bearer ${token}` }});
+    return response;
 }
 
 export async function updateDisheProfile(id: string, file: File): Promise<BasicResponses> {
@@ -36,9 +36,9 @@ export async function updateDisheProfile(id: string, file: File): Promise<BasicR
     return response.data;
 }
 
-export async function deleteDishe(id: string, deleteDisheDto: DeleteDishe): Promise<BasicResponses> {
+export async function deleteDishe(deleteDisheDto: DeleteDishe): Promise<BasicResponses> {
     const token = getToken()
     
-    const response = await axiosConfig.delete(`/dishe/delete/${id}`, { data: deleteDisheDto ,headers: { 'Authorization': `Bearer ${token}` }});
+    const response = await axiosConfig.delete(`/dishe/delete/`, { data: deleteDisheDto ,headers: { 'Authorization': `Bearer ${token}` }});
     return response.data;
 }

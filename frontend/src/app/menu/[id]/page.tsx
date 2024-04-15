@@ -11,6 +11,7 @@ import DisheForm from '../../components/dishe.form';
 import Link from 'next/link';
 import DisheCard from '../../components/dishe.card';
 import Load from '../../components/load';
+import { getCategories } from '../../api/services/category.service';
 
 
 export default function Page() {
@@ -18,10 +19,13 @@ export default function Page() {
   const route = useRouter()
   const params = useParams()
   const searchParams = useSearchParams()
+  const [menu, setMenu] = useState<MenuResponse>()
   const [isMe, setIsme] = useState<boolean>(false)
   const [load, setLoad] = useState<boolean>(true)
   const [realTime, setRealTime] = useState<boolean>(false)
+  const [categories, setCategories] = useState<{ id: string, name: string }[]>()
   const [openCreationDishe, setOpenCreationDishe] = useState<boolean>(false)
+
   useEffect(() => {
     if (searchParams?.get('filter') == 'realtime') {
       setRealTime(true)
@@ -32,57 +36,76 @@ export default function Page() {
     }
   }, [route, params, searchParams])
 
-const getBgRealTime=()=>{
-  if(realTime){
-    const date=new Date()
-    if(date.getHours()>17 || date.getHours()<4){
-      return 'bg-gray-700'
-    }else{
-      return 'bg-orange-100'
-    }
-  }else{
-    return 'bg-orange-100'
-  }
-
-  
-}
-
-
-const getBgDivRealTime=()=>{
-  if(realTime){
-    const date=new Date()
-    if(date.getHours()>17 || date.getHours()<4){
-      return 'bg-blue-950'
-    }else{
-      return 'bg-orange-500'
-    }
-  }else{
-    return 'bg-orange-500'
-  }
-
-  
-}
-  const refreshMenu = (id: string) => (searchParams?.get('filter') == 'realtime' ? getMenuInRealTime(id, 1, 6) : getMenu(id, 1, 6)).then(res => {
-    setLoad(false)
-    setMenu(res)
-
-  }).catch(() => route.replace('/error'))
-
-  const [menu, setMenu] = useState<MenuResponse>()
 
   useEffect(() => {
     if (!menu) {
 
       return
     }
-
+    getCategories(menu.restaurantId).then(res=>setCategories(res))
     getMyRestaurant().then(res => setIsme(res?.data.id == menu.restaurantId)).catch(() => setIsme(false))
   }, [route, menu])
+
+  const getBgRealTime = () => {
+    if (realTime) {
+      const date = new Date()
+      if (date.getHours() > 17 || date.getHours() < 4) {
+        return 'bg-gray-700'
+      } else {
+        return 'bg-orange-100'
+      }
+    } else {
+      return 'bg-orange-100'
+    }
+
+
+  }
+
+
+
+
+  const getBgDivRealTime = () => {
+    if (realTime) {
+      const date = new Date()
+      if (date.getHours() > 17 || date.getHours() < 4) {
+        return 'bg-blue-950'
+      } else {
+        return 'bg-orange-500'
+      }
+    } else {
+      return 'bg-orange-500'
+    }
+
+
+  }
+  const refreshMenu = (id: string) => (searchParams?.get('filter') == 'realtime' ? getMenuInRealTime(id, 1, 6) : getMenu(id, 1, 6, searchParams?.get('category'))).then(res => {
+    setLoad(false)
+    setMenu(res)
+
+  }).catch(() => route.replace('/error'))
+
+
+
+
 
   return (
     <div className={`${getBgRealTime()} min-h-screen py-8`}>
       <h1 className={`text-3xl shadow-lg py-2 font-semibold text-center mb-8 w-full text-white ${getBgDivRealTime()} absolute top-0 rounded-b-2xl`}>{menu?.name}</h1>
+     <div className='mt-10 flex justify-center'>
 
+     <Link className={`mx-2 p-2 ${getBgDivRealTime()} rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}`} >
+            Todos
+        </Link>
+      {categories?.map((category,i)=>{
+        return <Link className={`mx-2 p-2 ${getBgDivRealTime()} rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}?category=${category.id}`} key={i}>
+              {category.name}
+        </Link>
+      })}
+ <Link className={`mx-2 p-2 ${getBgDivRealTime()} rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}?filter=realtime`} >
+            disponíveis agora
+        </Link>
+ </div>
+    
       {load && <LoadComponent />}
       {isMe && menu && <DisheForm menuId={menu.id}
         create={true}

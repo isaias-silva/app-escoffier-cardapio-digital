@@ -36,7 +36,7 @@ export default function MenuControl({ isMe, menu }: { menu?: MenuResponse, isMe:
         <button onClick={() => setDelete(true)} className="w-full flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1 mb-2">
           <DeleteIcon className="w-4 h-4 mr-2" /> excluir
         </button></>}
-      <button onClick={() => router.back()} className="w-full flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1">
+      <button onClick={() => router.replace(isMe?`/dashboard`:`/dashboard?restaurant=${menu?.restaurantId}`)} className="w-full flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1">
         <ReturnIcon className="w-4 h-4 mr-2" /> retornar
       </button>
     </div>

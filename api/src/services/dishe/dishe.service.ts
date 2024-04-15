@@ -76,9 +76,9 @@ export class DisheService {
         }
 
 
-        const { name, price, description, mode } = disheInDb
+        const { name, price, description, mode, restaurantId, menuId } = disheInDb
 
-        return { name, price, description, mode, image, category: category ? { name: category.name, keywords: category.keywords } : 'N/A' }
+        return { restaurantId, menuId, name, price, description, mode, image, category: category ? { id: category.id, name: category.name, keywords: category.keywords } : 'N/A' }
 
     }
 

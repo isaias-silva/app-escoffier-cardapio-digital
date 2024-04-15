@@ -32,6 +32,16 @@ export async function getMyCategories(): Promise<{ name: string, keywords: strin
     }
 }
 
+export async function getCategories(restaurantId:string): Promise<{ name: string, keywords: string[], id: string }[]> {
+   
+    const response = await axiosConfig.get(`/category/categories/${restaurantId}`);
+    if (response.status == 200) {
+        return response.data;
+
+    } else {
+        return []
+    }
+}
 export async function updateCategory(id: string, updateCategoryDto: UpdateCategory) {
     const token = getToken()
 
