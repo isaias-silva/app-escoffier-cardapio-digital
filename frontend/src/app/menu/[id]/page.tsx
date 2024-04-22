@@ -42,7 +42,7 @@ export default function Page() {
 
       return
     }
-    getCategories(menu.restaurantId).then(res=>setCategories(res))
+    getCategories(menu.restaurantId).then(res => setCategories(res))
     getMyRestaurant().then(res => setIsme(res?.data.id == menu.restaurantId)).catch(() => setIsme(false))
   }, [route, menu])
 
@@ -91,21 +91,21 @@ export default function Page() {
   return (
     <div className={`${getBgRealTime()} min-h-screen py-8`}>
       <h1 className={`text-3xl shadow-lg py-2 font-semibold text-center mb-8 w-full text-white ${getBgDivRealTime()} absolute top-0 rounded-b-2xl`}>{menu?.name}</h1>
-     <div className='mt-10 flex justify-center'>
+      <div className='mt-10 flex justify-center flex-wrap'>
 
-     <Link className={`mx-2 p-2 ${getBgDivRealTime()} rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}`} >
-            Todos
+        <Link className={`mx-2 p-2 my-1 ${getBgDivRealTime()} rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}`} >
+          Todos
         </Link>
-      {categories?.map((category,i)=>{
-        return <Link className={`mx-2 p-2 ${getBgDivRealTime()} rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}?category=${category.id}`} key={i}>
-              {category.name}
+        {categories?.map((category, i) => {
+          return <Link className={`mx-2 p-2 my-1 ${getBgDivRealTime()} rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}?category=${category.id}`} key={i}>
+            {category.name}
+          </Link>
+        })}
+        <Link className={`mx-2 p-2 my-1 ${getBgDivRealTime()} rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}?filter=realtime`} >
+          Disponíveis agora
         </Link>
-      })}
- <Link className={`mx-2 p-2 ${getBgDivRealTime()} rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}?filter=realtime`} >
-            disponíveis agora
-        </Link>
- </div>
-    
+      </div>
+
       {load && <LoadComponent />}
       {isMe && menu && <DisheForm menuId={menu.id}
         create={true}

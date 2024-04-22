@@ -11,6 +11,7 @@ import { MessageMailEnum, SubjectMailEnum } from '../../enums/email.templates.en
 import { MenuService } from '../menu/menu.service';
 import { CategoryService } from '../category/category.service';
 import { DisheService } from '../dishe/dishe.service';
+import { Readable } from 'stream';
 
 @Injectable()
 export class RestaurantService {
@@ -168,13 +169,18 @@ export class RestaurantService {
         if (!restaurantRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
+        
+           this.model.update({
+                where: { id },
+                data: {
+                    profile: data
+                }
+            })
 
-        await this.model.update({
-            where: { id }, data: {
-                profile: data
-            }
-        })
-        this.fileService.writeImage(`${id}.png`, data)
+            this.fileService.writeImage(`${id}.png`, data)
+     
+
+
 
         return { message: ResponsesEnum.PROFILE_UPDATED }
     }
@@ -256,14 +262,14 @@ export class RestaurantService {
         }
 
         const changesString = await this.cacheService.getCache(restaurantRegisterInDb.id)
-       
+
         if (!changesString) {
             throw new BadRequestException(ResponsesEnum.NOT_HAVE_CHANGES)
         }
 
         const objectChanges = JSON.parse(changesString)
 
-     
+
         if (bcrypt.compareSync(code, objectChanges.code)) {
             if (objectChanges['email']) {
                 await this.model.update({ where: { id: restaurantRegisterInDb.id }, data: { email: objectChanges['email'] } })
@@ -277,7 +283,7 @@ export class RestaurantService {
             }
 
             if (objectChanges['password']) {
-                console.log(objectChanges['password'])
+
                 await this.model.update({ where: { id: restaurantRegisterInDb.id }, data: { password: objectChanges['password'] } })
 
                 this.mailService.makeHtmlMailAndSend('default',

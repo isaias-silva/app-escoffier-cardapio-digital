@@ -32,7 +32,7 @@ export class DisheController {
     @ApiResponse({ status: 404, description: 'Dish not found', type: BasicResponseDto })
     @ApiParam({ name: 'id', type: String, required: true })
     async getDishe(@Req() req: Request, @Param('id') id: string) {
-        console.log(id)
+       
         return await this.disheService.getDishe(id,req["apiurl"]);
     }
 
@@ -60,7 +60,7 @@ export class DisheController {
     async updateDisheProfile(@Req() req: Request, @Param('id') id: string, @UploadedFile(new ParseFilePipe({
         validators: [
             new FileTypeValidator({ fileType: 'image' }),
-            new MaxFileSizeValidator({ maxSize: 1000000, message: 'Image too large, max 1mb' })
+            new MaxFileSizeValidator({ maxSize: 1e+7, message: 'Image too large, max 10mb' })
         ]
     })) file?: Express.Multer.File) {
 

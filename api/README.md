@@ -1,73 +1,65 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+  <h1>Escoffier API</h1>
+  <p>A API Escoffier é um sistema de gerenciamento de cardápios desenvolvido com TypeScript, NestJS, MongoDB (Prisma ORM) e Redis.</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+  <h2>Instalação e Execução</h2>
+  <ol>
+    <li>Clone o repositório do projeto.</li>
+    <li>Navegue até o diretório raiz do projeto.</li>
+    <li>Crie um arquivo <code>.env</code> na raiz do projeto com as seguintes variáveis de ambiente:</li>
+  </ol>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+  <pre>
+# API
+PORT=porta onde a api irá ficar disponível
+SECRET=string responsavel pela geração de jsonwebtokens
 
-## Description
+# Redis
+REDIS_HOST=host do redis
+REDIS_PORT=porta onde o redis ficará disponível
+REDIS_PASS=senha do redis
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Gmail OAuth2
+OAUTH_CLIENT_MAIL=email do usuario oauth2
+OAUTH_CLIENTID=id do usuario oauth2
+OAUTH_CLIENT_SECRET= codigo secreto do oauth2
+OAUTH_REFRESH_TOKEN= refresh token do usuário oauth2
 
-## Installation
+# Prisma MongoDB
+DATABASE_URL=url do banco de dados mongodb
 
-```bash
-$ yarn install
-```
+# Frontend
+FRONT_LINK=link do frontend
+  </pre>
 
-## Running the app
+  <ol start="4">
+    <li>Instale as dependências do projeto com o comando:</li>
+  </ol>
 
-```bash
-# development
-$ yarn run start
+  <pre>
+yarn install
+  </pre>
 
-# watch mode
-$ yarn run start:dev
+  <ol start="5">
+    <li>inicie o prismaORM:</li>
+  </ol>
 
-# production mode
-$ yarn run start:prod
-```
+  <pre>
+yarn db-pull
+  </pre>
 
-## Test
 
-```bash
-# unit tests
-$ yarn run test
+  <ol start="6">
+    <li>Execute a API com o comando:</li>
+  </ol>
 
-# e2e tests
-$ yarn run test:e2e
+  <pre>
+yarn start
+  </pre>
 
-# test coverage
-$ yarn run test:cov
-```
+  <h2>Contribuindo</h2>
+  <p>Por favor, leia o guia de contribuição antes de criar uma issue ou enviar um pull request.</p>
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+  <h2>Licença</h2>
+  <p>Este projeto é licenciado sob a Licença MIT - veja o arquivo <a href="LICENSE">LICENSE</a> para mais detalhes.</p>
+</body>
+</html>

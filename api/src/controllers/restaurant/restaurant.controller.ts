@@ -66,9 +66,10 @@ export class RestaurantController {
     async updateRestaurantProfile(@Req() req: Request, @UploadedFile(new ParseFilePipe({
         validators: [
             new FileTypeValidator({ fileType: 'image' }),
-            new MaxFileSizeValidator({ maxSize: 1000000, message: 'Image too large, max 1mb' })
+            new MaxFileSizeValidator({ maxSize: 1e+7, message: 'Image too large, max 10mb' })
         ]
     })) file?: Express.Multer.File) {
+       
         return await this.restaurantService.updateProfile(req['auth'].id, file.buffer);
     }
 

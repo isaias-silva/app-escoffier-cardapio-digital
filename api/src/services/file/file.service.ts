@@ -1,10 +1,14 @@
 import { Global, HttpServer, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { resolve } from 'path';
 import * as fs from 'fs'
+import { Readable, Transform, pipeline } from 'stream';
+import { promisify } from 'util';
 
 @Global()
 @Injectable()
 export class FileService implements OnModuleInit {
+    private promissedPipeline = promisify(pipeline)
+
     constructor() {
     }
     onModuleInit() {
@@ -17,15 +21,29 @@ export class FileService implements OnModuleInit {
     private pathMail = resolve('assets', 'mails')
     private logger = new Logger(FileService.name)
 
-    async writeImage(name: string, data: Buffer) {
-        this.logger.debug(`write file ${name}`)
+    async writeImage(name: string, buff: Buffer) {
 
-        fs.writeFile(resolve(this.pathTemp, name), data, (err) => {
-            if (err) {
-                this.logger.error(err)
+        this.logger.debug(`write file ${name} (${(buff.length / (1024 * 1024)).toFixed(2)} mb)`)
 
-            }
+        const stream = new Readable({ read: () => { } })
+
+        const parts = await this.splitBuffer(buff, 10)
+        parts.forEach((chunks) => {
+            stream.push(chunks)
         })
+        this.promissedPipeline(
+            stream,
+            new Transform({
+                transform(chunk, encoding, callback) {
+                    console.log(`[!] ${(chunk.length / 1024).toFixed(1)} kb's received`)
+                    callback(null, chunk);
+                }
+            }),
+            fs.createWriteStream(resolve(this.pathTemp, name))
+        )
+
+
+
     }
 
     async unlinkImage(name: string) {
@@ -40,7 +58,7 @@ export class FileService implements OnModuleInit {
     }
 
     async getImage(name: string, host: string) {
-       
+
         try {
             fs.readFileSync(resolve(this.pathTemp, name))
 
@@ -64,5 +82,15 @@ export class FileService implements OnModuleInit {
             this.logger.error(err)
             return null
         }
+    }
+    async splitBuffer(buffer: Buffer, numParts: number) {
+        const partSize = Math.ceil(buffer.length / numParts);
+        const parts = [];
+        for (let i = 0; i < numParts; i++) {
+            const start = i * partSize;
+            const end = Math.min(start + partSize, buffer.length);
+            parts.push(buffer.slice(start, end));
+        }
+        return parts;
     }
 }
