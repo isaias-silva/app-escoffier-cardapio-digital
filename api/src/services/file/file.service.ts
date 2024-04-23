@@ -27,20 +27,19 @@ export class FileService implements OnModuleInit {
 
         const stream = new Readable({ read: () => { } })
 
-        const parts = await this.splitBuffer(buff, 10)
+        const parts = await this.splitBuffer(buff, buff.length / 1024)
         parts.forEach((chunks) => {
             stream.push(chunks)
         })
         this.promissedPipeline(
             stream,
-            new Transform({
-                transform(chunk, encoding, callback) {
-                    console.log(`[!] ${(chunk.length / 1024).toFixed(1)} kb's received`)
-                    callback(null, chunk);
-                }
-            }),
             fs.createWriteStream(resolve(this.pathTemp, name))
         )
+
+        stream.on('data', (chunk) => {
+            this.logger.debug(` ${(chunk.length / 1024).toFixed(1)} kb's received`)
+
+        })
 
 
 
@@ -62,7 +61,7 @@ export class FileService implements OnModuleInit {
         try {
             fs.readFileSync(resolve(this.pathTemp, name))
 
-            
+
             return host + '/static/' + name
 
         } catch (err) {
