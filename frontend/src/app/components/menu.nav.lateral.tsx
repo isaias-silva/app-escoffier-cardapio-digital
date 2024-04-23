@@ -1,0 +1,62 @@
+import { useState } from "react";
+import MenuIcon from '@mui/icons-material/Menu';
+import ClearIcon from '@mui/icons-material/Clear';
+import LogoutIcon from '@mui/icons-material/Logout';
+import QrCode2Icon from '@mui/icons-material/QrCode2';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import RamenDiningIcon from '@mui/icons-material/RamenDining';
+import Link from "next/link";
+import { logout } from "../api/services/restaurant.service";
+
+export function LateralNavMenu() {
+    const [open, setOpen] = useState<boolean>(false)
+
+    return (
+        <div>
+            <nav className={`text-xl fixed top-0 left-0 sm:w-1/3 w-full z-50 bg-orange-300 h-screen transition-all duration-300 ml-[${open ? '0px' : '-100%'}] shadow-xl`} >
+                <button onClick={() => setOpen(false)}><ClearIcon /></button>
+                <ul>
+                    <li className="mb-2">
+                        <Link className="flex items-center hover:bg-orange-600 hover:text-white transition-all duration-300 rounded-md p-2" href="/">
+                            <AccountCircleIcon className="mr-2" />Perfil
+
+                        </Link>
+                    </li>
+                    <li className="mb-2">
+                        <Link className="flex items-center hover:bg-orange-600 hover:text-white transition-all duration-300 rounded-md p-2" href="/">
+                            <MenuBookIcon className="mr-2" />Meus cardápios
+
+                        </Link>
+                    </li>
+                    <li className="mb-2">
+                        <Link className="flex items-center hover:bg-orange-600 hover:text-white transition-all duration-300 rounded-md p-2" href="/">
+                            <RamenDiningIcon className="mr-2" />Meus Pratos
+
+                        </Link>
+                    </li>
+                    <li className="mb-2">
+                        <Link className="flex items-center hover:bg-orange-600 hover:text-white transition-all duration-300 rounded-md p-2" href="/">
+
+                            <BarChartIcon className="mr-2" />Gráficos
+                        </Link>
+                    </li>
+                    <li className="mb-2">
+                        <Link className="flex items-center hover:bg-orange-600 hover:text-white transition-all duration-300 rounded-md p-2" href="/">
+                            <QrCode2Icon className="mr-2" />Gerar QR Code
+
+                        </Link>
+                    </li>
+                    <li className="mb-2">
+                        <Link className="flex items-center hover:bg-orange-600 hover:text-white transition-all duration-300 rounded-md p-2" href="/" onClick={() => logout()}>
+
+                            <LogoutIcon className="mr-2" />Sair
+                        </Link>
+                    </li>
+                </ul>
+            </nav>
+            <button className={`${open ? 'hidden' : 'block'} fixed top-0 left-0 bg-orange-300 w-[40px] h-[40px] z-50 rounded-lg`} onClick={() => setOpen(true)}><MenuIcon /></button>
+        </div>
+    );
+}

@@ -62,6 +62,7 @@ export class FileService implements OnModuleInit {
         try {
             fs.readFileSync(resolve(this.pathTemp, name))
 
+            
             return host + '/static/' + name
 
         } catch (err) {
@@ -89,7 +90,7 @@ export class FileService implements OnModuleInit {
         for (let i = 0; i < numParts; i++) {
             const start = i * partSize;
             const end = Math.min(start + partSize, buffer.length);
-            parts.push(buffer.slice(start, end));
+            parts.push(buffer.subarray(start, end));
         }
         return parts;
     }

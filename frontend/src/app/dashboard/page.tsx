@@ -6,9 +6,11 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import MenusList from '../../app/components/menus.list'
 import CategoryList from '../../app/components/category.list'
 import MenuEditRestaurant from '../../app/components/menu.edit.restaurant'
-import LogoutIcon from '@mui/icons-material/Logout';
+
 import Link from 'next/link'
 import LoadComponent from '../components/load.component'
+import MenusNavList from '../../app/components/menus.list'
+import { LateralNavMenu } from '../components/menu.nav.lateral'
 
 export default function Page() {
 
@@ -31,22 +33,22 @@ export default function Page() {
         setRestaurant(res?.data)
         setLoad(false)
       }).catch(() => router.replace('/error'))
-    
+
       setIsMe(false)
 
 
     } else {
       setIsMe(true)
       getMyRestaurant().then(res => {
-        if(!res){
+        if (!res) {
           logout();
-           router.replace('/')
+          router.replace('/')
         }
         setRestaurant(res?.data)
 
         setLoad(false)
       })
-      .catch(() => { logout(); router.replace('/') })
+        .catch(() => { logout(); router.replace('/') })
 
     }
   }
@@ -54,10 +56,7 @@ export default function Page() {
   return (
     <div className="bg-orange-100 min-h-screen w-full">
       {load && <LoadComponent />}
-      {isMe && <MenuEditRestaurant callback={refreshRestaurant} restaurant={restaurant} />}
-      {isMe && <Link onClick={() => logout()} href="/" className='flex justify-center items-center absolute right-0 top-0 w-[100px] h-[50px] bg-orange-300 transition-all duration-200 rounded-lg hover:scale-105'>
-        <LogoutIcon />
-        Sair </Link>}
+      {isMe && <LateralNavMenu/>}
       <div className="bg-orange-500 py-6">
         <div className="container mx-auto px-4">
           <div className="sm:flex-row flex-col justify-center items-center px-2 pt-2">
