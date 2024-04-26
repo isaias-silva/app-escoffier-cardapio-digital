@@ -33,7 +33,7 @@ export function LateralNavMenu() {
     }
     return (
         <div>
-            <nav ref={popupRef} className={`text-xl fixed top-0 left-0 sm:w-1/3 w-full z-50 bg-orange-300 h-screen transition-all duration-300 ml-[${open ? '0px' : '-100%'}] shadow-xl`} >
+            <nav ref={popupRef} className={`text-xl fixed top-0 left-0 sm:w-1/3 w-full z-50 bg-orange-300 h-screen transition-all duration-300 ${open ? 'ml-0' : 'ml-[-100%]'} shadow-xl`} >
                 <button onClick={() => setOpen(false)}><ClearIcon /></button>
                 <ul>
                     <li className="mb-2">
@@ -74,7 +74,7 @@ export function LateralNavMenu() {
                     </li>
                 </ul>
             </nav>
-            <button className={`${open ? 'hidden' : 'block'} fixed top-0 left-0 bg-orange-300 w-[40px] h-[40px] z-50 rounded-lg`} onClick={() => setOpen(true)}><MenuIcon /></button>
+            <button className={`${open ? 'hidden' : 'block'} absolute top-0 left-0 bg-orange-300 w-[40px] h-[40px] z-50 rounded-lg`} onClick={() => setOpen(true)}><MenuIcon /></button>
         </div>
     );
 }
