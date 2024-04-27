@@ -56,8 +56,10 @@ export class FileService implements OnModuleInit {
 
     }
 
-    async getImage(name: string, host: string) {
-
+    async getImage(name?: string, host?: string) {
+        if (!name) {
+            return null
+        }
         try {
             fs.readFileSync(resolve(this.pathTemp, name))
 

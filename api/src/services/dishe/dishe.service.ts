@@ -59,12 +59,9 @@ export class DisheService {
         let image: string
         if (disheInDb.image) {
 
-            image = await this.fileService.getImage(`${id}.png`, host)
+            image = await this.fileService.getImage(disheInDb.image, host)
 
-            if (!image) {
-                await this.fileService.writeImage(`${id}.png`, disheInDb.image)
-                image = await this.fileService.getImage(`${id}.png`, host)
-            }
+
         }
         let category: Category
         try {
@@ -100,12 +97,8 @@ export class DisheService {
             let image: string
             if (disheInDb.image) {
 
-                image = await this.fileService.getImage(`${disheInDb.id}.png`, host)
+                image = await this.fileService.getImage(disheInDb.image, host)
 
-                if (!image) {
-                    await this.fileService.writeImage(`${disheInDb.id}.png`, disheInDb.image)
-                    image = await this.fileService.getImage(`${disheInDb.id}.png`, host)
-                }
             }
             const { name, price, description, mode, categoryId, id } = disheInDb
             let category: Category
@@ -159,13 +152,15 @@ export class DisheService {
             throw new NotFoundException(ResponsesEnum.DISHE_NOT_FOUND)
         }
 
+        const filename = `dishe_${id}.png`
+
         await this.model.update({
             where: { id },
             data: {
-                image: data
+                image: filename
             }
         })
-        this.fileService.writeImage(`${id}.png`, data)
+        this.fileService.writeImage(filename, data)
 
         return { message: ResponsesEnum.DISHE_IMAGE_UPLOADED }
     }

@@ -1,0 +1,16 @@
+services:
+
+  api:
+    restart: always
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - '${PORT}:${PORT}'
+
+    networks:
+      - escoffier-network
+
+networks:
+  escoffier-network:
+    driver: bridge

@@ -13,8 +13,8 @@ model Restaurant {
   name     String
   password String
   resume   String?
-  profile  Bytes?
-  background Bytes?
+  profile  String?
+  background String?
 }
 
 model Menu {
@@ -36,7 +36,7 @@ model Dishe {
   restaurantId String
   name         String
   price        Float
-  image        Bytes?
+  image        String?
   mode         String   @default("MORNNING")
   description  String
   categoryId   String?

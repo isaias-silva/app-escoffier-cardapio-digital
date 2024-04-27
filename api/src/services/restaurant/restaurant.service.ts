@@ -87,28 +87,23 @@ export class RestaurantService {
     }
 
     async get(id: string, host: string) {
+
         const restaurant = await this.model.findFirst({ where: { id } })
         if (!restaurant) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
 
+
         let profile
         let background
         if (restaurant.profile || restaurant.background) {
 
-            [profile, background] = await Promise.all([this.fileService.getImage(`profile_${id}.png`, host), this.fileService.getImage(`background_${id}.png`, host)])
+            [profile, background] = await Promise.all([this.fileService.getImage(restaurant.profile, host), this.fileService.getImage(restaurant.background, host)])
 
-            if (!profile && restaurant.profile) {
-                await this.fileService.writeImage(`profile_${id}.png`, restaurant.profile)
-                profile = await this.fileService.getImage(`profile_${id}.png`, host)
-            }
-            if (!background && restaurant.background) {
-                await this.fileService.writeImage(`background_${id}.png`, restaurant.background)
-                background = await this.fileService.getImage(`background_${id}.png`, host)
 
-            }
         }
         const { name, resume, email } = restaurant
+
         return { profile, background, name, resume, email, id }
     }
 
@@ -175,7 +170,7 @@ export class RestaurantService {
         if (!restaurantRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
-        const data = key == 'profile' ? { profile: buff } : { background: buff }
+        const data = key == 'profile' ? { profile: `${key}_${id}.png` } : { background: `${key}_${id}.png` }
 
 
 
@@ -183,8 +178,6 @@ export class RestaurantService {
             this.model.update({
                 where: { id },
                 data
-            }).then(() => {
-            console.log('file updated')
             }))
 
 

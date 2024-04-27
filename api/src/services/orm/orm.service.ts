@@ -8,10 +8,11 @@ export class OrmService extends PrismaClient implements OnModuleInit {
   async onModuleInit() {
     try{
       await this.$connect();
-      this.logger.verbose('Orm connection successful')
+    
+      this.logger.verbose('instantiated connector')
 
     }catch(err){
-      this.logger.error('error in Orm connection:',err)
+      this.logger.error('error in Orm connector:',err)
     }
    
   }
