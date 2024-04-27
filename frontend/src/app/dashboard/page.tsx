@@ -57,11 +57,14 @@ export default function Page() {
     <div className="bg-orange-100 min-h-screen w-full">
       {load && <LoadComponent />}
       {isMe && <LateralNavMenu/>}
-      <div className="bg-orange-500 py-6">
+      <div className="bg-orange-500 py-6  relative">
         <div className="container mx-auto px-4">
-          <div className="sm:flex-row flex-col justify-center items-center px-2 pt-2">
-            <img className="md:w-56 w-[200px] rounded-full border-orange-400 border-2  h-[210px]" src={restaurant?.profile || "https://cdn-icons-png.flaticon.com/512/433/433087.png"} alt="Restaurant" />
-            <div className="ml-6 text-white">
+          <div className="sm:flex-row flex-col justify-center items-center px-2 pt-2 ">
+
+            <img src="https://t3.ftcdn.net/jpg/05/79/48/54/360_F_579485400_8jSrBgNQP1BWUOjWujmRS79YJmzQv6fw.jpg" alt="banner" className='absolute top-0 left-0 w-full h-1/2 z-[1]' />
+           
+            <img className="relative z-[2] md:w-56 w-[200px] rounded-full border-orange-500 sm:border-4 border-2 h-[210px] m-auto sm:m-0" src={restaurant?.profile || "https://cdn-icons-png.flaticon.com/512/433/433087.png"} alt="Restaurant" />
+            <div className="ml-6 text-white z-20">
               <h1 className="text-3xl font-bold">{restaurant?.name || "sem nome"}</h1>
 
               <p className="mt-2 w-[60%] text-sm">{restaurant?.resume
