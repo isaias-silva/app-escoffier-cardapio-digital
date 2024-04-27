@@ -102,6 +102,9 @@ export class ResponseRestaurantDto {
     profile?: string;
 
     @ApiProperty()
+    background?: string;
+
+    @ApiProperty()
     name: string;
 
     @ApiProperty()

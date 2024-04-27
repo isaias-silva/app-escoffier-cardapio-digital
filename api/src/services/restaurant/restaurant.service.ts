@@ -93,17 +93,23 @@ export class RestaurantService {
         }
 
         let profile
-        if (restaurant.profile) {
+        let background
+        if (restaurant.profile || restaurant.background) {
 
-            profile = await this.fileService.getImage(`${id}.png`, host)
+            [profile, background] = await Promise.all([this.fileService.getImage(`profile_${id}.png`, host), this.fileService.getImage(`background_${id}.png`, host)])
 
-            if (!profile) {
-                await this.fileService.writeImage(`${id}.png`, restaurant.profile)
-                profile = await this.fileService.getImage(`${id}.png`, host)
+            if (!profile && restaurant.profile) {
+                await this.fileService.writeImage(`profile_${id}.png`, restaurant.profile)
+                profile = await this.fileService.getImage(`profile_${id}.png`, host)
+            }
+            if (!background && restaurant.background) {
+                await this.fileService.writeImage(`background_${id}.png`, restaurant.background)
+                background = await this.fileService.getImage(`background_${id}.png`, host)
+
             }
         }
         const { name, resume, email } = restaurant
-        return { profile, name, resume, email, id }
+        return { profile, background, name, resume, email, id }
     }
 
 
@@ -162,28 +168,32 @@ export class RestaurantService {
 
     }
 
-    async updateProfile(id: string, data: Buffer) {
+    async updateImage(id: string, buff: Buffer, key: 'profile' | 'background') {
         const restaurantRegisterInDb = await this.model.findFirst({
             where: { id }
         })
         if (!restaurantRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
         }
-        
-           this.model.update({
-                where: { id },
-                data: {
-                    profile: data
-                }
-            })
+        const data = key == 'profile' ? { profile: buff } : { background: buff }
 
-            this.fileService.writeImage(`${id}.png`, data)
-     
+
+
+        this.fileService.writeImage(`${key}_${id}.png`, buff).then(() =>
+            this.model.update({
+                where: { id },
+                data
+            }).then(() => {
+            console.log('file updated')
+            }))
+
 
 
 
         return { message: ResponsesEnum.PROFILE_UPDATED }
     }
+
+
 
     async changePassword(id: string, new_password: string) {
         const restaurantRegisterInDb = await this.model.findFirst({

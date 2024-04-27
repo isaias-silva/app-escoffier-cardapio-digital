@@ -69,9 +69,32 @@ export class RestaurantController {
             new MaxFileSizeValidator({ maxSize: 1e+7, message: 'Image too large, max 10mb' })
         ]
     })) file?: Express.Multer.File) {
-       
-        return await this.restaurantService.updateProfile(req['auth'].id, file.buffer);
+
+        return await this.restaurantService.updateImage(req['auth'].id, file.buffer, 'profile');
     }
+
+    @Put('update/background')
+    @UseGuards(JwtGuard)
+    @UseInterceptors(FileInterceptor('file'))
+    @ApiBearerAuth()
+
+    @ApiOperation({ summary: 'Update restaurant profile image.', description: 'Update the background image of the authenticated restaurant.' })
+    @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 200, description: 'restaurant background updated', type: BasicResponseDto })
+    @ApiResponse({ status: 400, description: 'error in upload image', type: BasicResponseDto })
+
+    async updateRestaurantBackground(@Req() req: Request, @UploadedFile(new ParseFilePipe({
+        validators: [
+            new FileTypeValidator({ fileType: 'image' }),
+            new MaxFileSizeValidator({ maxSize: 1e+7, message: 'Image too large, max 10mb' })
+        ]
+    })) file?: Express.Multer.File) {
+
+        return await this.restaurantService.updateImage(req['auth'].id, file.buffer, 'background');
+    }
+
+
 
     @Put('update/password/forgotten')
 
@@ -81,7 +104,7 @@ export class RestaurantController {
     @ApiResponse({ status: 200, description: 'email sent to reset password', type: BasicResponseDto })
     @ApiResponse({ status: 400, description: 'error in request body', type: BasicResponseDto })
 
-    
+
     async forgottenPassword(@Body() body: UpdatePasswordRestaurantForgottenDto) {
         return await this.restaurantService.changePasswordForgotten(body);
     }
@@ -134,7 +157,7 @@ export class RestaurantController {
     @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
     @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
     @ApiResponse({ status: 200, description: 'account deleted', type: AuthResponseDto })
-   
+
     async deleteRestaurantAccount(@Req() req: Request) {
         return await this.restaurantService.delete(req['auth'].id);
     }
