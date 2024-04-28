@@ -44,7 +44,7 @@ yarn install
   </ol>
 
   <pre>
-yarn db-pull
+yarn db-gen
   </pre>
 
 

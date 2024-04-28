@@ -24,9 +24,11 @@ export class RestaurantController {
     @ApiResponse({ status: 200, description: 'restaurant info.', type: ResponseRestaurantDto })
 
     async getMyRestaurant(@Req() req: Request) {
+        
         return await this.restaurantService.get(req['auth'].id, req['apiurl']);
     }
 
+    
     @Get('/:id')
 
     @ApiOperation({ summary: 'Get a specific restaurant.', description: 'Retrieve information about a specific restaurant.' })

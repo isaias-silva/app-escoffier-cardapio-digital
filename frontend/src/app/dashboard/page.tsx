@@ -9,7 +9,7 @@ import MenuEditRestaurant from '../../app/components/menu.edit.restaurant'
 
 import Link from 'next/link'
 import LoadComponent from '../components/load.component'
-import MenusNavList from '../../app/components/menus.list'
+
 import { LateralNavMenu } from '../components/menu.nav.lateral'
 
 export default function Page() {

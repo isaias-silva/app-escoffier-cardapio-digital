@@ -8,12 +8,12 @@ datasource db {
 }
 
 model Restaurant {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  email    String  @unique
-  name     String
-  password String
-  resume   String?
-  profile  String?
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  email      String  @unique
+  name       String
+  password   String
+  resume     String?
+  profile    String?
   background String?
 }
 
@@ -40,5 +40,5 @@ model Dishe {
   mode         String   @default("MORNNING")
   description  String
   categoryId   String?
+  galery       String[] @default([])
 }
-

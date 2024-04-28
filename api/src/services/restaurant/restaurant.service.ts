@@ -88,6 +88,10 @@ export class RestaurantService {
 
     async get(id: string, host: string) {
 
+        if(id.length!== 24){
+            throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
+
+        }
         const restaurant = await this.model.findFirst({ where: { id } })
         if (!restaurant) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
