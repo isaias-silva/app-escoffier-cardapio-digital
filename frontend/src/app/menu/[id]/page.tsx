@@ -2,15 +2,15 @@
 import React, { useEffect, useState } from 'react'
 
 import { getMenu, getMenuInRealTime } from '../../../app/api/services/menu.service';
-import { MenuResponse } from '../../../interfaces/menu.interface';
+import { MenuResponse } from '../../../core/interfaces/menu.interface';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getMyRestaurant } from '../../api/services/restaurant.service';
-import MenuControl from '../../components/menu.control';
-import LoadComponent from '../../components/load.component';
-import DisheForm from '../../components/dishe.form';
+import MenuControl from '../../../components/menu.control';
+import LoadComponent from '../../../components/load.component';
+import DisheForm from '../../../components/dishe.form';
 import Link from 'next/link';
-import DisheCard from '../../components/dishe.card';
-import Load from '../../components/load';
+import DisheCard from '../../../components/dishe.card';
+import Load from '../../../components/load';
 import { getCategories } from '../../api/services/category.service';
 
 

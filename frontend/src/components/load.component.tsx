@@ -1,5 +1,5 @@
 import React from 'react'
-import loadImage from '../../../public/load.webp'
+import loadImage from '../../public/load.webp'
 export default function LoadComponent() {
   return (
     <div className="load-div">

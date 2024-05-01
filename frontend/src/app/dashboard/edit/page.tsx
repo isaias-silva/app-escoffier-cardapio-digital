@@ -1,16 +1,14 @@
 "use client"
-import React, { useEffect, useMemo, useState } from 'react'
-import { getMyRestaurant, getRestaurant, logout } from '../../app/api/services/restaurant.service'
-import { Restaurant } from '../../core/interfaces/restaurant.interface'
+import React, { useEffect, useState } from 'react'
+import { getMyRestaurant, getRestaurant, logout } from '../../../app/api/services/restaurant.service'
+import { Restaurant } from '../../../core/interfaces/restaurant.interface'
 import { useRouter, useSearchParams } from 'next/navigation'
-import MenusList from '../../components/menus.list'
-import CategoryList from '../../components/category.list'
-import MenuEditRestaurant from '../../components/menu.edit.restaurant'
 
 import Link from 'next/link'
-import LoadComponent from '../../components/load.component'
+import LoadComponent from '../../../components/load.component'
 
-import { LateralNavMenu } from '../../components/menu.nav.lateral'
+import { LateralNavMenu } from '../../../components/menu.nav.lateral'
+import { EditImageInput } from '../../../components/edit.image.input'
 
 export default function Page() {
 
@@ -18,6 +16,11 @@ export default function Page() {
   const [restaurant, setRestaurant] = useState<Restaurant>()
   const [isMe, setIsMe] = useState<boolean>(true)
   const [load, setLoad] = useState<boolean>(true)
+
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [resume, setResume] = useState<string>('');
+  const [image, setImage] = useState<File | null>(null);
 
   const params = useSearchParams()
   useEffect(() => {
@@ -56,14 +59,15 @@ export default function Page() {
   return (
     <div className="bg-orange-100 min-h-screen w-full">
       {load && <LoadComponent />}
-      {isMe && <LateralNavMenu/>}
+      {isMe && <LateralNavMenu />}
       <div className="bg-orange-500 py-6  relative">
         <div className="container mx-auto px-4">
           <div className="sm:flex-row flex-col justify-center items-center px-2 pt-2 ">
 
-            <img src={restaurant?.['background']||"https://t3.ftcdn.net/jpg/05/79/48/54/360_F_579485400_8jSrBgNQP1BWUOjWujmRS79YJmzQv6fw.jpg"} alt="banner" className='absolute top-0 left-0 w-full h-1/2 z-[1]' />
-           
-            <img className="relative z-[2] md:w-56 w-[200px] rounded-full border-orange-500 sm:border-4 border-2 h-[210px] m-auto sm:m-0" src={restaurant?.profile || "https://cdn-icons-png.flaticon.com/512/433/433087.png"} alt="Restaurant" />
+            <img src={restaurant?.['background'] || "https://t3.ftcdn.net/jpg/05/79/48/54/360_F_579485400_8jSrBgNQP1BWUOjWujmRS79YJmzQv6fw.jpg"} alt="banner" className='absolute top-0 left-0 w-full h-1/2 z-[1]' />
+
+            <EditImageInput imageState={{ image, setImage }} default={restaurant?.profile}/>
+
             <div className="ml-6 text-white z-20">
               <h1 className="text-3xl font-bold">{restaurant?.name || "sem nome"}</h1>
 
@@ -75,19 +79,7 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className="container mx-auto px-4 py-8">
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-800">Cardápios</h2>
-          <MenusList isMe={isMe} id={restaurant?.id} />
-        </div>
-      </div>
 
-      {isMe ? <div className="container mx-auto px-4 py-8">
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-800">Categorias</h2>
-          <CategoryList />
-        </div>
-      </div> : null}
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { CreateCategory, DeleteCategory, UpdateCategory } from "../../../interfaces/category.interface";
+import { CreateCategory, DeleteCategory, UpdateCategory } from "../../../core/interfaces/category.interface";
 import axiosConfig from "../axiosConfig";
 import { getToken } from "./restaurant.service";
 

@@ -69,10 +69,7 @@ export class FileService implements OnModuleInit {
             );
         } catch (error) {
             this.logger.error('Error in compact file:', error);
-        } finally {
-            readStream.emit('close')
-            writeStream.emit('close');
-        }
+        } 
 
 
     }
@@ -81,10 +78,7 @@ export class FileService implements OnModuleInit {
         gunzip.on('end', () => {
             this.logger.verbose(`file ${fileName} decompress.`)
         })
-        gunzip.on('data', (chunk) => {
-            this.logger.debug(` ${(chunk.length / (1024)).toFixed(2)} kb's decompress in ${fileName}`)
-
-        })
+        
         this.promissedPipeline(
             compactFile,
             gunzip,
@@ -112,7 +106,7 @@ export class FileService implements OnModuleInit {
             return host + '/static/' + name
 
         } catch (err) {
-            this.logger.warn(err)
+          
             const compactExist = fs.existsSync(resolve(this.pathTemp, "compact_" + name + ".gz"))
 
             if (compactExist) {

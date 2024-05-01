@@ -1,8 +1,8 @@
 import { Modal } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit';
-import { Restaurant } from '../../interfaces/restaurant.interface';
-import { updateProfile, updateRestaurant } from '../api/services/restaurant.service';
+import { Restaurant } from '../core/interfaces/restaurant.interface';
+import { updateProfile, updateRestaurant } from '../app/api/services/restaurant.service';
 
 
 

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { deleteCategory, getMyCategories } from '../api/services/category.service'
+import { deleteCategory, getMyCategories } from '../app/api/services/category.service'
 import CategoryForm from './category.form';
 import DeleteForm from './delete.form';
 

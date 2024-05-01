@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { getAllRestaurantMenus } from '../api/services/menu.service'
-import { MenuData, MenuResponse } from '../../interfaces/menu.interface'
-import { Box, Modal, Typography } from '@mui/material'
+import { getAllRestaurantMenus } from '../app/api/services/menu.service'
+import {  MenuResponse } from '../core/interfaces/menu.interface'
 import CreateMenuForm from './create.menu.form'
 
 export default function MenusList({ id, isMe }: { id?: string, isMe: boolean }) {

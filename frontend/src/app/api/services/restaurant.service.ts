@@ -1,7 +1,7 @@
 
 import { setCookie ,getCookie,deleteCookie} from "cookies-next";
-import { AuthResponse, BasicResponses } from "../../../interfaces/response.interfaces";
-import { Restaurant, RestaurantUpdate } from "../../../interfaces/restaurant.interface";
+import { AuthResponse, BasicResponses } from "../../../core/interfaces/response.interfaces";
+import { Restaurant, RestaurantUpdate } from "../../../core/interfaces/restaurant.interface";
 import axiosConfig from "../axiosConfig";
 
 

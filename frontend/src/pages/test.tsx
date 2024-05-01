@@ -1,6 +1,6 @@
 import { AppContext } from "next/app"
 import { getMyRestaurant } from "../app/api/services/restaurant.service"
-import { Restaurant } from "../interfaces/restaurant.interface"
+import { Restaurant } from "../core/interfaces/restaurant.interface"
 import { GetStaticPropsContext } from "next"
 
 export default function Test({props}:{props:{data:Restaurant}}) {

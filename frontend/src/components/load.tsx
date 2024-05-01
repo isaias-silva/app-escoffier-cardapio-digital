@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Dishe } from '../../interfaces/dishe.interface'
-import { getMenu, getMenuInRealTime } from '../api/services/menu.service'
+import { Dishe } from '../core/interfaces/dishe.interface'
+import { getMenu, getMenuInRealTime } from '../app/api/services/menu.service'
 import DisheCard from './dishe.card'
 
 export default function Load({ menuId, isRealTime }: { menuId: string, isRealTime: boolean }) {

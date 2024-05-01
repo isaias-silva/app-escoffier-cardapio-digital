@@ -6,6 +6,14 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+type Pallete {
+  main String?
+  primary String?
+  secondary String?
+  font String?
+  hover String?
+
+}
 
 model Restaurant {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -15,6 +23,7 @@ model Restaurant {
   resume     String?
   profile    String?
   background String?
+  pallete    Pallete?
 }
 
 model Menu {

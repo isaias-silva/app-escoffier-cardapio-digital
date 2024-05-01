@@ -5,10 +5,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
+import HomeIcon from '@mui/icons-material/Home';
 import RamenDiningIcon from '@mui/icons-material/RamenDining';
 import Link from "next/link";
-import { logout } from "../api/services/restaurant.service";
+import { logout } from "../app/api/services/restaurant.service";
 
 export function LateralNavMenu() {
     const [open, setOpen] = useState<boolean>(false)
@@ -36,18 +36,19 @@ export function LateralNavMenu() {
             <nav ref={popupRef} className={`text-xl fixed top-0 left-0 sm:w-1/4 w-full z-50 bg-orange-300 h-screen transition-all duration-300 ${open ? 'ml-0' : 'ml-[-100%]'} shadow-xl`} >
                 <button onClick={() => setOpen(false)}><ClearIcon /></button>
                 <ul>
+                <li className="mb-2">
+                        <Link className="flex items-center  hover:bg-orange-400 hover:text-white transition-all duration-300 p-2" href="/dashboard">
+                            <HomeIcon className="mr-2" />Home
+
+                        </Link>
+                    </li>
                     <li className="mb-2">
-                        <Link className="flex items-center  hover:bg-orange-400 hover:text-white transition-all duration-300 p-2" href="/">
+                        <Link className="flex items-center  hover:bg-orange-400 hover:text-white transition-all duration-300 p-2" href="/dashboard/edit">
                             <AccountCircleIcon className="mr-2" />Perfil
 
                         </Link>
                     </li>
-                    <li className="mb-2">
-                        <Link className="flex items-center  hover:bg-orange-400 hover:text-white transition-all duration-300 p-2" href="/">
-                            <MenuBookIcon className="mr-2" />Meus cardápios
-
-                        </Link>
-                    </li>
+                  
                     <li className="mb-2">
                         <Link className="flex items-center  hover:bg-orange-400 hover:text-white transition-all duration-300 p-2" href="/">
                             <RamenDiningIcon className="mr-2" />Meus Pratos
@@ -74,7 +75,7 @@ export function LateralNavMenu() {
                     </li>
                 </ul>
             </nav>
-            <button className={`${open ? 'hidden' : 'block'} absolute top-0 left-0 bg-orange-300 w-[40px] h-[40px] z-50 rounded-lg`} onClick={() => setOpen(true)}><MenuIcon /></button>
+            <button className={`${open ? 'hidden' : 'block'}  absolute top-0 left-0 bg-orange-300 w-[40px] h-[40px] z-50 rounded-lg`} onClick={() => setOpen(true)}><MenuIcon /></button>
         </div>
     );
 }

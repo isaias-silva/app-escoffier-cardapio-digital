@@ -1,5 +1,5 @@
-import { MenuData, MenuResponse } from "../../../interfaces/menu.interface";
-import { BasicResponses } from "../../../interfaces/response.interfaces";
+import { MenuData, MenuResponse } from "../../../core/interfaces/menu.interface";
+import { BasicResponses } from "../../../core/interfaces/response.interfaces";
 import axiosConfig from "../axiosConfig";
 import { getToken } from "./restaurant.service";
 

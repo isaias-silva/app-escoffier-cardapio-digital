@@ -1,5 +1,5 @@
-import { CreateDishe, DeleteDishe, Dishe, UpdateDishe } from "../../../interfaces/dishe.interface";
-import { BasicResponses, IdResponses } from "../../../interfaces/response.interfaces";
+import { CreateDishe, DeleteDishe, Dishe, UpdateDishe } from "../../../core/interfaces/dishe.interface";
+import { BasicResponses, IdResponses } from "../../../core/interfaces/response.interfaces";
 import axiosConfig from "../axiosConfig";
 import { getToken } from "./restaurant.service";
 

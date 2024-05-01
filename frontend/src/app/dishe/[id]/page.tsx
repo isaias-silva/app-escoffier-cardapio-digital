@@ -1,9 +1,9 @@
 "use client"
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { Dishe } from '../../../interfaces/dishe.interface';
+import { Dishe } from '../../../core/interfaces/dishe.interface';
 import { getDishe } from '../../api/services/dishe.service';
-import DisheControl from '../../components/dishe.control';
+import DisheControl from '../../../components/dishe.control';
 import MoonIcon from '@mui/icons-material/Bedtime';
 import SunIcon from '@mui/icons-material/Brightness7';
 export default function Page() {

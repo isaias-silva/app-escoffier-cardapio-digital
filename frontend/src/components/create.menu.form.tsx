@@ -1,18 +1,18 @@
-import { Modal } from '@mui/material';
+import { Modal } from '@mui/material'
 import React, { useState } from 'react'
-import { updateRestaurantMenu } from '../api/services/menu.service';
-import { MenuResponse } from '../../interfaces/menu.interface';
+import { createRestaurantMenu } from '../app/api/services/menu.service';
 
-export default function EditMenuForm({ menu, open, setOpen, callback }:
-    { open: boolean, setOpen: Function, callback?: Function, menu?: MenuResponse }) {
+export default function CreateMenuForm({ handleOpen, open, setOpen, callback }: { open: boolean, setOpen: Function, handleOpen: Function, callback?: Function }) {
 
     const handleClose = () => {
         setOpen(false);
-
+        if (callback) {
+            callback()
+        }
     };
-    const [name, setName] = useState<string | undefined>(menu?.name)
+    const [name, setName] = useState<string>()
     const [error, setError] = useState<string>()
-    function updateMenu() {
+    function createMenu() {
         setError(undefined)
         if (!name) {
             setError("nome é obrigatório")
@@ -22,13 +22,7 @@ export default function EditMenuForm({ menu, open, setOpen, callback }:
             setError("nome deve ter de 4 a 30 digitos.")
             return
         }
-        if (menu)
-            updateRestaurantMenu(menu?.id, { name }).then(() => {
-                handleClose()
-                if (callback) {
-                    callback()
-                }
-            }).catch(err => setError(err.response.data.message))
+        createRestaurantMenu({ name }).then(res => { handleClose() }).catch(err => { setError(err.response.data.message) })
     }
     return (
 
@@ -43,7 +37,7 @@ export default function EditMenuForm({ menu, open, setOpen, callback }:
                 <div className="fixed inset-0 bg-black opacity-30"></div>
                 <div className="bg-orange-200 rounded-lg overflow-hidden shadow-xl transform transition-all max-w-sm w-full">
                     <div className="px-6 py-4">
-                        <h2 className="text-lg font-semibold mb-4">Atualizar nome do Cardápio {menu?.name}</h2>
+                        <h2 className="text-lg font-semibold mb-4">Criar Cardápio</h2>
                         {error ? <p className=' text-red-600 bg-red-300 p-3 rounded-lg my-4'>{error}</p> : null}
                         <form >
                             <input
@@ -56,11 +50,11 @@ export default function EditMenuForm({ menu, open, setOpen, callback }:
 
                             <div className="flex justify-between">
                                 <button
-                                    onClick={() => updateMenu()}
+                                    onClick={() => createMenu()}
                                     type="button"
                                     className="bg-orange-500 text-white px-4 py-2 rounded-lg mr-2 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50"
                                 >
-                                    Salvar
+                                    Adicionar
                                 </button>
                                 <button
                                     type="button"

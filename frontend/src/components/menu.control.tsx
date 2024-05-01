@@ -4,9 +4,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ReturnIcon from '@mui/icons-material/KeyboardReturn';
 import { useRouter } from 'next/navigation';
 import EditMenuForm from './edit.menu.form';
-import { MenuResponse } from '../../interfaces/menu.interface';
+import { MenuResponse } from '../core/interfaces/menu.interface';
 import DeleteForm from './delete.form';
-import { deleteRestaurantMenu } from '../api/services/menu.service';
+import { deleteRestaurantMenu } from '../app/api/services/menu.service';
 export default function MenuControl({ isMe, menu }: { menu?: MenuResponse, isMe: boolean }) {
   const router = useRouter()
   const [openEditMenu, setEditMenu] = useState<boolean>(false)

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react';
-import { login, register, updatePasswordForgotten } from '../api/services/restaurant.service';
+import { login, register, updatePasswordForgotten } from '../app/api/services/restaurant.service';
 import { useRouter } from 'next/navigation';
 import { Modal } from '@mui/material';
 import LoadComponent from './load.component';
