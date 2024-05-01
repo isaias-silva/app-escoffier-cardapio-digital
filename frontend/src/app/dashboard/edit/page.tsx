@@ -20,7 +20,8 @@ export default function Page() {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [resume, setResume] = useState<string>('');
-  const [image, setImage] = useState<File | null>(null);
+  const [profile, setProfile] = useState<File | null>(null);
+  const [background, setBackground] = useState<File | null>(null);
 
   const params = useSearchParams()
   useEffect(() => {
@@ -63,10 +64,16 @@ export default function Page() {
       <div className="bg-orange-500 py-6  relative">
         <div className="container mx-auto px-4">
           <div className="sm:flex-row flex-col justify-center items-center px-2 pt-2 ">
+            <EditImageInput
+              modePreview='background'
+              imageState={{ image: background, setImage: setBackground }}
+              default={restaurant?.background} />
 
-            <img src={restaurant?.['background'] || "https://t3.ftcdn.net/jpg/05/79/48/54/360_F_579485400_8jSrBgNQP1BWUOjWujmRS79YJmzQv6fw.jpg"} alt="banner" className='absolute top-0 left-0 w-full h-1/2 z-[1]' />
 
-            <EditImageInput imageState={{ image, setImage }} default={restaurant?.profile}/>
+            <EditImageInput
+              modePreview='profile'
+              imageState={{ image: profile, setImage: setProfile }}
+              default={restaurant?.profile} />
 
             <div className="ml-6 text-white z-20">
               <h1 className="text-3xl font-bold">{restaurant?.name || "sem nome"}</h1>
