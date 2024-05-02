@@ -25,6 +25,8 @@ export class FileService implements OnModuleInit {
     private logger = new Logger(FileService.name)
 
     async writeImage(name: string, buff: Buffer) {
+        this.logger.verbose('write file')
+        this.unlinkImage(name)
 
         this.logger.debug(`write file ${name} (${(buff.length / (1024 * 1024)).toFixed(2)} mb)`)
 
@@ -36,6 +38,7 @@ export class FileService implements OnModuleInit {
 
         const readStream = Readable.from(parts)
 
+        
         await this.compressFile(readStream, writeStream, "compact_" + name + ".gz")
 
 

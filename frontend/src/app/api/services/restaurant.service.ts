@@ -50,7 +50,7 @@ async function updateProfile(data: File) {
 
     formData.append('file', data);
 
-    const res = await axiosConfig.put<Restaurant>('/restaurant/update/profile', formData, {
+    const res = await axiosConfig.put<BasicResponses>('/restaurant/update/profile', formData, {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -59,6 +59,23 @@ async function updateProfile(data: File) {
     return res
 }
 
+async function updateBackground(data: File) {
+    const token = getToken()
+    if (!token) {
+        return
+    }
+    const formData = new FormData();
+
+    formData.append('file', data);
+
+    const res = await axiosConfig.put<BasicResponses>('/restaurant/update/background', formData, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    return res
+}
 async function updatePasswordForgotten(new_password: string, email: string) {
     
     const res = await axiosConfig.put<BasicResponses>('/restaurant/update/password/forgotten', { email, new_password } )
@@ -94,6 +111,7 @@ export {
     getMyRestaurant,
     updateRestaurant,
     updateProfile,
+    updateBackground,
     updatePasswordForgotten,
     confirmCode
 }
