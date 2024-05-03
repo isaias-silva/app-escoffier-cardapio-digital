@@ -8,11 +8,13 @@ import Link from 'next/link'
 import LoadComponent from '../../../components/load.component'
 
 import { LateralNavMenu } from '../../../components/menu.nav.lateral'
-import { EditImageInput } from '../../../components/edit.image.input'
-import { EditTextInput } from '../../../components/edit.text.input'
+import { EditImageInput } from '../../../components/inputs/edit.image.input'
+import { EditTextInput } from '../../../components/inputs/edit.text.input'
 import { ToastContainer, toast } from 'react-toastify'
 
 import 'react-toastify/dist/ReactToastify.css';
+import { SelectDiv } from '../../../components/select.div'
+import { ChangePasswordForm } from '../../../components/change.password.form'
 
 export default function Page() {
 
@@ -41,11 +43,11 @@ export default function Page() {
       }
 
       toast.success("imagem atualizada!")
-   
+
     } catch (err: any) {
       toast.error(`Erro ao atualizar imagem: ${err.response.data.message}`)
 
-    }finally{
+    } finally {
       setProfile(null)
       setBackground(null)
 
@@ -150,27 +152,54 @@ export default function Page() {
                 callback={updateRestaurantCallback}
               /></h1>
 
-              <p><EditTextInput
+              <span className=' block'><EditTextInput
                 default={restaurant?.email}
                 valueState={{ value: email, setValue: setEmail }}
                 callback={updateRestaurantCallback}
 
-              /></p>
+              /></span>
 
-              <p className="mt-2 w-[60%] text-sm">
+              <span className="block mt-2 w-[60%] text-sm">
                 <EditTextInput default={restaurant?.resume || 'sem descrição'}
                   valueState={{ value: resume, setValue: setResume }}
                   mode='text-area'
                   max={300}
                   callback={updateRestaurantCallback}
 
-                /></p>
+                /></span>
 
             </div>
           </div>
         </div>
       </div>
 
+      <SelectDiv titles={['Mudar senha', 'Paleta de cores', 'Configurações da conta']}>
+
+
+        <div>
+          <div className='w-[90%] min-h-10 m-auto bg-[#0000000f] rounded-lg p-4 shadow-lg'>
+            <h2 className=' text-orange-500 text-xl font-bold'>Mudar senha</h2>
+            <ChangePasswordForm />
+          </div>
+
+        </div>
+
+        <div>
+          <div className='w-[90%] min-h-10 m-auto bg-[#0000000f] rounded-lg p-4 shadow-lg'>
+            <h2 className=' text-orange-500 text-xl font-bold'>Paleta de cores</h2>
+
+          </div>
+        </div>
+
+        <div>
+          <div className='w-[90%] min-h-10 m-auto bg-[#0000000f] rounded-lg p-4 shadow-lg'>
+            <h2 className=' text-orange-500 text-xl font-bold'>Configurações da conta</h2>
+
+          </div>
+        </div>
+
+
+      </SelectDiv>
 
     </div>
   )

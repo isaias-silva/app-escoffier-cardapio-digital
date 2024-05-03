@@ -1,6 +1,6 @@
 import EditIcon from '@mui/icons-material/BorderColor';
 import SaveIcon from '@mui/icons-material/Save';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 
 export function EditTextInput(props: {
     callback?: () => Promise<void>
@@ -16,22 +16,26 @@ export function EditTextInput(props: {
 }) {
     const [edit, setEdit] = useState<boolean>(false)
     const { value, setValue } = props.valueState
-    const id = Math.random().toString(32).replace('0.', 'text-input-')
+    const [id, setId] = useState<string>()
 
     const handleValue = (ev: any) => setValue(ev.target.value)
     const handleEdit = () => {
         if (value && !edit == false && props.callback) {
-         
-                props.callback()
 
-            
+            props.callback()
+
+
         }
         setEdit(!edit)
     }
     useEffect(() => {
         setValue(props.default)
+
     }, [props.default])
 
+    useMemo(()=>{
+        setId(Math.random().toString(32).replace('0.', 'text-input-'))
+    },[])
     return <div className=' relative'>
         {edit ? props.mode == 'text-area' ?
             <textarea id={id}
@@ -48,10 +52,10 @@ export function EditTextInput(props: {
                 onChange={handleValue} />
             : value || props.default}
 
-        <label htmlFor={id} onClick={handleEdit} className=" absolute top-0 mx-2 transition-all duration-300 opacity-25 hover:opacity-100 hover:cursor-pointer text-sm">{edit ? <SaveIcon /> : <EditIcon />}
+        <label htmlFor={id} onClick={handleEdit} className=" absolute  bottom-0 mx-4 transition-all duration-300 opacity-25 hover:opacity-100 hover:cursor-pointer text-sm">{edit ? <SaveIcon /> : <EditIcon />}
         </label>
 
 
-        {props?.max && value && edit && <p className={' opacity-50 ' + (value?.length == props.max ? ' text-red-600' : '')}>{value?.length}/{props.max}</p>}
+        {props?.max && value && edit && <p className={' opacity-50 w-[40px] ' + (value?.length == props.max ? ' text-red-600' : '')}>{value?.length}/{props.max}</p>}
     </div>
 }

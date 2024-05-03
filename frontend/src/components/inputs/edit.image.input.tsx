@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 
 
@@ -14,7 +14,8 @@ export function EditImageInput(props: {
     const [previewImage, setPreviewImage] = useState<string | null>(null);
 
     const { setImage,image } = props.imageState
-    const id = Math.random().toString(32).replace('0.', 'image-input-')
+    const [id, setId] = useState<string>()
+   
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -45,6 +46,9 @@ export function EditImageInput(props: {
             props.callback()            
         }
     },[image])
+    useMemo(()=>{
+        setId(Math.random().toString(32).replace('0.', 'text-input-'))
+    },[])
     return <>
         <input
             type="file"
