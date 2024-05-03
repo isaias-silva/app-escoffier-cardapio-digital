@@ -5,6 +5,7 @@ import { Readable, Writable, pipeline } from 'stream';
 import { promisify } from 'util';
 import { createGunzip, createGzip } from 'node:zlib';
 
+
 @Global()
 @Injectable()
 
@@ -26,6 +27,8 @@ export class FileService implements OnModuleInit {
 
     async writeImage(name: string, buff: Buffer) {
         this.logger.verbose('write file')
+
+
         this.unlinkImage(name)
 
         this.logger.debug(`write file ${name} (${(buff.length / (1024 * 1024)).toFixed(2)} mb)`)
@@ -36,15 +39,11 @@ export class FileService implements OnModuleInit {
 
         const parts = await this.splitBuffer(buff, buff.length / (1024 * 1024))
 
+
         const readStream = Readable.from(parts)
 
-        
+
         await this.compressFile(readStream, writeStream, "compact_" + name + ".gz")
-
-
-
-
-
 
     }
 
@@ -58,10 +57,6 @@ export class FileService implements OnModuleInit {
         gzip.on('end', () => {
             this.logger.verbose(`file ${fileName} compressed.`)
         })
-        gzip.on('data', (chunk) => {
-            this.logger.debug(` ${(chunk.length / (1024)).toFixed(2)} kb's compress in ${fileName}`)
-
-        })
 
         try {
 
@@ -72,16 +67,17 @@ export class FileService implements OnModuleInit {
             );
         } catch (error) {
             this.logger.error('Error in compact file:', error);
-        } 
+        }
 
 
     }
     async decompressFile(compactFile: Readable, descompactFile: Writable, fileName: string) {
         const gunzip = createGunzip()
-        gunzip.on('end', () => {
+     
+       gunzip.on('end', () => {
             this.logger.verbose(`file ${fileName} decompress.`)
         })
-        
+
         this.promissedPipeline(
             compactFile,
             gunzip,
@@ -89,13 +85,12 @@ export class FileService implements OnModuleInit {
         )
     }
     async unlinkImage(name: string) {
-        this.logger.debug(`delete file ${name}`)
+        this.logger.debug(`delete file if name is ${name}`)
+        const exists = fs.existsSync(resolve(this.pathTemp, name))
+        if (exists) {
 
-        fs.unlink(resolve(this.pathTemp, name), (err) => {
-            if (err) {
-                this.logger.error(err)
-            }
-        })
+            fs.unlinkSync(resolve(this.pathTemp, name))
+        }
 
     }
 
@@ -109,7 +104,7 @@ export class FileService implements OnModuleInit {
             return host + '/static/' + name
 
         } catch (err) {
-          
+
             const compactExist = fs.existsSync(resolve(this.pathTemp, "compact_" + name + ".gz"))
 
             if (compactExist) {

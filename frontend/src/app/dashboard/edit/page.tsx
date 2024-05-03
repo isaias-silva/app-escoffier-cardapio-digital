@@ -32,19 +32,22 @@ export default function Page() {
     try {
 
       if (profile) {
-        
-       await updateProfile(profile)
-       
+
+        await updateProfile(profile)
+
       }
       if (background) {
         await updateBackground(background)
       }
 
       toast.success("imagem atualizada!")
-    
-
+   
     } catch (err: any) {
       toast.error(`Erro ao atualizar imagem: ${err.response.data.message}`)
+
+    }finally{
+      setProfile(null)
+      setBackground(null)
 
     }
   }

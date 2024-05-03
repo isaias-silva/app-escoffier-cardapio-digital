@@ -32,13 +32,13 @@ export function EditTextInput(props: {
         setValue(props.default)
     }, [props.default])
 
-    return <>
+    return <div className=' relative'>
         {edit ? props.mode == 'text-area' ?
             <textarea id={id}
                 value={value}
                 maxLength={props.max}
                 onChange={handleValue}
-                className='bg-transparent w-[80%] max-w-[80%] h-[50px] resize-none focus:outline-none focus:ring-transparent border-b' >
+                className='bg-transparent w-[80%] max-w-[80%] h-[80px] resize-none focus:outline-none focus:ring-transparent border-b' >
 
             </textarea> :
 
@@ -48,10 +48,10 @@ export function EditTextInput(props: {
                 onChange={handleValue} />
             : value || props.default}
 
-        <label htmlFor={id} onClick={handleEdit} className=" transition-all duration-300 opacity-25 hover:opacity-100 hover:cursor-pointer text-sm">{edit ? <SaveIcon /> : <EditIcon />}
+        <label htmlFor={id} onClick={handleEdit} className=" absolute top-0 mx-2 transition-all duration-300 opacity-25 hover:opacity-100 hover:cursor-pointer text-sm">{edit ? <SaveIcon /> : <EditIcon />}
         </label>
 
 
         {props?.max && value && edit && <p className={' opacity-50 ' + (value?.length == props.max ? ' text-red-600' : '')}>{value?.length}/{props.max}</p>}
-    </>
+    </div>
 }
