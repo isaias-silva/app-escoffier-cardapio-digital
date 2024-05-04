@@ -13,7 +13,7 @@ export interface Restaurant {
         font: string,
         hover: string,
     }
-    "createdAt":Date
+    "createdAt":string
 }
 export interface RestaurantUpdate {
 

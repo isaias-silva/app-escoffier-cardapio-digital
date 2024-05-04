@@ -69,7 +69,7 @@ export class RestaurantService {
 
         const password = bcrypt.hashSync(dto.password, 10)
 
-        const restaurant = await this.model.create({ data: { name, email, password } })
+        const restaurant = await this.model.create({ data: { name, email, password ,createdAt:new Date()} })
 
         const { id } = restaurant
 
@@ -86,9 +86,9 @@ export class RestaurantService {
 
     }
 
-    async get(id: string, host: string) {
+    async get(id: string, host?: string, noLoadImage?: boolean) {
 
-        if(id.length!== 24){
+        if (id.length !== 24) {
             throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
 
         }
@@ -100,17 +100,25 @@ export class RestaurantService {
 
         let profile
         let background
-        if (restaurant.profile || restaurant.background) {
+
+        if ((restaurant.profile || restaurant.background) && !noLoadImage) {
 
             [profile, background] = await Promise.all([this.fileService.getImage(restaurant.profile, host), this.fileService.getImage(restaurant.background, host)])
 
 
         }
-        const { name, resume, email,rule,createdAt } = restaurant
+        const { name, resume, email, rule, createdAt } = restaurant
 
-        return { profile, background, name, resume, email, id,rule ,createdAt}
+        return { profile, background, name, resume, email, id, rule, createdAt }
     }
 
+    async getAll(page: number, count: number) {
+
+        return await this.model.findMany({
+            take: count,
+            skip: (page - 1) * count
+        })
+    }
 
     async update(id: string, dto: UpdateRestaurantDto) {
         const restaurantRegisterInDb = await this.model.findFirst({

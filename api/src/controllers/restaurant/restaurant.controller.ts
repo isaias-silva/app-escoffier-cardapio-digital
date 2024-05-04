@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, Put, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { RestaurantService } from '../../services/restaurant/restaurant.service';
 import { ConfirmCodeRestaurantDto, CreateRestaurantDto, LoginRestaurantDto, ResponseRestaurantDto, UpdatePasswordRestaurantForgottenDto, UpdateRestaurantDto } from '../../dtos/restaurant.dtos';
 import { Request } from 'express';
@@ -6,6 +6,7 @@ import { JwtGuard } from '../../guards/jwt/jwt.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthResponseDto, BasicResponseDto } from '../../dtos/basic.response.dto';
+import { AdminGuard } from '../../guards/admin/admin.guard';
 
 @Controller('restaurant')
 @ApiTags('Restaurant Auth and Management')
@@ -24,11 +25,11 @@ export class RestaurantController {
     @ApiResponse({ status: 200, description: 'restaurant info.', type: ResponseRestaurantDto })
 
     async getMyRestaurant(@Req() req: Request) {
-        
+
         return await this.restaurantService.get(req['auth'].id, req['apiurl']);
     }
 
-    
+
     @Get('/:id')
 
     @ApiOperation({ summary: 'Get a specific restaurant.', description: 'Retrieve information about a specific restaurant.' })
@@ -38,6 +39,20 @@ export class RestaurantController {
 
     async getRestaurant(@Req() req: Request, @Param('id') id: string) {
         return await this.restaurantService.get(id, req['apiurl']);
+    }
+
+    @Get('/get/all')
+    @ApiBearerAuth()
+    @UseGuards(AdminGuard)
+    @ApiOperation({ summary: 'Get all restaurants.', description: 'Retrieve information about all restaurants in db.' })
+    @ApiResponse({ status: 403, description: 'Access Denied', type: BasicResponseDto })
+  
+    @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 200, description: 'restaurant info.', type: ResponseRestaurantDto, isArray: true })
+
+    async getAllRestaurant(@Query('page') page: number, @Query('count') count: number) {
+        return await this.restaurantService.getAll(page, count)
     }
 
     @Put('update')
@@ -162,5 +177,19 @@ export class RestaurantController {
 
     async deleteRestaurantAccount(@Req() req: Request) {
         return await this.restaurantService.delete(req['auth'].id);
+    }
+
+    @Delete('delete/account/:id')
+    @UseGuards(JwtGuard, AdminGuard)
+    @ApiBearerAuth()
+
+    @ApiOperation({ summary: 'Delete restaurant account.', description: 'Delete restaurant by id.' })
+    @ApiResponse({ status: 401, description: 'user is not admin', type: BasicResponseDto })
+    @ApiResponse({ status: 404, description: 'restaurant not found', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 200, description: 'account deleted', type: AuthResponseDto })
+
+    async deleteRestaurantAccountByAdmin(@Param('id') id: string) {
+        return await this.restaurantService.delete(id);
     }
 }

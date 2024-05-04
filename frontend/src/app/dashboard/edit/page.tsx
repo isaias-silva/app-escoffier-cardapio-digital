@@ -4,7 +4,7 @@ import { getMyRestaurant, getRestaurant, logout, updateBackground, updateProfile
 import { Restaurant } from '../../../core/interfaces/restaurant.interface'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import Link from 'next/link'
+
 import LoadComponent from '../../../components/load.component'
 
 import { LateralNavMenu } from '../../../components/menu.nav.lateral'
@@ -16,6 +16,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { SelectDiv } from '../../../components/select.div'
 import { ChangePasswordForm } from '../../../components/change.password.form'
 
+import DeleteIcon from '@mui/icons-material/Delete';
+import includeZero from '../../../core/utils/include.zero'
 export default function Page() {
 
   const router = useRouter()
@@ -29,7 +31,7 @@ export default function Page() {
 
   const [profile, setProfile] = useState<File | null>(null);
   const [background, setBackground] = useState<File | null>(null);
-
+  const [staticDate,setStaticDate]=useState<Date>(new Date());
   const updateImagesCallback = async () => {
     try {
 
@@ -95,6 +97,7 @@ export default function Page() {
     if (restaurantId) {
 
       getRestaurant(restaurantId).then(res => {
+        setStaticDate(new Date(res.data.createdAt))
         setRestaurant(res?.data)
         setLoad(false)
       }).catch(() => router.replace('/error'))
@@ -194,12 +197,13 @@ export default function Page() {
         <div>
           <div className='w-[90%] min-h-10 m-auto bg-[#0000000f] rounded-lg p-4 shadow-lg'>
             <h2 className=' text-orange-500 text-xl font-bold'>Resumo da conta</h2>
-              <ul>
-                <li><b>Nome:</b> {restaurant?.name}</li>
-                <li><b>Email:</b> {restaurant?.email}</li>
-                <li>usuário de classe {restaurant?.rule}</li>
-                <li></li>
-              </ul>
+            <ul>
+
+              <li><b>Tipo de usuário: </b>{restaurant?.rule}</li>
+              <li><b>registrado desde: </b> {includeZero(staticDate.getDate()) }/{includeZero(staticDate.getMonth()+1)}/{staticDate.getFullYear()}</li>
+            </ul>
+
+            <button className='flex justify-center items-center my-2 p-2 bg-red-400 rounded-lg font-bold transition-all duration-300 hover:bg-red-500 hover:text-white'><DeleteIcon/> Deletar conta</button>
           </div>
         </div>
 
