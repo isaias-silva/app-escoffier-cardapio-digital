@@ -35,7 +35,7 @@ describe('JwtGuard', () => {
 
     it('should throw UnauthorizedException if token is invalid', async () => {
       jwtServiceMock.verifyAsync = jest.fn().mockRejectedValueOnce(new Error('Invalid token'));
-      const request = { headers: { authorization: 'Bearer invalid-token' } } as any; // Mocked request
+      const request = { headers: { authorization: 'Bearer invalid-token' } } as any; 
 
       await expect(guard.canActivate({ switchToHttp: () => ({ getRequest: () => request }) } as any)).rejects.toThrowError(UnauthorizedException);
     });

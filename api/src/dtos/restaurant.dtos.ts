@@ -115,4 +115,10 @@ export class ResponseRestaurantDto {
 
     @ApiProperty()
     id: string;
+
+    @ApiProperty()
+    rule: 'NORMAL'|'ADMIN';
+
+    @ApiProperty()
+    createdAt:Date
 }

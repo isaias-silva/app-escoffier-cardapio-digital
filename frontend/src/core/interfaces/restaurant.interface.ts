@@ -5,6 +5,7 @@ export interface Restaurant {
     "resume"?: string,
     "email": string,
     "id": string,
+    "rule":'NORMAL'|'ADMIN'
     "pallete"?: {
         main: string,
         primary: string,
@@ -12,6 +13,7 @@ export interface Restaurant {
         font: string,
         hover: string,
     }
+    "createdAt":Date
 }
 export interface RestaurantUpdate {
 

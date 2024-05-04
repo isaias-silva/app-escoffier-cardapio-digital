@@ -193,8 +193,13 @@ export default function Page() {
 
         <div>
           <div className='w-[90%] min-h-10 m-auto bg-[#0000000f] rounded-lg p-4 shadow-lg'>
-            <h2 className=' text-orange-500 text-xl font-bold'>Configurações da conta</h2>
-
+            <h2 className=' text-orange-500 text-xl font-bold'>Resumo da conta</h2>
+              <ul>
+                <li><b>Nome:</b> {restaurant?.name}</li>
+                <li><b>Email:</b> {restaurant?.email}</li>
+                <li>usuário de classe {restaurant?.rule}</li>
+                <li></li>
+              </ul>
           </div>
         </div>
 

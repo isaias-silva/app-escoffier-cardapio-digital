@@ -106,9 +106,9 @@ export class RestaurantService {
 
 
         }
-        const { name, resume, email } = restaurant
+        const { name, resume, email,rule,createdAt } = restaurant
 
-        return { profile, background, name, resume, email, id }
+        return { profile, background, name, resume, email, id,rule ,createdAt}
     }
 
 
