@@ -28,6 +28,8 @@ async function register(name: string, email: string, password: string) {
 
 async function logout() {
     deleteCookie('jwt-auth')
+    deleteCookie('pallete')
+    
 }
 
 function getToken(): string | undefined {
@@ -111,7 +113,7 @@ async function getMyRestaurant() {
     }
     const res = await axiosConfig.get<Restaurant>('/restaurant/', { headers: { 'Authorization': `Bearer ${token}` } })
     if (res.data && res.data.pallete) {
-        localStorage.setItem('pallete', JSON.stringify(res.data.pallete))
+        setCookie('pallete', JSON.stringify(res.data.pallete))
     }
     return res
 }
@@ -121,7 +123,7 @@ async function getRestaurant(id: string) {
     const res = await axiosConfig.get<Restaurant>(`/restaurant/${id}`)
 
     if (res.data && res.data.pallete) {
-        localStorage.setItem('pallete', JSON.stringify(res.data.pallete))
+        setCookie('pallete', JSON.stringify(res.data.pallete))
     }
 
     return res
@@ -138,7 +140,8 @@ async function deleteRestaurant() {
 }
 
  function getPallete(){
-    const pallete:Restaurant["pallete"]= JSON.parse(localStorage.getItem('pallete')||"{}")
+   
+    const pallete:Restaurant["pallete"]= JSON.parse(getCookie('pallete')||"{}")
     return pallete
 }
 export {

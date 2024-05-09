@@ -30,6 +30,13 @@ html, body {
 
 }
 
+.hoved{
+    transition: ease-in 0.1s;
+}
+.hoved:hover{
+    background-color: #00000036;
+
+}
 @keyframes rotate {
     0% {
         transform: rotate(0deg);
