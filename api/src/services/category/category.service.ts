@@ -73,7 +73,8 @@ export class CategoryService {
         } else {
             throw new BadRequestException(ResponsesEnum.INVALID_BODY_OF_REQUEST)
         }
-        await this.model.delete({ where: { id } })
+      
+
         return { message: ResponsesEnum.CATEGORY_DELETED }
     }
     async validCategories(restaurantId: string, id: string) {

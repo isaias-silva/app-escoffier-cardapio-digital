@@ -179,7 +179,7 @@ export class DisheService {
         } else {
             throw new BadRequestException(ResponsesEnum.INVALID_BODY_OF_REQUEST)
         }
-        await this.model.delete({ where: { id } })
+      
         return { message: ResponsesEnum.DISHE_DELETED }
 
     }

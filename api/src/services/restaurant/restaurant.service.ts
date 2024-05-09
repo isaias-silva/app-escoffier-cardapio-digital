@@ -1,6 +1,6 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { OrmService } from '../orm/orm.service';
-import { ConfirmCodeRestaurantDto, CreateRestaurantDto, LoginRestaurantDto, UpdatePasswordRestaurantForgottenDto, UpdateRestaurantDto } from '../../dtos/restaurant.dtos';
+import { ConfirmCodeRestaurantDto, CreateRestaurantDto, LoginRestaurantDto, UpdatePalleteDto, UpdatePasswordRestaurantForgottenDto, UpdateRestaurantDto } from '../../dtos/restaurant.dtos';
 import { ResponsesEnum } from '../../enums/responses.enum';
 import * as bcrypt from 'bcrypt';
 import { MailService } from '../mail/mail.service';
@@ -69,7 +69,7 @@ export class RestaurantService {
 
         const password = bcrypt.hashSync(dto.password, 10)
 
-        const restaurant = await this.model.create({ data: { name, email, password ,createdAt:new Date()} })
+        const restaurant = await this.model.create({ data: { name, email, password, createdAt: new Date() } })
 
         const { id } = restaurant
 
@@ -107,9 +107,9 @@ export class RestaurantService {
 
 
         }
-        const { name, resume, email, rule, createdAt } = restaurant
+        const { name, resume, email, rule, createdAt, pallete } = restaurant
 
-        return { profile, background, name, resume, email, id, rule, createdAt }
+        return { profile, background, name, resume, email, id, rule, createdAt, pallete }
     }
 
     async getAll(page: number, count: number) {
@@ -174,6 +174,23 @@ export class RestaurantService {
         return { message: ResponsesEnum.UPDATED_INFO }
 
     }
+
+    async updatePallete(id: string, dto: UpdatePalleteDto) {
+        const restaurantRegisterInDb = await this.model.findFirst({
+            where: {
+                id
+            }
+        })
+        if (!restaurantRegisterInDb) {
+            throw new NotFoundException(ResponsesEnum.RESTAURANT_NOT_FOUND)
+        }
+
+        await this.model.update({ where: { id }, data: { pallete: dto } })
+
+        return { message: ResponsesEnum.UPDATED_INFO }
+
+    }
+
 
     async updateImage(id: string, buff: Buffer, key: 'profile' | 'background') {
         const restaurantRegisterInDb = await this.model.findFirst({
@@ -333,13 +350,13 @@ export class RestaurantService {
 
         this.fileService.unlinkImage(`${id}.png`)
 
-        await this.model.delete({ where: { id } })
+
 
         Promise.all([
-            this.categoryService.deleteCategory(id, { many: true }),
-            this.menuService.deleteMenu(id, { many: true }),
-            this.dishesService.deleteDishe(id, { many: true })
-        ])
+            this.categoryService.deleteCategory(restaurantRegisterInDb.id, { many: true }),
+            this.menuService.deleteMenu(restaurantRegisterInDb.id, { many: true }),
+            this.dishesService.deleteDishe(restaurantRegisterInDb.id, { many: true })
+        ]).then(() => this.model.delete({ where: { id } }))
 
         return { message: ResponsesEnum.DELETED_RESTAURANT }
     }

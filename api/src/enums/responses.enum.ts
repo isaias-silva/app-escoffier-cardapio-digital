@@ -72,6 +72,7 @@ export enum ResponsesEnum{
     DISHE_CREATED = "prato criado",
     MENU_ID_IS_REQUIRED = "id do menu é requerido",
     VERY_LOW_PRICE = "preço minimo é 1 (reais)",
-    CATEGORIES_REQUIRED = "categoria é requerida"
+    CATEGORIES_REQUIRED = "categoria é requerida",
+    INVALID_HEX_COLOR = "INVALID_HEX_COLOR"
 
 }

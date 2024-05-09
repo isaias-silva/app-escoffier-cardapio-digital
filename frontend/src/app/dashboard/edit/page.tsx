@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { getMyRestaurant, getRestaurant, logout, updateBackground, updateProfile, updateRestaurant } from '../../../app/api/services/restaurant.service'
+import { deleteRestaurant, getMyRestaurant, getRestaurant, logout, updateBackground, updateProfile, updateRestaurant } from '../../../app/api/services/restaurant.service'
 import { Restaurant } from '../../../core/interfaces/restaurant.interface'
 import { useRouter, useSearchParams } from 'next/navigation'
 
@@ -18,6 +18,9 @@ import { ChangePasswordForm } from '../../../components/change.password.form'
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import includeZero from '../../../core/utils/include.zero'
+import DeleteForm from '../../../components/delete.form'
+import ColorInput from '../../../components/inputs/color.picker.input'
+import { PalleteForm } from '../../../components/pallete.form'
 export default function Page() {
 
   const router = useRouter()
@@ -31,7 +34,9 @@ export default function Page() {
 
   const [profile, setProfile] = useState<File | null>(null);
   const [background, setBackground] = useState<File | null>(null);
-  const [staticDate,setStaticDate]=useState<Date>(new Date());
+  const [staticDate, setStaticDate] = useState<Date>(new Date());
+
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const updateImagesCallback = async () => {
     try {
 
@@ -85,7 +90,21 @@ export default function Page() {
     }
 
   }
+  const deleteRestaurantCallback = async () => {
 
+    try {
+
+      const res = await deleteRestaurant()
+      await logout();
+      router.push('/')
+
+    } catch (err: any) {
+      toast.error(`Erro : ${err.response.data.message}`)
+
+
+    }
+
+  }
   const params = useSearchParams()
   useEffect(() => {
     refreshRestaurant()
@@ -123,10 +142,15 @@ export default function Page() {
 
   return (
     <div className="bg-orange-100 min-h-screen w-full">
+
       <ToastContainer />
       {load && <LoadComponent />}
       {isMe && <LateralNavMenu />}
-
+      <DeleteForm
+        message={'deseja mesmo deletar sua conta?(todos seus pratos serão deletados!)'}
+        setOpen={setOpenDeleteModal}
+        callback={deleteRestaurantCallback}
+        open={openDeleteModal} />
       <div className="bg-orange-500 py-6  relative">
         <div className="container mx-auto px-4">
           <div className="sm:flex-row flex-col justify-center items-center px-2 pt-2 ">
@@ -191,6 +215,7 @@ export default function Page() {
           <div className='w-[90%] min-h-10 m-auto bg-[#0000000f] rounded-lg p-4 shadow-lg'>
             <h2 className=' text-orange-500 text-xl font-bold'>Paleta de cores</h2>
 
+            <PalleteForm />
           </div>
         </div>
 
@@ -200,10 +225,12 @@ export default function Page() {
             <ul>
 
               <li><b>Tipo de usuário: </b>{restaurant?.rule}</li>
-              <li><b>registrado desde: </b> {includeZero(staticDate.getDate()) }/{includeZero(staticDate.getMonth()+1)}/{staticDate.getFullYear()}</li>
+              <li><b>registrado desde: </b> {includeZero(staticDate.getDate())}/{includeZero(staticDate.getMonth() + 1)}/{staticDate.getFullYear()}</li>
             </ul>
 
-            <button className='flex justify-center items-center my-2 p-2 bg-red-400 rounded-lg font-bold transition-all duration-300 hover:bg-red-500 hover:text-white'><DeleteIcon/> Deletar conta</button>
+
+            <button onClick={() => setOpenDeleteModal(true)} className='flex justify-center items-center my-2 p-2 bg-red-400 rounded-lg font-bold transition-all duration-300 hover:bg-red-500 hover:text-white'><DeleteIcon /> Deletar conta</button>
+
           </div>
         </div>
 

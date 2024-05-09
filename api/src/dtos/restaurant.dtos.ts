@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsHexColor, IsNotEmpty, IsOptional, MaxLength, MinLength } from "class-validator";
 import { ResponsesEnum } from "../enums/responses.enum";
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -117,8 +117,37 @@ export class ResponseRestaurantDto {
     id: string;
 
     @ApiProperty()
-    rule: 'NORMAL'|'ADMIN';
+    rule: 'NORMAL' | 'ADMIN';
 
     @ApiProperty()
-    createdAt:Date
+    createdAt: Date
+}
+
+export class UpdatePalleteDto {
+
+    @ApiProperty()
+    @IsOptional()
+    @IsHexColor()
+    main: string;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsHexColor({message:ResponsesEnum.INVALID_HEX_COLOR})
+    primary: string;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsHexColor({message:ResponsesEnum.INVALID_HEX_COLOR})
+    secondary: string;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsHexColor({message:ResponsesEnum.INVALID_HEX_COLOR})
+    font: string;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsHexColor({message:ResponsesEnum.INVALID_HEX_COLOR})
+    hover: string;
+
 }

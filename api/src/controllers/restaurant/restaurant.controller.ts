@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, Put, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { RestaurantService } from '../../services/restaurant/restaurant.service';
-import { ConfirmCodeRestaurantDto, CreateRestaurantDto, LoginRestaurantDto, ResponseRestaurantDto, UpdatePasswordRestaurantForgottenDto, UpdateRestaurantDto } from '../../dtos/restaurant.dtos';
+import { ConfirmCodeRestaurantDto, CreateRestaurantDto, LoginRestaurantDto, ResponseRestaurantDto, UpdatePalleteDto, UpdatePasswordRestaurantForgottenDto, UpdateRestaurantDto } from '../../dtos/restaurant.dtos';
 import { Request } from 'express';
 import { JwtGuard } from '../../guards/jwt/jwt.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -67,6 +67,20 @@ export class RestaurantController {
 
     async updateRestaurant(@Body() dto: UpdateRestaurantDto, @Req() req: Request) {
         return await this.restaurantService.update(req['auth'].id, dto);
+    }
+
+    @Put('update/pallete')
+    @UseGuards(JwtGuard)
+    @ApiBearerAuth()
+
+    @ApiOperation({ summary: 'Update pallete restaurant information.', description: 'Update pallete of the authenticated restaurant.' })
+    @ApiResponse({ status: 401, description: 'not authorized', type: BasicResponseDto })
+    @ApiResponse({ status: 500, description: 'internal error', type: BasicResponseDto })
+    @ApiResponse({ status: 200, description: 'restaurant updated.', type: BasicResponseDto })
+    @ApiResponse({ status: 400, description: 'error in request body', type: BasicResponseDto })
+
+    async updateRestaurantPallete(@Body() dto: UpdatePalleteDto, @Req() req: Request) {
+        return await this.restaurantService.updatePallete(req['auth'].id, dto);
     }
 
     @Put('update/profile')

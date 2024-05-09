@@ -1,5 +1,5 @@
 
-import { setCookie ,getCookie,deleteCookie} from "cookies-next";
+import { setCookie, getCookie, deleteCookie } from "cookies-next";
 import { AuthResponse, BasicResponses } from "../../../core/interfaces/response.interfaces";
 import { Restaurant, RestaurantUpdate } from "../../../core/interfaces/restaurant.interface";
 import axiosConfig from "../axiosConfig";
@@ -77,12 +77,30 @@ async function updateBackground(data: File) {
     return res
 }
 async function updatePasswordForgotten(new_password: string, email: string) {
-    
-    const res = await axiosConfig.put<BasicResponses>('/restaurant/update/password/forgotten', { email, new_password } )
+
+    const res = await axiosConfig.put<BasicResponses>('/restaurant/update/password/forgotten', { email, new_password })
     return res
 }
+
+
+async function updatePallete(pallete: Restaurant["pallete"]) {
+    const token = getToken()
+    if (!token) {
+        return
+    }
+    const res = await axiosConfig.put<BasicResponses>('/restaurant/update/pallete', pallete,
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        }
+    )
+    return res
+}
+
+
 async function confirmCode(code: string, email: string) {
-    
+
     const res = await axiosConfig.put<BasicResponses>('/restaurant/confirm/code', { email, code })
     return res
 }
@@ -92,17 +110,39 @@ async function getMyRestaurant() {
         return
     }
     const res = await axiosConfig.get<Restaurant>('/restaurant/', { headers: { 'Authorization': `Bearer ${token}` } })
+    if (res.data && res.data.pallete) {
+        localStorage.setItem('pallete', JSON.stringify(res.data.pallete))
+    }
     return res
 }
+
 async function getRestaurant(id: string) {
-   
+
     const res = await axiosConfig.get<Restaurant>(`/restaurant/${id}`)
 
+    if (res.data && res.data.pallete) {
+        localStorage.setItem('pallete', JSON.stringify(res.data.pallete))
+    }
+
     return res
 }
 
+async function deleteRestaurant() {
+    const token = getToken()
+    if (!token) {
+        return
+    }
 
+    const res = await axiosConfig.delete<BasicResponses>('/restaurant/cancel/account', { headers: { 'Authorization': `Bearer ${token}` } })
+    return res
+}
+
+ function getPallete(){
+    const pallete:Restaurant["pallete"]= JSON.parse(localStorage.getItem('pallete')||"{}")
+    return pallete
+}
 export {
+    getPallete,
     login,
     register,
     logout,
@@ -110,8 +150,10 @@ export {
     getRestaurant,
     getMyRestaurant,
     updateRestaurant,
+    updatePallete,
     updateProfile,
     updateBackground,
     updatePasswordForgotten,
-    confirmCode
+    confirmCode,
+    deleteRestaurant
 }
