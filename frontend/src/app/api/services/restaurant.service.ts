@@ -28,7 +28,6 @@ async function register(name: string, email: string, password: string) {
 
 async function logout() {
     deleteCookie('jwt-auth')
-    deleteCookie('pallete')
     
 }
 

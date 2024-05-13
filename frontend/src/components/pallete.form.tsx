@@ -1,15 +1,27 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ColorInput from "./inputs/color.picker.input"
 import { updatePallete } from "../app/api/services/restaurant.service"
 import { toast } from "react-toastify"
+import { Restaurant } from "../core/interfaces/restaurant.interface"
 
-export function PalleteForm() {
+export function PalleteForm({palletes}:{palletes:Restaurant["pallete"]}) {
     const [main, setMain] = useState<string>('#000')
     const [primary, setPrimary] = useState<string>('#000')
     const [secondary, setSecondary] = useState<string>('#000')
     const [font, setFont] = useState<string>('#000')
     const [hover, setHover] = useState<string>('#000')
 
+    useEffect(()=>{
+        if(palletes){
+
+            setMain(palletes.main)
+            setPrimary(palletes.primary)
+            setSecondary(palletes.secondary)
+            setFont(palletes.font)
+            setHover(palletes.hover)
+        }
+
+    },[palletes])
     const updatePalleteCallback = async () => {
         try {
 
@@ -22,7 +34,7 @@ export function PalleteForm() {
         }
     }
     return <div>
-        <div className=" flex flex-wrap my-4">
+        <div className=" flex overflow-hidden rounded-xl bg-red-50 w-[340px]">
 
             <ColorInput name="Main" state={[main, setMain]} />
             <ColorInput name="Primary" state={[primary, setPrimary]} />

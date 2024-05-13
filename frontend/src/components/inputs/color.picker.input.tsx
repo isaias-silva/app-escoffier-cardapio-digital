@@ -21,7 +21,7 @@ const ColorInput = ({ state, name }: { name: string, state: [string | undefined,
         
     }, [color])
     return (
-        <div className="flex h-full items-center mr-10">
+        <div className="flex h-full items-center w-full">
 
             <input
                 onChange={(ev) => setColor(ev.target.value)}
@@ -29,8 +29,9 @@ const ColorInput = ({ state, name }: { name: string, state: [string | undefined,
                 id={id}
                 name="colorPicker"
                 className=" w-[1px] opacity-0"
+                value={color}
             />
-            <label ref={refColor} htmlFor={id} className={` border-2 border-white font-bold cursor-pointer text-gray-100 flex items-center justify-center m-0 bg-gray-800 h-auto p-4 rounded-full`} >{name}</label>
+            <label ref={refColor} htmlFor={id} className={` m-h-10 m-w-10 p-2 cursor-pointer text-white`} >{name}</label>
         </div>
     );
 };

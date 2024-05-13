@@ -140,6 +140,9 @@ export default function Page() {
     }
   }
 
+  const changeColor=()=>{
+    
+  }
   return (
     <div className="bg-orange-100 min-h-screen w-full">
 
@@ -215,7 +218,7 @@ export default function Page() {
           <div className='w-[90%] min-h-10 m-auto bg-[#0000000f] rounded-lg p-4 shadow-lg'>
             <h2 className=' text-orange-500 text-xl font-bold'>Paleta de cores</h2>
 
-            <PalleteForm />
+            <PalleteForm palletes={restaurant?.pallete} />
           </div>
         </div>
 

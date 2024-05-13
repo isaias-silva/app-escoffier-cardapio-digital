@@ -15,7 +15,7 @@ export default function Page() {
   const [restaurant, setRestaurant] = useState<Restaurant>()
   const [isMe, setIsMe] = useState<boolean>(true)
   const [load, setLoad] = useState<boolean>(true)
-  const pallete = getPallete();
+  const [pallete,setPallete]=useState<Restaurant["pallete"]>();
   const params = useSearchParams();
 
   useEffect(() => {
@@ -23,6 +23,9 @@ export default function Page() {
 
   }, [router, params])
 
+  useEffect(()=>{
+    console.log(pallete)
+  },[pallete])
 
   const refreshRestaurant = () => {
     let restaurantId = params?.get('restaurant')
@@ -50,6 +53,8 @@ export default function Page() {
         .catch(() => { logout(); router.replace('/') })
 
     }
+    let pallete=getPallete()
+    setPallete(pallete)
   }
 
   return (
