@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { login, register, updatePasswordForgotten } from '../app/api/services/restaurant.service';
 import { useRouter } from 'next/navigation';
-import { Modal } from '@mui/material';
+import { CircularProgress, LinearProgress, Modal } from '@mui/material';
 import LoadComponent from './load.component';
 import { delay } from '../core/utils/delay';
 
@@ -64,10 +64,13 @@ export default function LoginForm () {
 
         try {
             setLoad(true)
+           
+            await delay(3)
+           
             const req = registerForm ? register(name, email, password) : login(email, password)
             const result = await req
             if (result.status == 201) {
-                await delay(3)
+                
                 router.replace('/dashboard')
             }
         } catch (error: any) {
@@ -82,7 +85,7 @@ export default function LoginForm () {
 
     return (
         <div className="flex justify-center items-center h-screen">
-            {load && <LoadComponent />}
+         
             <Modal
 
                 open={open}
@@ -165,14 +168,20 @@ export default function LoginForm () {
                             required
                         />
                     </div>
-
-                    <button type="submit" className=" duration-300 transition-all w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600">{registerForm ? "Cadastre-se" : "Entre"}</button>
+                
+                    {load?
+                    
+                     <div className='w-full flex justify-center items-center'> <CircularProgress/></div>:
+                    <button type="submit" className=" duration-300 transition-all w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600">{(registerForm ? "Cadastre-se" : "Entre")}</button>
+                }
                     <div>
 
-                        <ul className='flex justify-center items-center flex-col'>
-                            <li><span>{registerForm ? "já possui cadastro?" : "é novo aqui?"} <span onClick={() => { setRegisterForm(!registerForm); setError('') }} className='duration-300 transition-all hover:cursor-pointer text-orange-500 underline hover:text-orange-700'>{registerForm ? "entre" : "cadastre-se"}</span></span></li>
+
+                       {!load && <ul className='flex justify-center items-center flex-col'>
+                            <li>
+                                <span>{registerForm ? "já possui cadastro?" : "é novo aqui?"} <span onClick={() => { setRegisterForm(!registerForm); setError('') }} className='duration-300 transition-all hover:cursor-pointer text-orange-500 underline hover:text-orange-700'>{registerForm ? "entre" : "cadastre-se"}</span></span></li>
                             {registerForm ? null : <li><span onClick={() => setOpen(true)} className='duration-300 transition-all hover:cursor-pointer text-orange-500 underline hover:text-orange-700'>Esqueceu sua senha?</span></li>}
-                        </ul>
+                        </ul>}
 
                     </div>
                 </form>

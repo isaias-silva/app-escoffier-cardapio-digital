@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { deleteRestaurant, getMyRestaurant, getRestaurant, logout, updateBackground, updateProfile, updateRestaurant } from '../../../app/api/services/restaurant.service'
 import { Restaurant } from '../../../core/interfaces/restaurant.interface'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -19,13 +19,15 @@ import { ChangePasswordForm } from '../../../components/change.password.form'
 import DeleteIcon from '@mui/icons-material/Delete';
 import includeZero from '../../../core/utils/include.zero'
 import DeleteForm from '../../../components/delete.form'
-import ColorInput from '../../../components/inputs/color.picker.input'
+
 import { PalleteForm } from '../../../components/pallete.form'
+import { AuthContext } from '../../../context/auth.context'
 export default function Page() {
 
   const router = useRouter()
-  const [restaurant, setRestaurant] = useState<Restaurant>()
-  const [isMe, setIsMe] = useState<boolean>(true)
+
+  const { restaurant, refreshRestaurant, isMe } = useContext(AuthContext)
+
   const [load, setLoad] = useState<boolean>(true)
 
   const [name, setName] = useState<string | undefined>();
@@ -76,8 +78,8 @@ export default function Page() {
         const res = await updateRestaurant(objectUpdate)
 
         toast.success(res?.data.message)
-
-        refreshRestaurant()
+        if (refreshRestaurant)
+          refreshRestaurant()
       }
 
 
@@ -105,43 +107,18 @@ export default function Page() {
     }
 
   }
-  const params = useSearchParams()
+
   useEffect(() => {
-    refreshRestaurant()
-  }, [router, params])
-
-
-  const refreshRestaurant = () => {
-    let restaurantId = params?.get('restaurant')
-    if (restaurantId) {
-
-      getRestaurant(restaurantId).then(res => {
-        setStaticDate(new Date(res.data.createdAt))
-        setRestaurant(res?.data)
-        setLoad(false)
-      }).catch(() => router.replace('/error'))
-
-      setIsMe(false)
-
-
-    } else {
-      setIsMe(true)
-      getMyRestaurant().then(res => {
-        if (!res) {
-          logout();
-          router.replace('/')
-        }
-        setRestaurant(res?.data)
-
-        setLoad(false)
-      })
-        .catch(() => { logout(); router.replace('/') })
+    if (refreshRestaurant) {
+      refreshRestaurant().then(()=>setLoad(false))
 
     }
-  }
+  }, [refreshRestaurant])
 
-  const changeColor=()=>{
-    
+
+
+  const changeColor = () => {
+
   }
   return (
     <div className="bg-orange-100 min-h-screen w-full">

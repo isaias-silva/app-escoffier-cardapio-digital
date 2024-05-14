@@ -8,15 +8,17 @@ import CategoryList from '../../components/category.list'
 import Link from 'next/link'
 import LoadComponent from '../../components/load.component'
 import { LateralNavMenu } from '../../components/menu.nav.lateral'
-import { AuthContext} from '../../context/is.auth'
+import { AuthContext} from '../../context/auth.context'
+import { PalleteContext } from '../../context/pallete.context'
 
 export default function Page() {
 
   
 
   const { restaurant, refreshRestaurant,isMe } = useContext(AuthContext)
+  const pallete=useContext(PalleteContext)
   const [load, setLoad] = useState<boolean>(true)
-  const [pallete, setPallete] = useState<Restaurant["pallete"]>();
+ 
   
   
   useEffect(() => {
@@ -25,11 +27,7 @@ export default function Page() {
     }
   }, [refreshRestaurant]);
 
-  useEffect(() => {
-    if (restaurant && restaurant.pallete) {
-      setPallete(restaurant.pallete);
-    }
-  }, [restaurant]);
+ 
 
   return (
   
@@ -40,13 +38,13 @@ export default function Page() {
           <div className="container mx-auto px-4">
             <div className="sm:flex-row flex-col justify-center items-center px-2 pt-2 ">
 
-              <img src={restaurant?.['background'] || "https://t3.ftcdn.net/jpg/05/79/48/54/360_F_579485400_8jSrBgNQP1BWUOjWujmRS79YJmzQv6fw.jpg"} alt="banner" className='absolute -top-[55%] left-0 w-full h-[100%] z-[1]' />
+              <img src={restaurant?.['background'] || "https://t3.ftcdn.net/jpg/05/79/48/54/360_F_579485400_8jSrBgNQP1BWUOjWujmRS79YJmzQv6fw.jpg"} alt="banner" className='absolute -top-[80%] sm:-top-[55%]  left-0 w-full h-[100%] z-[1]' />
 
               <img style={{ borderColor: pallete?.primary || "#f97316" }} className="relative z-[2] md:w-56 w-[200px] rounded-full sm:border-4 border-2 h-[210px] m-auto sm:m-0" src={restaurant?.profile || "https://cdn-icons-png.flaticon.com/512/433/433087.png"} alt="Restaurant" />
-              <div className="ml-6 text-white z-20">
+              <div className="ml-6 text-white z-20 relative">
                 <h1 className="text-3xl font-bold">{restaurant?.name || "sem nome"}</h1>
 
-                <p className="mt-2 w-[60%] text-sm">{restaurant?.resume
+                <p className="my-2 w-[100%] sm:w-[60%] text-sm">{restaurant?.resume
                   || 'sem descrição'}</p>
                 {isMe ? <Link className=' font-bold hover:underline' target='_blank' href={`/dashboard?restaurant=${restaurant?.id}`}>link público</Link> : null}
 

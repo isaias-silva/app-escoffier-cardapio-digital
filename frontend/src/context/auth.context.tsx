@@ -9,6 +9,7 @@ import { delay } from '../core/utils/delay';
 interface IAuthContext {
   restaurant?: Restaurant
   refreshRestaurant?: () => Promise<void>,
+  logoutRestaurant?: () => Promise<void>,
   isMe?: boolean,
 
 }
@@ -34,17 +35,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (res?.status != 200) {
       router.replace('/')
     }
-    await delay(3)
+    await delay(2)
+
     setRestaurant(res?.data)
   }
 
+  const logoutRestaurant = async () => {
+    logout()
+    setIsMe(false)
+    setRestaurant(undefined);
+
+  }
   useEffect(() => {
     refreshRestaurant()
   }, [searchParams, router])
 
   return (
 
-    <AuthContext.Provider value={{ restaurant, refreshRestaurant, isMe }}>
+    <AuthContext.Provider value={{ restaurant, refreshRestaurant, isMe, logoutRestaurant }}>
       {children}
     </AuthContext.Provider>
   )

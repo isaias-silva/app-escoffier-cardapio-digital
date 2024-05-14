@@ -65,7 +65,7 @@ export function EditImageInput(props: {
                 <label htmlFor={id} className="transition-all duration-300  absolute z-[2] top-0 right-0 bg-orange-300 p-1 rounded-lg opacity-10 hover:cursor-pointer hover:opacity-100" >
                     <EditIcon />
                 </label>
-                <img src={previewImage || props.default || "https://t3.ftcdn.net/jpg/05/79/48/54/360_F_579485400_8jSrBgNQP1BWUOjWujmRS79YJmzQv6fw.jpg"} alt="banner" className='absolute -top-[55%] left-0 w-full h-[100%] z-[1]' />
+                <img src={previewImage || props.default || "https://t3.ftcdn.net/jpg/05/79/48/54/360_F_579485400_8jSrBgNQP1BWUOjWujmRS79YJmzQv6fw.jpg"} alt="banner" className='absolute -top-[80%] sm:-top-[55%]  left-0 w-full h-[100%] z-[1]' />
 
             </>
         }

@@ -1,8 +1,11 @@
-import React from 'react'
-import loadImage from '../../public/load.webp'
+import React, { useContext } from 'react'
+import { PalleteContext } from '../context/pallete.context'
+
 export default function LoadComponent() {
+  const pallete=useContext(PalleteContext)
+ 
   return (
-    <div className="load-div">
+    <div style={{background:pallete?.main||"#ce7800"}} className="load-div">
        <div className='load-block'>
           <span></span>
           <span></span>

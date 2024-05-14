@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import ClearIcon from '@mui/icons-material/Clear';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -8,13 +8,16 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomeIcon from '@mui/icons-material/Home';
 import RamenDiningIcon from '@mui/icons-material/RamenDining';
 import Link from "next/link";
-import { getPallete, logout } from "../app/api/services/restaurant.service";
+import { PalleteContext } from "../context/pallete.context";
+import { AuthContext } from "../context/auth.context";
 
 export function LateralNavMenu() {
     const [open, setOpen] = useState<boolean>(false)
     const popupRef = useRef<HTMLObjectElement>(null);
     const [isMouseInside, setIsMouseInside] = useState(false);
-    const pallete = getPallete()
+    const {logoutRestaurant}=useContext(AuthContext)
+    const pallete=useContext(PalleteContext)
+   
     useEffect(() => {
 
         document.addEventListener('mousedown', closeOrNot);
@@ -68,7 +71,11 @@ export function LateralNavMenu() {
                         </Link>
                     </li>
                     <li className="mb-2">
-                        <Link className="flex items-center hover:bg-red-500  transition-all duration-300 p-2" href="/" onClick={() => logout()}>
+                        <Link className="flex items-center hover:bg-red-500  transition-all duration-300 p-2" href="/" onClick={() =>{
+                            if(logoutRestaurant){
+                                logoutRestaurant()
+                            } 
+                            }}>
 
                             <LogoutIcon className="mr-2" />Sair
                         </Link>
