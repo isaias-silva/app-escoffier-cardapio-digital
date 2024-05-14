@@ -21,7 +21,7 @@ const ColorInput = ({ state, name }: { name: string, state: [string | undefined,
         
     }, [color])
     return (
-        <div className="flex h-full items-center w-full">
+        <div className="flex h-full items-center w-full font-bold">
 
             <input
                 onChange={(ev) => setColor(ev.target.value)}

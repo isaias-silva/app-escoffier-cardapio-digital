@@ -5,6 +5,7 @@ import { login, register, updatePasswordForgotten } from '../app/api/services/re
 import { useRouter } from 'next/navigation';
 import { Modal } from '@mui/material';
 import LoadComponent from './load.component';
+import { delay } from '../core/utils/delay';
 
 export default function LoginForm () {
 
@@ -66,6 +67,7 @@ export default function LoginForm () {
             const req = registerForm ? register(name, email, password) : login(email, password)
             const result = await req
             if (result.status == 201) {
+                await delay(3)
                 router.replace('/dashboard')
             }
         } catch (error: any) {

@@ -34,7 +34,7 @@ export function PalleteForm({palletes}:{palletes:Restaurant["pallete"]}) {
         }
     }
     return <div>
-        <div className=" flex overflow-hidden rounded-xl bg-red-50 w-[340px]">
+        <div className=" flex overflow-hidden rounded-xl bg-red-50 w-[350px]">
 
             <ColorInput name="Main" state={[main, setMain]} />
             <ColorInput name="Primary" state={[primary, setPrimary]} />
