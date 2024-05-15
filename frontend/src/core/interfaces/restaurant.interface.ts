@@ -11,7 +11,7 @@ export interface Restaurant {
         primary: string,
         secondary: string,
         font: string,
-        hover: string,
+        
     }
     "createdAt":string
 }
@@ -26,6 +26,5 @@ export interface RestaurantUpdate {
         primary: string,
         secondary: string,
         font: string,
-        hover: string,
     }
 }

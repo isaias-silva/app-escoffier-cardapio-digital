@@ -145,9 +145,6 @@ export class UpdatePalleteDto {
     @IsHexColor({message:ResponsesEnum.INVALID_HEX_COLOR})
     font: string;
 
-    @ApiProperty()
-    @IsOptional()
-    @IsHexColor({message:ResponsesEnum.INVALID_HEX_COLOR})
-    hover: string;
+ 
 
 }

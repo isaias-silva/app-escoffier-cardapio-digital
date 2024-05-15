@@ -22,6 +22,7 @@ import DeleteForm from '../../../components/delete.form'
 
 import { PalleteForm } from '../../../components/pallete.form'
 import { AuthContext } from '../../../context/auth.context'
+import { PalleteContext } from '../../../context/pallete.context'
 export default function Page() {
 
   const router = useRouter()
@@ -39,6 +40,8 @@ export default function Page() {
   const [staticDate, setStaticDate] = useState<Date>(new Date());
 
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
+
+  const {pallete}=useContext(PalleteContext)
   const updateImagesCallback = async () => {
     try {
 
@@ -121,7 +124,7 @@ export default function Page() {
 
   }
   return (
-    <div className="bg-orange-100 min-h-screen w-full">
+    <div style={{ background: pallete?.main || "#ffedd5" }} className="bg-orange-100 min-h-screen w-full">
 
       <ToastContainer />
       {load && <LoadComponent />}
@@ -131,7 +134,7 @@ export default function Page() {
         setOpen={setOpenDeleteModal}
         callback={deleteRestaurantCallback}
         open={openDeleteModal} />
-      <div className="bg-orange-500 py-6  relative">
+      <div  style={{ background: pallete?.primary || "#f97316" }}  className=" py-6  relative">
         <div className="container mx-auto px-4">
           <div className="sm:flex-row flex-col justify-center items-center px-2 pt-2 ">
             <EditImageInput
@@ -185,7 +188,7 @@ export default function Page() {
 
         <div>
           <div className='w-[90%] min-h-10 m-auto bg-[#0000000f] rounded-lg p-4 shadow-lg'>
-            <h2 className=' text-orange-500 text-xl font-bold'>Mudar senha</h2>
+            <h2 className=' text-xl font-bold'>Mudar senha</h2>
             <ChangePasswordForm />
           </div>
 
@@ -193,15 +196,15 @@ export default function Page() {
 
         <div>
           <div className='w-[90%] min-h-10 m-auto bg-[#0000000f] rounded-lg p-4 shadow-lg'>
-            <h2 className=' text-orange-500 text-xl font-bold'>Paleta de cores</h2>
+            <h2 className=' text-xl font-bold'>Paleta de cores</h2>
 
-            <PalleteForm palletes={restaurant?.pallete} />
+            <PalleteForm  />
           </div>
         </div>
 
         <div>
           <div className='w-[90%] min-h-10 m-auto bg-[#0000000f] rounded-lg p-4 shadow-lg'>
-            <h2 className=' text-orange-500 text-xl font-bold'>Resumo da conta</h2>
+            <h2 className=' text-xl font-bold'>Resumo da conta</h2>
             <ul>
 
               <li><b>Tipo de usuário: </b>{restaurant?.rule}</li>

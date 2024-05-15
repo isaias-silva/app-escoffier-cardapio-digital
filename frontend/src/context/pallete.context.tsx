@@ -5,7 +5,7 @@ import { getPallete } from "../app/api/services/restaurant.service";
 
 
 
-export const PalleteContext = createContext<Restaurant["pallete"] | undefined>(undefined);
+export const PalleteContext = createContext<{pallete?:Restaurant["pallete"], changePalleteTime?:()=>void }>({});
 
 export function PalleteProvider({ children }: { children: React.ReactNode }) {
     const [pallete, setPallete] = useState<Restaurant["pallete"]>()
@@ -15,7 +15,7 @@ export function PalleteProvider({ children }: { children: React.ReactNode }) {
         setPallete(newPallete)
     }, [])
     return(
-    <PalleteContext.Provider value={pallete}>
+    <PalleteContext.Provider value={{pallete}}>
         {children}
     </PalleteContext.Provider>)
 }

@@ -1,8 +1,5 @@
 "use client"
-import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { getMyRestaurant, getPallete, getRestaurant, logout } from '../../app/api/services/restaurant.service'
-import { Restaurant } from '../../core/interfaces/restaurant.interface'
-import { useRouter, useSearchParams } from 'next/navigation'
+import React, { useContext, useEffect,useState } from 'react'
 import MenusList from '../../components/menus.list'
 import CategoryList from '../../components/category.list'
 import Link from 'next/link'
@@ -16,7 +13,7 @@ export default function Page() {
   
 
   const { restaurant, refreshRestaurant,isMe } = useContext(AuthContext)
-  const pallete=useContext(PalleteContext)
+  const {pallete}=useContext(PalleteContext)
   const [load, setLoad] = useState<boolean>(true)
  
   

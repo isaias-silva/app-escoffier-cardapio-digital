@@ -1,12 +1,15 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { EditPasswordInput } from "./inputs/edit.password.input"
 import { Alert, LinearProgress } from "@mui/material"
 import { updateRestaurant } from "../app/api/services/restaurant.service"
 import { delay } from "../core/utils/delay"
+import { PalleteContext } from "../context/pallete.context"
 
 export function ChangePasswordForm() {
     const [password, setPassword] = useState<string>()
     const [passwordRepite, setPasswordRepite] = useState<string>()
+    const { pallete } = useContext(PalleteContext)
+
     const [message, setMessage] = useState<{ type: 'success' | 'info' | 'error' | 'warning', text: string }>({
         type: 'info',
         text: ` Uma senha segura deve conter uma combinação de letras maiúsculas e minúsculas, números e caracteres especiais. Evite usar informações pessoais óbvias, como seu nome ou data de nascimento.
@@ -44,13 +47,13 @@ export function ChangePasswordForm() {
             </p>
         </Alert>}
         {load &&
-        <LinearProgress />}
+            <LinearProgress />}
         <EditPasswordInput placeholder="nova senha" valueState={{ value: password, setValue: setPassword }} />
         <EditPasswordInput placeholder="repita a senha" valueState={{ value: passwordRepite, setValue: setPasswordRepite }} />
 
-       
- {    !load &&   <button onClick={() => updatePassword()} className="bg-orange-500 text-white font-bold p-2 rounded-lg my-2 transition-all duration-300 hover:bg-orange-300">Confirmar</button>
-  }  </div>
+
+        {!load && <button style={{background:pallete?.secondary || "#f97316"}} onClick={() => updatePassword()} className=" text-white font-bold p-2 rounded-lg my-2 transition-all duration-300 hover:scale-110">Confirmar</button>
+        }  </div>
 
 
 }

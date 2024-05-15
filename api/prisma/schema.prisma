@@ -12,7 +12,7 @@ type Pallete {
   primary   String?
   secondary String?
   font      String?
-  hover     String?
+ 
 }
 
 enum Rule {

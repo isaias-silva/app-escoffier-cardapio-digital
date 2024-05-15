@@ -16,8 +16,10 @@ export function LateralNavMenu() {
     const popupRef = useRef<HTMLObjectElement>(null);
     const [isMouseInside, setIsMouseInside] = useState(false);
     const {logoutRestaurant}=useContext(AuthContext)
-    const pallete=useContext(PalleteContext)
    
+    const {pallete}=useContext(PalleteContext)
+   
+    console.log(pallete)
     useEffect(() => {
 
         document.addEventListener('mousedown', closeOrNot);
