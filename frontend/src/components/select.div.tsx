@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { PalleteContext } from "../context/pallete.context";
+import { invertHexColor } from "../core/utils/invert.hex";
 
 
 export function SelectDiv({ children, titles }: { titles: string[], children: React.ReactNode[] }) {
@@ -14,7 +15,7 @@ export function SelectDiv({ children, titles }: { titles: string[], children: Re
         })
 
     })
-    return <div className=" w-full ">
+    return <div style={{color:invertHexColor(pallete?.font||"#fff") }} className=" w-full ">
         <div className=" flex w-full justify-around my-2">
             {titles.map((v, i) => <button onClick={() => setActiveDiv(i)} style={{color: pallete?.secondary|| "#000"}}  className={` font-bold hover:underline ${i == activeDiv ? 'underline' : ''}`} key={i}>{v}</button>)}
         </div>

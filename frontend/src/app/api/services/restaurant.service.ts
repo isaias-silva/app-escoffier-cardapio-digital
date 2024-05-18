@@ -28,7 +28,7 @@ async function register(name: string, email: string, password: string) {
 
 async function logout() {
     deleteCookie('jwt-auth')
-    
+
 }
 
 function getToken(): string | undefined {
@@ -111,8 +111,8 @@ async function getMyRestaurant() {
         return
     }
     const res = await axiosConfig.get<Restaurant>('/restaurant/', { headers: { 'Authorization': `Bearer ${token}` } })
-    if (res.data && res.data.pallete) {
-        setCookie('pallete', JSON.stringify(res.data.pallete))
+    if (res.data.pallete) {
+        setPallete(res.data.pallete)
     }
     return res
 }
@@ -120,10 +120,10 @@ async function getMyRestaurant() {
 async function getRestaurant(id: string) {
 
     const res = await axiosConfig.get<Restaurant>(`/restaurant/${id}`)
-
-    if (res.data && res.data.pallete) {
-        setCookie('pallete', JSON.stringify(res.data.pallete))
+    if (res.data.pallete) {
+        setPallete(res.data.pallete)
     }
+
 
     return res
 }
@@ -138,10 +138,17 @@ async function deleteRestaurant() {
     return res
 }
 
- function getPallete(){
-   
-    const pallete:Restaurant["pallete"]= JSON.parse(getCookie('pallete')||"{}")
-    return pallete
+function setPallete(pallete: Restaurant["pallete"]) {
+    setCookie('pallete', JSON.stringify(pallete))
+}
+function getPallete() {
+
+    const cookiePallete = getCookie('pallete')
+    if (cookiePallete) {
+        const pallete: Restaurant["pallete"] = JSON.parse(cookiePallete)
+        return pallete
+
+    }
 }
 export {
     getPallete,

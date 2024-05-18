@@ -13,18 +13,26 @@ export default function Page() {
   
 
   const { restaurant, refreshRestaurant,isMe } = useContext(AuthContext)
-  const {pallete}=useContext(PalleteContext)
+  const {pallete,refreshPallete}=useContext(PalleteContext)
   const [load, setLoad] = useState<boolean>(true)
  
   
   
   useEffect(() => {
     if (refreshRestaurant) {
-      refreshRestaurant().then(()=>setLoad(false));
+      refreshRestaurant().then(()=>{
+        if(refreshPallete){
+
+          refreshPallete()
+     
+        }
+        setLoad(false)});
     }
   }, [refreshRestaurant]);
 
- 
+
+  
+
 
   return (
   

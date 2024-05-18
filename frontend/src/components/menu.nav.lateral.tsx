@@ -19,7 +19,7 @@ export function LateralNavMenu() {
    
     const {pallete}=useContext(PalleteContext)
    
-    console.log(pallete)
+   
     useEffect(() => {
 
         document.addEventListener('mousedown', closeOrNot);

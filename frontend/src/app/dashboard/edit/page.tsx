@@ -1,8 +1,15 @@
 "use client"
 import React, { useContext, useEffect, useState } from 'react'
-import { deleteRestaurant, getMyRestaurant, getRestaurant, logout, updateBackground, updateProfile, updateRestaurant } from '../../../app/api/services/restaurant.service'
-import { Restaurant } from '../../../core/interfaces/restaurant.interface'
-import { useRouter, useSearchParams } from 'next/navigation'
+import {
+  deleteRestaurant,
+
+  logout,
+  updateBackground,
+  updateProfile,
+  updateRestaurant
+} from '../../../app/api/services/restaurant.service'
+
+import { useRouter } from 'next/navigation'
 
 
 import LoadComponent from '../../../components/load.component'
@@ -41,7 +48,7 @@ export default function Page() {
 
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
 
-  const {pallete}=useContext(PalleteContext)
+  const { pallete } = useContext(PalleteContext)
   const updateImagesCallback = async () => {
     try {
 
@@ -99,7 +106,7 @@ export default function Page() {
 
     try {
 
-      const res = await deleteRestaurant()
+      await deleteRestaurant()
       await logout();
       router.push('/')
 
@@ -113,16 +120,13 @@ export default function Page() {
 
   useEffect(() => {
     if (refreshRestaurant) {
-      refreshRestaurant().then(()=>setLoad(false))
+      refreshRestaurant().then(() => setLoad(false))
 
     }
   }, [refreshRestaurant])
 
 
 
-  const changeColor = () => {
-
-  }
   return (
     <div style={{ background: pallete?.main || "#ffedd5" }} className="bg-orange-100 min-h-screen w-full">
 
@@ -134,7 +138,7 @@ export default function Page() {
         setOpen={setOpenDeleteModal}
         callback={deleteRestaurantCallback}
         open={openDeleteModal} />
-      <div  style={{ background: pallete?.primary || "#f97316" }}  className=" py-6  relative">
+      <div style={{ background: pallete?.primary || "#f97316" }} className=" py-6  relative">
         <div className="container mx-auto px-4">
           <div className="sm:flex-row flex-col justify-center items-center px-2 pt-2 ">
             <EditImageInput
@@ -198,7 +202,7 @@ export default function Page() {
           <div className='w-[90%] min-h-10 m-auto bg-[#0000000f] rounded-lg p-4 shadow-lg'>
             <h2 className=' text-xl font-bold'>Paleta de cores</h2>
 
-            <PalleteForm  />
+            <PalleteForm />
           </div>
         </div>
 
