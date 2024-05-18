@@ -48,7 +48,7 @@ export default function Page() {
 
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
 
-  const { pallete } = useContext(PalleteContext)
+  const { mirrorPallete } = useContext(PalleteContext)
   const updateImagesCallback = async () => {
     try {
 
@@ -128,17 +128,17 @@ export default function Page() {
 
 
   return (
-    <div style={{ background: pallete?.main || "#ffedd5" }} className="bg-orange-100 min-h-screen w-full">
+    <div style={{ background: mirrorPallete?.main || "#ffedd5" }} className="bg-orange-100 min-h-screen w-full">
 
       <ToastContainer />
       {load && <LoadComponent />}
-      {isMe && <LateralNavMenu />}
+      {isMe && <LateralNavMenu editMode={true}/>}
       <DeleteForm
         message={'deseja mesmo deletar sua conta?(todos seus pratos serão deletados!)'}
         setOpen={setOpenDeleteModal}
         callback={deleteRestaurantCallback}
         open={openDeleteModal} />
-      <div style={{ background: pallete?.primary || "#f97316" }} className=" py-6  relative">
+      <div style={{ background: mirrorPallete?.primary || "#f97316" }} className=" py-6  relative">
         <div className="container mx-auto px-4">
           <div className="sm:flex-row flex-col justify-center items-center px-2 pt-2 ">
             <EditImageInput
@@ -158,7 +158,7 @@ export default function Page() {
 
             />
 
-            <div className="ml-6 text-white z-20">
+            <div style={{color:mirrorPallete?.font||'#fff'}} className="ml-6 z-20">
               <h1 className="text-3xl font-bold"> <EditTextInput
                 default={restaurant?.name}
                 valueState={{ value: name, setValue: setName }}
@@ -187,7 +187,7 @@ export default function Page() {
         </div>
       </div>
 
-      <SelectDiv titles={['Mudar senha', 'Paleta de cores', 'Configurações da conta']}>
+      <SelectDiv mode='edit' titles={['Mudar senha', 'Paleta de cores', 'Configurações da conta']}>
 
 
         <div>

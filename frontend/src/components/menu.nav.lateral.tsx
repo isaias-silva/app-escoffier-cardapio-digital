@@ -11,13 +11,13 @@ import Link from "next/link";
 import { PalleteContext } from "../context/pallete.context";
 import { AuthContext } from "../context/auth.context";
 
-export function LateralNavMenu() {
+export function LateralNavMenu({editMode}:{editMode?:boolean}) {
     const [open, setOpen] = useState<boolean>(false)
     const popupRef = useRef<HTMLObjectElement>(null);
     const [isMouseInside, setIsMouseInside] = useState(false);
     const {logoutRestaurant}=useContext(AuthContext)
    
-    const {pallete}=useContext(PalleteContext)
+    const {pallete,mirrorPallete}=useContext(PalleteContext)
    
    
     useEffect(() => {
@@ -84,7 +84,7 @@ export function LateralNavMenu() {
                     </li>
                 </ul>
             </nav>
-            <button style={{background:pallete?.secondary||"#fc9e51"}} className={`${open ? 'hidden' : 'block'} text-white  absolute top-0 left-0  w-[40px] h-[40px] z-50 rounded-lg`} onClick={() => setOpen(true)}><MenuIcon /></button>
+            <button style={{background:(editMode?mirrorPallete:pallete)?.secondary||"#fc9e51",color:(editMode?mirrorPallete:pallete)?.font || '#fff'}} className={`${open ? 'hidden' : 'block'} text-white  absolute top-0 left-0  w-[40px] h-[40px] z-50 rounded-lg`} onClick={() => setOpen(true)}><MenuIcon /></button>
         </div>
     );
 }

@@ -8,26 +8,30 @@ import { getPallete } from "../app/api/services/restaurant.service";
 export const PalleteContext = createContext<
     {
         pallete?: Restaurant["pallete"],
+        mirrorPallete?: Restaurant["pallete"],
         refreshPallete?: () => void,
         changePalleteInRealTime?: (pallete: Restaurant['pallete']) => void
     }>({});
 
 export function PalleteProvider({ children }: { children: React.ReactNode }) {
     const [pallete, setPallete] = useState<Restaurant["pallete"]>()
+    const [mirrorPallete, setMirrorPallete] = useState<Restaurant["pallete"]>()
+
     useEffect(() => {
-     refreshPallete()
+        refreshPallete()
+        setMirrorPallete(pallete)
     }, [])
 
     const changePalleteInRealTime = (pallete: Restaurant['pallete']) => {
-        setPallete(pallete)
+        setMirrorPallete(pallete)
     }
-    const refreshPallete=()=>{
+    const refreshPallete = () => {
         const newPallete = getPallete()
-        console.log(newPallete)
+
         setPallete(newPallete)
     }
     return (
-        <PalleteContext.Provider value={{ pallete, changePalleteInRealTime,refreshPallete }}>
+        <PalleteContext.Provider value={{ pallete, mirrorPallete, changePalleteInRealTime, refreshPallete }}>
             {children}
         </PalleteContext.Provider>)
 }

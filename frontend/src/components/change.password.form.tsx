@@ -8,7 +8,7 @@ import { PalleteContext } from "../context/pallete.context"
 export function ChangePasswordForm() {
     const [password, setPassword] = useState<string>()
     const [passwordRepite, setPasswordRepite] = useState<string>()
-    const { pallete } = useContext(PalleteContext)
+    const { mirrorPallete} = useContext(PalleteContext)
 
     const [message, setMessage] = useState<{ type: 'success' | 'info' | 'error' | 'warning', text: string }>({
         type: 'info',
@@ -52,7 +52,7 @@ export function ChangePasswordForm() {
         <EditPasswordInput placeholder="repita a senha" valueState={{ value: passwordRepite, setValue: setPasswordRepite }} />
 
 
-        {!load && <button style={{background:pallete?.secondary || "#f97316"}} onClick={() => updatePassword()} className=" text-white font-bold p-2 rounded-lg my-2 transition-all duration-300 hover:scale-110">Confirmar</button>
+        {!load && <button style={{background: mirrorPallete?.secondary || "#f97316", color:mirrorPallete?.font||"#fff"}} onClick={() => updatePassword()} className=" font-bold p-2 rounded-lg my-2 transition-all duration-300 hover:scale-110">Confirmar</button>
         }  </div>
 
 

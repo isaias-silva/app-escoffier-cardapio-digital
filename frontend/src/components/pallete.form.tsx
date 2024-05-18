@@ -6,30 +6,41 @@ import { Restaurant } from "../core/interfaces/restaurant.interface"
 import { PalleteContext } from "../context/pallete.context"
 
 export function PalleteForm() {
-   
-    const { pallete } = useContext(PalleteContext)
-    
+
+    const { pallete, mirrorPallete, changePalleteInRealTime } = useContext(PalleteContext)
+
     const [main, setMain] = useState<string>('#000')
     const [primary, setPrimary] = useState<string>('#000')
     const [secondary, setSecondary] = useState<string>('#000')
     const [font, setFont] = useState<string>('#000')
 
 
-    useEffect(()=>{
-        if(pallete){
+    useEffect(() => {
+        if (pallete) {
 
             setMain(pallete.main)
             setPrimary(pallete.primary)
             setSecondary(pallete.secondary)
             setFont(pallete.font)
-         
+
         }
 
-    },[pallete])
+    }, [pallete])
+
+    useEffect(() => {
+
+        if (changePalleteInRealTime) {
+            changePalleteInRealTime({ main, font, primary, secondary })
+        }
+    }, [
+        main, font, primary, secondary
+    ])
+
+
     const updatePalleteCallback = async () => {
         try {
 
-            const res = await updatePallete({ main, primary, secondary, font})
+            const res = await updatePallete({ main, primary, secondary, font })
             toast.success(res?.data.message)
 
         } catch (err: any) {
@@ -44,11 +55,11 @@ export function PalleteForm() {
             <ColorInput name="Primary" state={[primary, setPrimary]} />
             <ColorInput name="Secondary" state={[secondary, setSecondary]} />
             <ColorInput name="Font" state={[font, setFont]} />
-          
+
 
 
         </div>
-        <button style={{background:pallete?.secondary || "#f97316"}} onClick={() => updatePalleteCallback()} className="bg-orange-500 text-white font-bold p-2 rounded-lg my-2 transition-all duration-300 hover:scale-110">Confirmar</button>
+        <button style={{ background: mirrorPallete?.secondary || "#f97316", color: mirrorPallete?.font || '#fff' }} onClick={() => updatePalleteCallback()} className=" font-bold p-2 rounded-lg my-2 transition-all duration-300 hover:scale-110">Confirmar</button>
     </div>
 
 }

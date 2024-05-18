@@ -10,6 +10,10 @@ html, body {
     width: 100%;
 }
 
+div{
+    transition: linear 0.5s;
+}
+
 .load-div {
     position: fixed;
     top: 0;
