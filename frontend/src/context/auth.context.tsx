@@ -28,7 +28,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     let restaurantId = searchParams?.get('restaurant')
 
-
     setIsMe(restaurantId ? false : true)
 
     try{

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReturnIcon from '@mui/icons-material/KeyboardReturn';
@@ -7,11 +7,13 @@ import EditMenuForm from './edit.menu.form';
 import { MenuResponse } from '../core/interfaces/menu.interface';
 import DeleteForm from './delete.form';
 import { deleteRestaurantMenu } from '../app/api/services/menu.service';
-export default function MenuControl({ isMe, menu }: { menu?: MenuResponse, isMe: boolean }) {
+import { AuthContext } from '../context/auth.context';
+export default function MenuControl({ menu }: { menu?: MenuResponse }) {
   const router = useRouter()
   const [openEditMenu, setEditMenu] = useState<boolean>(false)
   const [openDelete, setDelete] = useState<boolean>(false)
-  
+  const {isMe}=useContext(AuthContext)
+ 
   return (<>
     <EditMenuForm
       open={openEditMenu}

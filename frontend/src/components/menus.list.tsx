@@ -1,21 +1,23 @@
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { getAllRestaurantMenus } from '../app/api/services/menu.service'
 import {  MenuResponse } from '../core/interfaces/menu.interface'
 import CreateMenuForm from './create.menu.form'
+import { AuthContext } from '../context/auth.context'
 
-export default function MenusList({ id, isMe }: { id?: string, isMe: boolean }) {
+export default function MenusList() {
     const [menus, setMenus] = useState<MenuResponse[]>([])
     const [open, setOpen] = React.useState(false);
+    const {restaurant,isMe}=useContext(AuthContext)
    
     const handleOpen = () => setOpen(true);
 
     useEffect(() => {
         refreshMenus();
         
-    }, [id]);
+    }, [restaurant]);
 
-    const refreshMenus = () => getAllRestaurantMenus(1, 99, id).then((res) => setMenus(res))
+    const refreshMenus = () => getAllRestaurantMenus(1, 99, restaurant?.id).then((res) => setMenus(res))
     return (
 
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

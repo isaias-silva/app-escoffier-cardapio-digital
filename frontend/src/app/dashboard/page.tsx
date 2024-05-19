@@ -60,7 +60,7 @@ export default function Page() {
         <div className="container mx-auto px-4 py-8" >
           <div className="mt-8">
             <h2 className="text-2xl font-semibold text-gray-800">Cardápios</h2>
-           {isMe && <MenusList isMe={isMe} id={restaurant?.id} />}
+           {<MenusList />}
           </div>
         </div>
 
