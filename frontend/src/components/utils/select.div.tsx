@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
-import { PalleteContext } from "../context/pallete.context";
-import { invertHexColor } from "../core/utils/invert.hex";
+import { PalleteContext } from "../../context/pallete.context";
+import { invertHexColor } from "../../core/utils/invert.hex";
 
 
 export function SelectDiv({ children, titles, mode }: { titles: string[], children: React.ReactNode[], mode: 'edit' | 'normal' }) {

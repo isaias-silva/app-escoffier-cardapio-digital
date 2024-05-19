@@ -2,7 +2,7 @@
 "use client"
 
 import { useContext, useEffect } from "react";
-import LoginForm from "../components/login.form";
+import LoginForm from "../components/forms/login.form";
 import { AuthContext } from "../context/auth.context";
 import { useRouter } from "next/navigation";
 import { getToken } from "./api/services/restaurant.service";

@@ -1,9 +1,9 @@
 import { useContext, useState } from "react"
-import { EditPasswordInput } from "./inputs/edit.password.input"
+import { EditPasswordInput } from "../inputs/edit.password.input"
 import { Alert, LinearProgress } from "@mui/material"
-import { updateRestaurant } from "../app/api/services/restaurant.service"
-import { delay } from "../core/utils/delay"
-import { PalleteContext } from "../context/pallete.context"
+import { updateRestaurant } from "../../app/api/services/restaurant.service"
+import { delay } from "../../core/utils/delay"
+import { PalleteContext } from "../../context/pallete.context"
 
 export function ChangePasswordForm() {
     const [password, setPassword] = useState<string>()

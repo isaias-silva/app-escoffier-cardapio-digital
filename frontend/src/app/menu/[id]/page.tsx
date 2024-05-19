@@ -5,12 +5,12 @@ import { getMenu, getMenuInRealTime } from '../../../app/api/services/menu.servi
 import { MenuResponse } from '../../../core/interfaces/menu.interface';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getMyRestaurant } from '../../api/services/restaurant.service';
-import MenuControl from '../../../components/menu.control';
-import LoadComponent from '../../../components/load.component';
-import DisheForm from '../../../components/dishe.form';
+import MenuControl from '../../../components/controls/menu.control';
+import LoadComponent from '../../../components/utils/load.component';
+import DisheForm from '../../../components/forms/dishe.form';
 import Link from 'next/link';
-import DisheCard from '../../../components/dishe.card';
-import Load from '../../../components/load';
+import DisheCard from '../../../components/cards/dishe.card';
+import Load from '../../../components/utils/load';
 import { getCategories } from '../../api/services/category.service';
 import { AuthContext } from '../../../context/auth.context';
 
@@ -22,13 +22,13 @@ export default function Page() {
   const searchParams = useSearchParams()
   const [menu, setMenu] = useState<MenuResponse>()
 
-  const [load, setLoad] = useState<boolean>(true)
-
-  const [realTime, setRealTime] = useState<boolean>(false)
+  const [load, setLoad] = useState<boolean>(true);
+  const [isMyMenu, setIsMyMenu] = useState<boolean>(false);
+  const [realTime, setRealTime] = useState<boolean>(false);
 
   const [openCreationDishe, setOpenCreationDishe] = useState<boolean>(false)
 
-  const {isMe,restaurant}=useContext(AuthContext)
+  const { restaurant } = useContext(AuthContext)
 
   useEffect(() => {
 
@@ -42,21 +42,18 @@ export default function Page() {
   }, [route, params, searchParams])
 
 
-  useEffect(() => {
-    if (!menu) {
-
-      return
-    }
- 
-  }, [route, menu])
 
 
-  const refreshMenu = (id: string) => (searchParams?.get('filter') == 'realtime' ? getMenuInRealTime(id, 1, 6) : getMenu(id, 1, 6, searchParams?.get('category'))).then(res => {
-    setLoad(false)
-    setMenu(res)
+  const refreshMenu = (id: string) => (searchParams?.get('filter') == 'realtime' ?
+    getMenuInRealTime(id, 1, 6) : getMenu(id, 1, 6, searchParams?.get('category'))).then(res => {
 
-  }).catch(() => route.replace('/error'))
+  
+      
+      setIsMyMenu(restaurant?.id? (res.restaurantId == restaurant?.id):false)
+      setLoad(false)
+      setMenu(res)
 
+    }).catch(() => route.replace('/error'))
 
 
 
@@ -69,20 +66,20 @@ export default function Page() {
         <Link className={`mx-2 p-2 my-1 rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}`} >
           Todos
         </Link>
-     
+
         <Link className={`mx-2 p-2 my-1 rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}?filter=realtime`} >
           Disponíveis agora
         </Link>
       </div>
 
       {load && <LoadComponent />}
-      {isMe && menu && <DisheForm menuId={menu.id}
+      {isMyMenu && menu && <DisheForm menuId={menu.id}
         create={true}
         open={openCreationDishe}
         callback={() => location.reload()}
         setOpen={setOpenCreationDishe} />}
 
-   <MenuControl menu={menu} />
+      <MenuControl isMe={isMyMenu} menu={menu} />
       <div className="max-w-4xl mx-auto mt-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {menu?.dishes && menu.dishes.map((item, index) => (
@@ -91,7 +88,7 @@ export default function Page() {
           {menu && <Load menuId={menu.id} isRealTime={realTime} />
           }
           <div className="p-6">
-            {isMe && <button onClick={() => setOpenCreationDishe(true)} className='bg-white rounded-lg shadow-md p-4 w-[200px] transition-all duration-300 hover:scale-110' >
+            {isMyMenu && <button onClick={() => setOpenCreationDishe(true)} className='bg-white rounded-lg shadow-md p-4 w-[200px] transition-all duration-300 hover:scale-110' >
               <h2 className='text-2xl'>+</h2>
             </button>}
           </div>

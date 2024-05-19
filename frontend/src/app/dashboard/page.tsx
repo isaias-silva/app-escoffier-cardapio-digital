@@ -1,10 +1,10 @@
 "use client"
 import React, { useContext, useEffect,useState } from 'react'
-import MenusList from '../../components/menus.list'
-import CategoryList from '../../components/category.list'
+import MenusList from '../../components/lists/menus.list'
+import CategoryList from '../../components/lists/category.list'
 import Link from 'next/link'
-import LoadComponent from '../../components/load.component'
-import { LateralNavMenu } from '../../components/menu.nav.lateral'
+import LoadComponent from '../../components/utils/load.component'
+import { LateralNavControl} from '../../components/controls/menu.nav.control'
 import { AuthContext} from '../../context/auth.context'
 import { PalleteContext } from '../../context/pallete.context'
 
@@ -38,7 +38,7 @@ export default function Page() {
   
       <div style={{ background: pallete?.main || "#ffedd5" }} className=" min-h-screen w-full">
         {load && <LoadComponent />}
-        {isMe && <LateralNavMenu />}
+        {isMe && <LateralNavControl />}
         <div style={{ background: pallete?.primary || "#f97316" }} className=" py-6  relative">
           <div className="container mx-auto px-4">
             <div className="sm:flex-row flex-col justify-center items-center px-2 pt-2 ">

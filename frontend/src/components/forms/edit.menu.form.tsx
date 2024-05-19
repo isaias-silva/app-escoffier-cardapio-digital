@@ -1,7 +1,7 @@
 import { Modal } from '@mui/material';
 import React, { useState } from 'react'
-import { updateRestaurantMenu } from '../app/api/services/menu.service';
-import { MenuResponse } from '../core/interfaces/menu.interface';
+import { updateRestaurantMenu } from '../../app/api/services/menu.service';
+import { MenuResponse } from '../../core/interfaces/menu.interface';
 
 export default function EditMenuForm({ menu, open, setOpen, callback }:
     { open: boolean, setOpen: Function, callback?: Function, menu?: MenuResponse }) {

@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { deleteCategory, getMyCategories } from '../app/api/services/category.service'
-import CategoryForm from './category.form';
-import DeleteForm from './delete.form';
+import { deleteCategory, getMyCategories } from '../../app/api/services/category.service'
+import CategoryForm from '../forms/category.form';
+import DeleteForm from '../forms/delete.form';
 
 export default function CategoryList() {
     const [categories, setCategories] = useState<{ name: string, keywords: string[], id: string }[]>([])
@@ -70,7 +70,7 @@ export default function CategoryList() {
                         <button onClick={() => handleOpenDelete(category.id)} className='transition-all duration-300 hover:text-red-500'><DeleteIcon /></button>
                     </div>
                     <div className="text-gray-800 font-semibold">{category.name}</div>
-                    {category.keywords.map((key,index) => <span key={index} className="inline-block m-1 p-1 bg-orange-300 rounded-xl text-sm">{key}</span>)}
+                    {category.keywords.map((key,index) => <span key={index} className="p-2 inline-block m-1  font-bold bg-orange-300 rounded-xl text-sm">{key}</span>)}
                 </div>
 
 

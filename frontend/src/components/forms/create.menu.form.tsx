@@ -1,6 +1,6 @@
 import { Modal } from '@mui/material'
 import React, { useState } from 'react'
-import { createRestaurantMenu } from '../app/api/services/menu.service';
+import { createRestaurantMenu } from '../../app/api/services/menu.service';
 
 export default function CreateMenuForm({ handleOpen, open, setOpen, callback }: { open: boolean, setOpen: Function, handleOpen: Function, callback?: Function }) {
 

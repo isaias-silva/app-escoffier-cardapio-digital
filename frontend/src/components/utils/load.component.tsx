@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { PalleteContext } from '../context/pallete.context'
+import { PalleteContext } from '../../context/pallete.context'
 
 export default function LoadComponent() {
   const {pallete}=useContext(PalleteContext)

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "@mui/material";
-import { getMyCategories } from "../app/api/services/category.service";
-import { createDishe, updateDishe, updateDisheProfile } from "../app/api/services/dishe.service";
-import { Dishe } from "../core/interfaces/dishe.interface";
+import { getMyCategories } from "../../app/api/services/category.service";
+import { createDishe, updateDishe, updateDisheProfile } from "../../app/api/services/dishe.service";
+import { Dishe } from "../../core/interfaces/dishe.interface";
 export default function DisheForm({ open, setOpen, create, menuId, callback, disheUpdate }:
     { callback?: Function, create: boolean, menuId: string, open: boolean, setOpen: Function, disheUpdate?: Dishe }) {
     const [name, setName] = useState("");

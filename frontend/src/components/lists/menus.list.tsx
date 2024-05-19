@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import React, { useContext, useEffect, useState } from 'react'
-import { getAllRestaurantMenus } from '../app/api/services/menu.service'
-import {  MenuResponse } from '../core/interfaces/menu.interface'
-import CreateMenuForm from './create.menu.form'
-import { AuthContext } from '../context/auth.context'
+import { getAllRestaurantMenus } from '../../app/api/services/menu.service'
+import {  MenuResponse } from '../../core/interfaces/menu.interface'
+import CreateMenuForm from '../forms/create.menu.form'
+import { AuthContext } from '../../context/auth.context'
 
 export default function MenusList() {
     const [menus, setMenus] = useState<MenuResponse[]>([])

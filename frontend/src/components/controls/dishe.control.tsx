@@ -4,11 +4,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReturnIcon from '@mui/icons-material/KeyboardReturn';
 import { useRouter } from 'next/navigation';
-import { Dishe } from '../core/interfaces/dishe.interface';
-import { getMyRestaurant } from '../app/api/services/restaurant.service';
-import DeleteForm from './delete.form';
-import DisheForm from './dishe.form';
-import { deleteDishe } from '../app/api/services/dishe.service';
+import { Dishe } from '../../core/interfaces/dishe.interface';
+import { getMyRestaurant } from '../../app/api/services/restaurant.service';
+import DeleteForm from '../forms/delete.form';
+import DisheForm from '../forms/dishe.form';
+import { deleteDishe } from '../../app/api/services/dishe.service';
 
 export default function DisheControl({ dishe }: { dishe: Dishe }) {
     const router = useRouter()

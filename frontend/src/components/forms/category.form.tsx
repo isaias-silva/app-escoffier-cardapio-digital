@@ -1,7 +1,7 @@
 import { Modal } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { createRestaurantMenu } from '../app/api/services/menu.service';
-import { createCategory, getCategory, updateCategory } from '../app/api/services/category.service';
+import { createRestaurantMenu } from '../../app/api/services/menu.service';
+import { createCategory, getCategory, updateCategory } from '../../app/api/services/category.service';
 
 export default function CategoryForm({ open, setOpen, update, id, callback }: {
     open: boolean,

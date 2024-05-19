@@ -12,22 +12,22 @@ import {
 import { useRouter } from 'next/navigation'
 
 
-import LoadComponent from '../../../components/load.component'
+import LoadComponent from '../../../components/utils/load.component'
 
-import { LateralNavMenu } from '../../../components/menu.nav.lateral'
+import { LateralNavControl} from '../../../components/controls/menu.nav.control'
 import { EditImageInput } from '../../../components/inputs/edit.image.input'
 import { EditTextInput } from '../../../components/inputs/edit.text.input'
 import { ToastContainer, toast } from 'react-toastify'
 
 import 'react-toastify/dist/ReactToastify.css';
-import { SelectDiv } from '../../../components/select.div'
-import { ChangePasswordForm } from '../../../components/change.password.form'
+import { SelectDiv } from '../../../components/utils/select.div'
+import { ChangePasswordForm } from '../../../components/forms/change.password.form'
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import includeZero from '../../../core/utils/include.zero'
-import DeleteForm from '../../../components/delete.form'
+import DeleteForm from '../../../components/forms/delete.form'
 
-import { PalleteForm } from '../../../components/pallete.form'
+import { PalleteForm } from '../../../components/forms/pallete.form'
 import { AuthContext } from '../../../context/auth.context'
 import { PalleteContext } from '../../../context/pallete.context'
 export default function Page() {
@@ -132,7 +132,7 @@ export default function Page() {
 
       <ToastContainer />
       {load && <LoadComponent />}
-      {isMe && <LateralNavMenu editMode={true}/>}
+      {isMe && <LateralNavControl editMode={true}/>}
       <DeleteForm
         message={'deseja mesmo deletar sua conta?(todos seus pratos serão deletados!)'}
         setOpen={setOpenDeleteModal}

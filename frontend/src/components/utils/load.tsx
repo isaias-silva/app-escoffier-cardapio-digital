@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Dishe } from '../core/interfaces/dishe.interface'
-import { getMenu, getMenuInRealTime } from '../app/api/services/menu.service'
-import DisheCard from './dishe.card'
+import { Dishe } from '../../core/interfaces/dishe.interface'
+import { getMenu, getMenuInRealTime } from '../../app/api/services/menu.service'
+import DisheCard from '../cards/dishe.card'
 
 export default function Load({ menuId, isRealTime }: { menuId: string, isRealTime: boolean }) {
     const [visible, setVisible] = useState<boolean>(false)

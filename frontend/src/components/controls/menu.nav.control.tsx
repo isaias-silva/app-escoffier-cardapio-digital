@@ -8,10 +8,10 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomeIcon from '@mui/icons-material/Home';
 import RamenDiningIcon from '@mui/icons-material/RamenDining';
 import Link from "next/link";
-import { PalleteContext } from "../context/pallete.context";
-import { AuthContext } from "../context/auth.context";
+import { PalleteContext } from "../../context/pallete.context";
+import { AuthContext } from "../../context/auth.context";
 
-export function LateralNavMenu({editMode}:{editMode?:boolean}) {
+export function LateralNavControl({editMode}:{editMode?:boolean}) {
     const [open, setOpen] = useState<boolean>(false)
     const popupRef = useRef<HTMLObjectElement>(null);
     const [isMouseInside, setIsMouseInside] = useState(false);

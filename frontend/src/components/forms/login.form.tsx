@@ -1,11 +1,11 @@
 "use client"
 
 import React, { useState } from 'react';
-import { login, register, updatePasswordForgotten } from '../app/api/services/restaurant.service';
+import { login, register, updatePasswordForgotten } from '../../app/api/services/restaurant.service';
 import { useRouter } from 'next/navigation';
 import { CircularProgress, LinearProgress, Modal } from '@mui/material';
-import LoadComponent from './load.component';
-import { delay } from '../core/utils/delay';
+import LoadComponent from '../utils/load.component';
+import { delay } from '../../core/utils/delay';
 
 export default function LoginForm () {
 
@@ -84,7 +84,7 @@ export default function LoginForm () {
     };
 
     return (
-        <div className="flex justify-center items-center h-screen">
+        <div className=" h-screen">
          
             <Modal
 
@@ -129,8 +129,10 @@ export default function LoginForm () {
 
             </Modal>
 
-            <div className="bg-gray-100 p-8 rounded shadow-md duration-300 transition-all ">
-                <h2 className="text-xl font-bold mb-4 text-orange-700">{registerForm ? "Cadastre-se para editar seus cardápios" : "Entre para editar seus cardápios"}</h2>
+            <div className="sm:w-1/3 bg-gray-100 h-full p-8 rounded shadow-md duration-300 transition-all flex items-center justify-center">
+               <div>
+
+                <h2 className=" text-xl font-bold mb-4 text-orange-700">{registerForm ? "Cadastre-se para editar seus cardápios" : "Entre para editar seus cardápios"}</h2>
                 {error && <p className="text-red-500 text-center mb-4 bg-red-300 rounded-lg">{error}</p>}
                 <form onSubmit={handleSubmit}>
                     {registerForm ?
@@ -185,6 +187,7 @@ export default function LoginForm () {
 
                     </div>
                 </form>
+               </div>
             </div>
         </div>
     );

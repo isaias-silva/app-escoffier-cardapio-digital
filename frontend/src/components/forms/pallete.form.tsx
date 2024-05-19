@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react"
-import ColorInput from "./inputs/color.picker.input"
-import { updatePallete } from "../app/api/services/restaurant.service"
+import ColorInput from "../inputs/color.picker.input"
+import { updatePallete } from "../../app/api/services/restaurant.service"
 import { toast } from "react-toastify"
-import { Restaurant } from "../core/interfaces/restaurant.interface"
-import { PalleteContext } from "../context/pallete.context"
+import { Restaurant } from "../../core/interfaces/restaurant.interface"
+import { PalleteContext } from "../../context/pallete.context"
 
 export function PalleteForm() {
 
