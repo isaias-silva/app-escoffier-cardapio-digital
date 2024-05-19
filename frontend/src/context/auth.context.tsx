@@ -31,13 +31,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setIsMe(restaurantId ? false : true)
 
-    const res = await (restaurantId ? getRestaurant(restaurantId) : getMyRestaurant())
-    if (res?.status != 200) {
-      router.replace('/')
-    }
-    await delay(2)
+    try{
 
-    setRestaurant(res?.data)
+      const res = await (restaurantId ? getRestaurant(restaurantId) : getMyRestaurant())
+     
+      await delay(2)
+  
+      setRestaurant(res?.data)
+    }catch(err){
+      router.push('/')
+    }
   }
 
   const logoutRestaurant = async () => {

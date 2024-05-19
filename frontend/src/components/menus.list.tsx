@@ -7,6 +7,7 @@ import CreateMenuForm from './create.menu.form'
 export default function MenusList({ id, isMe }: { id?: string, isMe: boolean }) {
     const [menus, setMenus] = useState<MenuResponse[]>([])
     const [open, setOpen] = React.useState(false);
+   
     const handleOpen = () => setOpen(true);
 
     useEffect(() => {
