@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReturnIcon from '@mui/icons-material/KeyboardReturn';
@@ -9,14 +9,16 @@ import { getMyRestaurant } from '../../app/api/services/restaurant.service';
 import DeleteForm from '../forms/delete.form';
 import DisheForm from '../forms/dishe.form';
 import { deleteDishe } from '../../app/api/services/dishe.service';
+import { PalleteContext } from '../../context/pallete.context';
 
 export default function DisheControl({ dishe }: { dishe: Dishe }) {
     const router = useRouter()
     const [isMe, setIsme] = useState<boolean>()
     const [editDishe, setEditDishe] = useState<boolean>(false)
     const [deleteDisheModal, setDeleteDisheModal] = useState<boolean>(false)
+    const { pallete } = useContext(PalleteContext)
     const deleteDisheCallback = () => {
-        deleteDishe({ many: false, id: dishe.id }).then((res)=>router.back())
+        deleteDishe({ many: false, id: dishe.id }).then((res) => router.back())
     }
 
     useEffect(() => {
@@ -25,15 +27,16 @@ export default function DisheControl({ dishe }: { dishe: Dishe }) {
 
     return (
         <>
-            <div className="fixed left-0 sm:bottom-0 bg-gray-50 rounded-xl overflow-hidden border-orange-500 border-2 z-10">
+            <div style={{ borderColor: pallete?.primary || "#f97316", background: pallete?.main || "#fff"}}
+                className="fixed left-0 sm:bottom-0 rounded-xl overflow-hidden  border-2 z-10">
                 {isMe && dishe.menuId && <>
                     <DisheForm create={false}
                         menuId={dishe?.menuId}
                         open={editDishe}
                         setOpen={setEditDishe}
                         disheUpdate={dishe}
-                        callback={()=>location.reload()}
-                      
+                        callback={() => location.reload()}
+
                     />
                     <DeleteForm
                         message={`deseja mesmo deletar o prato ${dishe.name} ?`}
@@ -41,13 +44,13 @@ export default function DisheControl({ dishe }: { dishe: Dishe }) {
                         callback={deleteDisheCallback}
                         open={deleteDisheModal} />
 
-                    <button onClick={() => setEditDishe(true)} className="w-full flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1 mb-2">
+                    <button style={{ color: pallete?.primary || "#f97316" }} onClick={() => setEditDishe(true)} className={`w-full flex items-center rounded-lg px-3 py-1 mb-2 hover:underline`}>
                         <EditIcon className="w-4 h-4 mr-2" /> editar
                     </button>
-                    <button onClick={() => setDeleteDisheModal(true)} className="w-full flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1 mb-2">
+                    <button style={{ color: pallete?.primary || "#f97316" }} onClick={() => setDeleteDisheModal(true)} className={`w-full flex items-center rounded-lg px-3 py-1 mb-2 hover:underline`}>
                         <DeleteIcon className="w-4 h-4 mr-2" /> excluir
                     </button></>}
-                <button onClick={() => router.back()} className="w-full flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1">
+                <button style={{ color: pallete?.primary || "#f97316" }} onClick={() => router.back()} className="w-full flex items-center rounded-lg px-3 py-1 hover:underline">
                     <ReturnIcon className="w-4 h-4 mr-2" /> retornar
                 </button>
             </div>

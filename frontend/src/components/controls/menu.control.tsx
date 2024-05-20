@@ -8,12 +8,13 @@ import { MenuResponse } from '../../core/interfaces/menu.interface';
 import DeleteForm from '../forms/delete.form';
 import { deleteRestaurantMenu } from '../../app/api/services/menu.service';
 import { AuthContext } from '../../context/auth.context';
-export default function MenuControl({ menu,isMe }: {isMe?:boolean, menu?: MenuResponse }) {
+import { PalleteContext } from '../../context/pallete.context';
+export default function MenuControl({ menu, isMe }: { isMe?: boolean, menu?: MenuResponse }) {
   const router = useRouter()
   const [openEditMenu, setEditMenu] = useState<boolean>(false)
   const [openDelete, setDelete] = useState<boolean>(false)
- 
- 
+
+  const { pallete } = useContext(PalleteContext)
   return (<>
     <EditMenuForm
       open={openEditMenu}
@@ -27,18 +28,23 @@ export default function MenuControl({ menu,isMe }: {isMe?:boolean, menu?: MenuRe
       message={`apagar o cardápio ${menu?.name}?`}
       callback={() => {
         if (menu?.id)
-          deleteRestaurantMenu(menu.id).then(()=>router.back())
+          deleteRestaurantMenu(menu.id).then(() => router.back())
       }}
     />
-    <div className="fixed left-0 sm:bottom-0 bg-gray-50 rounded-xl overflow-hidden border-orange-500 border-2 z-10">
-      {isMe && <><button onClick={() => setEditMenu(true)} className="w-full flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1 mb-2">
+    <div style={{background:pallete?.main || "#fff", borderColor: pallete?.primary || "#f97316" }}
+      className="fixed left-0 sm:bottom-0 rounded-xl overflow-hidden  border-2 z-10">
+      {isMe && <><button style={{ color: pallete?.primary || "#f97316" }}
+        onClick={() => setEditMenu(true)} className="w-full flex items-centerrounded-lg px-3 py-1 mb-2 hover:underline">
         <EditIcon className="w-4 h-4 mr-2" /> editar
       </button>
-
-        <button onClick={() => setDelete(true)} className="w-full flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1 mb-2">
+        <button style={{ color: pallete?.primary || "#f97316" }} onClick={() => setDelete(true)}
+          className="w-full flex items-center rounded-lg px-3 py-1 mb-2 hover:underline">
           <DeleteIcon className="w-4 h-4 mr-2" /> excluir
         </button></>}
-      <button onClick={() => router.replace(isMe?`/dashboard`:`/dashboard?restaurant=${menu?.restaurantId}`)} className="w-full flex items-center text-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-lg px-3 py-1">
+
+      <button style={{ color: pallete?.primary || "#f97316" }}
+        onClick={() => router.replace(isMe ? `/dashboard` : `/dashboard?restaurant=${menu?.restaurantId}`)}
+        className="w-full flex items-centerrounded-lg px-3 py-1 hover:underline">
         <ReturnIcon className="w-4 h-4 mr-2" /> retornar
       </button>
     </div>

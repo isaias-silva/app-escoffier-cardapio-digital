@@ -13,6 +13,7 @@ import DisheCard from '../../../components/cards/dishe.card';
 import Load from '../../../components/utils/load';
 import { getCategories } from '../../api/services/category.service';
 import { AuthContext } from '../../../context/auth.context';
+import { PalleteContext } from '../../../context/pallete.context';
 
 
 export default function Page() {
@@ -29,6 +30,7 @@ export default function Page() {
   const [openCreationDishe, setOpenCreationDishe] = useState<boolean>(false)
 
   const { restaurant } = useContext(AuthContext)
+  const {pallete}=useContext(PalleteContext)
 
   useEffect(() => {
 
@@ -59,15 +61,15 @@ export default function Page() {
 
 
   return (
-    <div className={` min-h-screen py-8`}>
-      <h1 className={`text-3xl shadow-lg py-2 font-semibold text-center mb-8 w-full text-white absolute top-0 rounded-b-2xl`}>{menu?.name}</h1>
+    <div style={{background: pallete?.main ||"#ffedd5"}} className={` min-h-screen py-8`}>
+      <h1 style={{background:pallete?.primary||"#f97316"}} className={`text-3xl shadow-lg py-2 font-semibold text-center mb-8 w-full text-white absolute top-0 rounded-b-2xl`}>{menu?.name}</h1>
       <div className='mt-10 flex justify-center flex-wrap'>
 
-        <Link className={`mx-2 p-2 my-1 rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}`} >
+        <Link style={{background:pallete?.secondary}} className={`mx-2 p-2 my-1 rounded-lg font-bold text-white transition-all duration-300 hover:scale-125`} href={`/menu/${menu?.id}`} >
           Todos
         </Link>
 
-        <Link className={`mx-2 p-2 my-1 rounded-lg font-bold text-white transition-all duration-300 hover:bg-green-700`} href={`/menu/${menu?.id}?filter=realtime`} >
+        <Link style={{background:pallete?.secondary}}  className={`mx-2 p-2 my-1 rounded-lg font-bold text-white transition-all duration-300 hover:scale-125`} href={`/menu/${menu?.id}?filter=realtime`} >
           Disponíveis agora
         </Link>
       </div>

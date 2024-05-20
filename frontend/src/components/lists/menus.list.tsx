@@ -35,8 +35,8 @@ export default function MenusList() {
 
             )}{
                 isMe ?
-                    <button className='bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-105' >
-                        <h2 className='text-2xl' onClick={handleOpen}>+</h2>
+                    <button  onClick={handleOpen} className='bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-105' >
+                        <h2 className='text-2xl'>+</h2>
                     </button> : null}
         </div>
     )
