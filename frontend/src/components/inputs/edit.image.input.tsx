@@ -62,7 +62,7 @@ export function EditImageInput(props: {
         />
         {props.modePreview == 'profile' ? <label htmlFor={id} style={{ borderColor: mirrorPallete?.primary || "#f97316" }}  className='block relative z-[2] md:w-56 w-[200px] rounded-full sm:border-4 border-2 h-[210px] m-auto sm:m-0 overflow-hidden'>
 
-            <img className="transition-transform duration-300 relative w-full h-full m-auto sm:m-0 hover:scale-150 hover:cursor-pointer profile-input" src={previewImage || props.default || "https://cdn-icons-png.flaticon.com/512/433/433087.png"} alt="Restaurant" />
+            <img className="transition-transform duration-300 relative w-full h-full m-auto sm:m-0 hover:scale-150 hover:cursor-pointer profile-input" src={previewImage || props.default || "https://1080motion.com/wp-content/uploads/2018/06/NoImageFound.jpg.png"} alt="Restaurant" />
         </label> :
             <>
                 <label htmlFor={id} style={{ background: mirrorPallete?.secondary || "#fdba76", color:mirrorPallete?.font||"#000" }}  className=" shadow-lg transition-all duration-300  absolute z-[2] top-0 right-0 p-1 rounded-lg opacity-10 hover:cursor-pointer hover:opacity-100" >

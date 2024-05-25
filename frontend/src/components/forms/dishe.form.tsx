@@ -125,7 +125,7 @@ export default function DisheForm({ open, setOpen, create, menuId, callback, dis
                             className=" hidden"
                         />
                         <label htmlFor="image" className='m-auto h-[200px] w-[200px] flex justify-center items-center'>
-                            <img src={previewImage || "https://cdn-icons-png.flaticon.com/512/433/433087.png"} alt="Preview" className=" w-full h-full mt-2 rounded-lg duration-200 transition-all hover:cursor-pointer hover:scale-110" />
+                            <img src={previewImage || "https://1080motion.com/wp-content/uploads/2018/06/NoImageFound.jpg.png"} alt="Preview" className=" w-full h-full mt-2 rounded-lg duration-200 transition-all hover:cursor-pointer hover:scale-110" />
                         </label>
 
                     </div>

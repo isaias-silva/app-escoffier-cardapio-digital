@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 .bg-login {
-    background-image: url('../../public/banner.jpeg');
+    background-size: cover;
+    background-image: url('../../public/banner.png');
 }
 
 html, body {

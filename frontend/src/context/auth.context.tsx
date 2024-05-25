@@ -30,14 +30,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setIsMe(restaurantId ? false : true)
 
-    try{
+    try {
 
       const res = await (restaurantId ? getRestaurant(restaurantId) : getMyRestaurant())
-     
+
       await delay(2)
-  
+
       setRestaurant(res?.data)
-    }catch(err){
+    } catch (err) {
       router.push('/')
     }
   }
@@ -51,6 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     refreshRestaurant()
   }, [searchParams, router])
+
 
   return (
 

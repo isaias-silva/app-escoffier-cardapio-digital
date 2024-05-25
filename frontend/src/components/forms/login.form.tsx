@@ -84,7 +84,7 @@ export default function LoginForm () {
     };
 
     return (
-        <div className=" h-screen">
+        <div className=" h-screen ">
          
             <Modal
 
