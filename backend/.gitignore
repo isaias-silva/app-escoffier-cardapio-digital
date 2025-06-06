@@ -39,3 +39,8 @@ lerna-debug.log*
 *.env
 *.gz
 public/temp/*.png
+
+#containers:
+docker/mongo-data
+docker/rabbitmq-data
+docker/redis-data

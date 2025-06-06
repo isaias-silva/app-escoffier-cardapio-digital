@@ -2,7 +2,7 @@ import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundEx
 import { OrmService } from '../orm/orm.service';
 import { ConfirmCodeRestaurantDto, CreateRestaurantDto, LoginRestaurantDto, UpdatePalleteDto, UpdatePasswordRestaurantForgottenDto, UpdateRestaurantDto } from '../../dtos/restaurant.dtos';
 import { ResponsesEnum } from '../../enums/responses.enum';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { MailService } from '../mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
 import { CacheService } from '../cache/cache.service';

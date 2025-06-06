@@ -4,13 +4,14 @@ import { CategoryService } from '../../services/category/category.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ResponsesEnum } from '../../enums/responses.enum';
 import { Request, request } from 'express';
-import { Category } from '@prisma/client';
+
 import { CreateCategoryDto, DeleteCategoryDto, UpdateCategoryDto } from '../../dtos/category.dto';
 
 describe('CategoryController', () => {
   let controller: CategoryController;
   let service: CategoryService;
   const mockReq: Request = request
+ 
   const mockCategory: Category = {
     id: 'test',
     name: 'test-category',

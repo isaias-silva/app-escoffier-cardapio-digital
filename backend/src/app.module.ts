@@ -9,14 +9,16 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { MulterModule } from '@nestjs/platform-express';
 import { ExtractURLMiddleware } from './middleware/extract.url.middleware';
 import { ExtractDateAccessMiddleware } from './middleware/extract.date.access.middleware';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
+    MongooseModule.forRoot(process.env.DATABASE_URL),
     RestaurantModule,
     DisheModule,
     MenuModule,
     CategoryModule,
-    
+
     MulterModule.register({
       dest: '/upload',
     }),
@@ -24,11 +26,11 @@ import { ExtractDateAccessMiddleware } from './middleware/extract.date.access.mi
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public', 'temp'),
       serveRoot: '/static',
-  
+
     })
-    
+
   ],
-    
+
   controllers: [],
   providers: [],
 })
@@ -36,6 +38,6 @@ import { ExtractDateAccessMiddleware } from './middleware/extract.date.access.mi
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(ExtractURLMiddleware,ExtractDateAccessMiddleware).forRoutes('*')
+      .apply(ExtractURLMiddleware, ExtractDateAccessMiddleware).forRoutes('*')
   }
 }

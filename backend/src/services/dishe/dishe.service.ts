@@ -5,12 +5,11 @@ import { CreateDisheDto, DeleteDisheDto, UpdateDisheDto } from '../../dtos/dishe
 import { ResponsesEnum } from '../../enums/responses.enum';
 import { CategoryService } from '../category/category.service';
 import { Mode } from '../../enums/mode.dishe.enum';
-import { MenuService } from '../menu/menu.service';
-import { Category } from '@prisma/client';
+
 
 @Injectable()
 export class DisheService {
-    constructor(private ormService: OrmService,
+    constructor(
         private fileService: FileService,
         private categoryService: CategoryService,
 
