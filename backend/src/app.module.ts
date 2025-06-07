@@ -10,10 +10,22 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ExtractURLMiddleware } from './middleware/extract.url.middleware';
 import { ExtractDateAccessMiddleware } from './middleware/extract.date.access.middleware';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.DATABASE_URL),
+    ConfigModule.forRoot({
+      isGlobal: true
+    }),
+    MongooseModule.forRootAsync(
+      {
+        useFactory: (config: ConfigService) => ({
+          uri: config.get("DATABASE_URL")
+        }),
+        inject: [ConfigService]
+      }
+    ),
     RestaurantModule,
     DisheModule,
     MenuModule,

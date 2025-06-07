@@ -1,7 +1,7 @@
 services:
 
   db:
-    image: mongo:6.0
+    image: mongo:4.4
     restart: always
     hostname: escoffier.db
 
@@ -13,23 +13,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
-    
-    command: [ "--replSet" , "rs0" , "--bind_ip_all" , "--port" , "27017" ] 
-
-  queues:
-    image: rabbitmq:management
-    restart: always
-    hostname: hermes.queue.dev
-    ports:
-      - '5673:5672'
-      - '15673:15672'
-    volumes:
-      - ./rabbitmq-data:/var/lib/rabbitmq
-    environment:
-      RABBITMQ_DEFAULT_USER: ${MQ_USER}
-      RABBITMQ_DEFAULT_PASS: ${MQ_PASS}
-    networks:
-      - escoffier.net
 
   redis:
     image: redis

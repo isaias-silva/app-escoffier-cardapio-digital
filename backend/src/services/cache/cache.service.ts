@@ -1,4 +1,5 @@
 import { Global, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Redis } from 'ioredis';
 
 
@@ -7,10 +8,12 @@ import { Redis } from 'ioredis';
 export class CacheService implements OnModuleInit {
     private logger = new Logger(CacheService.name)
     private client: Redis
+
+    constructor(private configService: ConfigService) { }
     async onModuleInit() {
         try {
-            const port = parseInt(process.env.REDIS_PORT)
-            const host = process.env.REDIS_HOST
+            const port = parseInt(this.configService.get('REDIS_PORT'))
+            const host = this.configService.get('REDIS_HOST')
 
             if (!port || !host) {
                 throw new Error("invalid credentials")
@@ -29,15 +32,15 @@ export class CacheService implements OnModuleInit {
     }
 
     async setCache(key: string, value: any) {
-        this.logger.debug(`set cache data [key=${key.substring(0,3)}*****]`)
+        this.logger.debug(`set cache data [key=${key.substring(0, 3)}*****]`)
         this.client.set(key, JSON.stringify(value))
     }
     async getCache(key: string) {
-        this.logger.debug(`get cache data [key=${key.substring(0,3)}*****]`)
+        this.logger.debug(`get cache data [key=${key.substring(0, 3)}*****]`)
         return await this.client.get(key)
     }
     async clearCache(key: string) {
-        this.logger.debug(`clear cache data [key=${key.substring(0,3)}*****]`)
+        this.logger.debug(`clear cache data [key=${key.substring(0, 3)}*****]`)
         this.client.del(key);
     }
 

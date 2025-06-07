@@ -6,7 +6,7 @@ export interface MenuData {
 
 
 export interface MenuResponse {
-    "id": string,
+    "_id": string,
     "restaurantId": string,
     "name": string,
     dishes?: Dishe[]

@@ -1,27 +1,32 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { OrmService } from '../orm/orm.service';
 import { FileService } from '../file/file.service';
 import { CreateDisheDto, DeleteDisheDto, UpdateDisheDto } from '../../dtos/dishe.dto';
 import { ResponsesEnum } from '../../enums/responses.enum';
 import { CategoryService } from '../category/category.service';
 import { Mode } from '../../enums/mode.dishe.enum';
+import { InjectModel } from '@nestjs/mongoose';
+import { Dishe } from '../../models/dishe.schema';
+import { Model } from 'mongoose';
+import { ICategory } from '../../interfaces/category.interface';
+import { Category } from '../../models/category.schema';
 
 
 @Injectable()
 export class DisheService {
     constructor(
+        @InjectModel(Dishe.name) private readonly model: Model<Dishe>,
         private fileService: FileService,
         private categoryService: CategoryService,
 
     ) {
     }
-    private model = this.ormService.dishe
+
 
     async createDishe(restaurantId: string, dto: CreateDisheDto) {
         const { name, price, description, mode, categoryId, menuId } = dto
 
 
-        const disheInDb = await this.model.findFirst({ where: { restaurantId, name } })
+        const disheInDb = await this.model.findOne({ restaurantId, name })
 
         if (disheInDb) {
             throw new BadRequestException(ResponsesEnum.DISHE_ALREADY_EXISTS)
@@ -45,13 +50,13 @@ export class DisheService {
             categoryId
 
         }
-        const dishe = await this.model.create({ data: { restaurantId, ...data, menuId } })
+        const dishe = await this.model.create({ restaurantId, ...data, menuId })
 
         return { message: ResponsesEnum.DISHE_CREATED, id: dishe.id }
     }
 
-    async getDishe(id: string, host: string) {
-        const disheInDb = await this.model.findFirst({ where: { id } })
+    async getDishe(_id: string, host: string) {
+        const disheInDb = await this.model.findOne({ _id })
         if (!disheInDb) {
             throw new NotFoundException(ResponsesEnum.DISHE_NOT_FOUND)
         }
@@ -74,7 +79,7 @@ export class DisheService {
 
         const { name, price, description, mode, restaurantId, menuId } = disheInDb
 
-        return { restaurantId, menuId, name, price, description, mode, image, category: category ? { id: category.id, name: category.name, keywords: category.keywords } : 'N/A' }
+        return { restaurantId, menuId, name, price, description, mode, image, category: category ? { id: category["id"], name: category.name, keywords: category.keywords } : 'N/A' }
 
     }
 
@@ -87,11 +92,8 @@ export class DisheService {
     ) {
 
 
-        const dishesDb = await this.model.findMany({
-            where: { menuId, mode, categoryId },
-            take: count,
-            skip: (page - 1) * count
-        })
+        const dishesDb = await this.model.find({ menuId, mode, categoryId })
+
         const responseDishes = dishesDb.map(async (disheInDb) => {
             let image: string
             if (disheInDb.image) {
@@ -113,9 +115,9 @@ export class DisheService {
         return await Promise.all(responseDishes)
     }
 
-    async updateDishe(restaurantId: string, id: string, dto: UpdateDisheDto) {
+    async updateDishe(restaurantId: string, _id: string, dto: UpdateDisheDto) {
 
-        const disheInDb = await this.model.findFirst({ where: { restaurantId, id } })
+        const disheInDb = await this.model.findOne({ restaurantId, _id })
         if (!disheInDb) {
             throw new NotFoundException(ResponsesEnum.DISHE_NOT_FOUND)
         }
@@ -139,26 +141,20 @@ export class DisheService {
             categoryId
 
         }
-        await this.model.update({ where: { id: disheInDb.id }, data })
+        await this.model.updateOne({ _id: disheInDb.id }, data)
         return { message: ResponsesEnum.DISHE_UPDATED }
     }
 
-    async updateDisheProfile(restaurantId: string, id: string, data: Buffer) {
-        const disheInDb = await this.model.findFirst({
-            where: { id, restaurantId }
-        })
+    async updateDisheProfile(restaurantId: string, _id: string, data: Buffer) {
+        const disheInDb = await this.model.findOne({ _id, restaurantId })
         if (!disheInDb) {
             throw new NotFoundException(ResponsesEnum.DISHE_NOT_FOUND)
         }
 
-        const filename = `dishe_${id}.png`
+        const filename = `dishe_${_id}.png`
 
-        await this.model.update({
-            where: { id },
-            data: {
-                image: filename
-            }
-        })
+        await this.model.updateOne({ _id }, { image: filename })
+
         this.fileService.writeImage(filename, data)
 
         return { message: ResponsesEnum.DISHE_IMAGE_UPLOADED }
@@ -170,28 +166,25 @@ export class DisheService {
             await this.model.deleteMany({ where: { restaurantId } })
 
         } else if (id) {
-            const categoryMenuRegisterInDb = await this.model.findFirst({ where: { id, restaurantId } })
+            const categoryMenuRegisterInDb = await this.model.findOne({ _id: id, restaurantId })
 
             if (!categoryMenuRegisterInDb) {
                 throw new NotFoundException(ResponsesEnum.DISHE_NOT_FOUND)
             }
+            await this.model.deleteOne({ _id: id, restaurantId })
         } else {
             throw new BadRequestException(ResponsesEnum.INVALID_BODY_OF_REQUEST)
         }
-      
+
         return { message: ResponsesEnum.DISHE_DELETED }
 
     }
 
-    private async removeInvalidCategory(id: string, categoryInvalid: string) {
+    private async removeInvalidCategory(_id: string, categoryInvalid: string) {
 
-
-        await this.model.updateMany({
-            where: { id, categoryId: categoryInvalid },
-            data: {
+        await this.model.updateMany({ _id, categoryId: categoryInvalid },
+            {
                 categoryId: undefined
-            }
-        })
-
+            })
     }
 }

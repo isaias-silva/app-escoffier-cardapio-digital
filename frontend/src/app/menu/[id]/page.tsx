@@ -35,11 +35,13 @@ export default function Page() {
 
   useEffect(() => {
 
+   
     if (searchParams?.get('filter') == 'realtime') {
       setRealTime(true)
     }
 
     if (params?.id) {
+    
       refreshMenu(params.id.toString())
     }
   }, [route, params, searchParams, restaurant])
@@ -52,7 +54,7 @@ export default function Page() {
 
 
 
-      setIsMyMenu(restaurant?.id ? (res.restaurantId == restaurant?.id) : false)
+      setIsMyMenu(restaurant?.id ? (res?.restaurantId == restaurant?.id) : false)
       delay(4).then(
         () => setLoad(false)
       )
@@ -69,17 +71,17 @@ export default function Page() {
       <h1 style={{ background: pallete?.primary || "#f97316" }} className={`text-3xl shadow-lg py-2 font-semibold text-center mb-8 w-full text-white absolute top-0 rounded-b-2xl`}>{menu?.name}</h1>
       <div className='mt-10 flex justify-center flex-wrap'>
 
-        <Link style={{ background: pallete?.secondary }} className={`mx-2 p-2 my-1 rounded-lg font-bold text-white transition-all duration-300 hover:scale-125`} href={`/menu/${menu?.id}`} >
+        <Link style={{ background: pallete?.secondary }} className={`mx-2 p-2 my-1 rounded-lg font-bold text-white transition-all duration-300 hover:scale-125`} href={`/menu/${menu?._id}`} >
           Todos
         </Link>
 
-        <Link style={{ background: pallete?.secondary }} className={`mx-2 p-2 my-1 rounded-lg font-bold text-white transition-all duration-300 hover:scale-125`} href={`/menu/${menu?.id}?filter=realtime`} >
+        <Link style={{ background: pallete?.secondary }} className={`mx-2 p-2 my-1 rounded-lg font-bold text-white transition-all duration-300 hover:scale-125`} href={`/menu/${menu?._id}?filter=realtime`} >
           Disponíveis agora
         </Link>
       </div>
 
       {load && <LoadComponent />}
-      {isMyMenu && menu && <DisheForm menuId={menu.id}
+      {isMyMenu && menu && <DisheForm menuId={menu._id}
         create={true}
         open={openCreationDishe}
         callback={() => location.reload()}
@@ -91,7 +93,7 @@ export default function Page() {
           {menu?.dishes && menu.dishes.map((item, index) => (
             <DisheCard dishe={item} key={index} />))}
 
-          {menu && <Load menuId={menu.id} isRealTime={realTime} />
+          {menu && <Load menuId={menu._id} isRealTime={realTime} />
           }
           <div className="p-6">
             {isMyMenu && <button onClick={() => setOpenCreationDishe(true)} className='bg-white rounded-lg shadow-md p-4 w-[200px] transition-all duration-300 hover:scale-110' >

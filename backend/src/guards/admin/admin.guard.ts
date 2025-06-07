@@ -1,5 +1,4 @@
 import { CanActivate, ExecutionContext, ForbiddenException, HttpException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { RestaurantService } from '../../services/restaurant/restaurant.service';
 import { ResponsesEnum } from '../../enums/responses.enum';
 

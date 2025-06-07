@@ -111,11 +111,16 @@ async function getMyRestaurant() {
     if (!token) {
         return
     }
+    try{
     const res = await axiosConfig.get<Restaurant>('/restaurant/', { headers: { 'Authorization': `Bearer ${token}` } })
-    if (res.data.pallete) {
+    console.log(res)
+    if (res.data?.pallete) {
         setPallete(res.data.pallete)
     }
-    return res
+    return res}
+    catch(err){
+        return null
+    }
 }
 
 async function getRestaurant(id: string) {

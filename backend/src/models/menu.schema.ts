@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { IMenu } from "../interfaces/menu.interface";
 
 @Schema()
@@ -9,3 +9,7 @@ export class Menu implements IMenu {
     @Prop()
     name: String;
 }
+
+
+
+export const MenuSchema = SchemaFactory.createForClass(Menu)

@@ -1,33 +1,35 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { OrmService } from '../orm/orm.service';
 import { CommonCategoryDto, CreateCategoryDto, DeleteCategoryDto, UpdateCategoryDto } from '../../dtos/category.dto';
 import { ResponsesEnum } from '../../enums/responses.enum';
+import { InjectModel } from '@nestjs/mongoose';
+import { Category } from '../../models/category.schema';
+import { Model } from 'mongoose';
 
 
 @Injectable()
 export class CategoryService {
-    constructor(private ormService: OrmService) {
+    constructor(@InjectModel(Category.name) private model: Model<Category>) {
 
     }
-    private model = this.ormService.category
+
 
 
     async createCategory(restaurantId: string, dto: CreateCategoryDto) {
 
         const { name } = dto
-        const categoryInDb = await this.model.findFirst({ where: { name, restaurantId } })
+        const categoryInDb = await this.model.findOne({ name, restaurantId })
 
         if (categoryInDb) {
             throw new BadRequestException(ResponsesEnum.CATEGORY_ALREADY_EXISTS_IN_RESTAURANT)
         }
 
-        await this.model.create({ data: { restaurantId, ...dto } })
+        await this.model.create({ restaurantId, ...dto })
 
         return { message: ResponsesEnum.CATEGORY_CREATED }
     }
 
-    async getCategory(restaurantId: string, id: string) {
-        const categoryMenuRegisterInDb = await this.model.findFirst({ where: { restaurantId, id } })
+    async getCategory(restaurantId: string, _id: string) {
+        const categoryMenuRegisterInDb = await this.model.findOne({ restaurantId, _id });
 
         if (!categoryMenuRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.CATEGORY_NOT_FOUND)
@@ -37,11 +39,11 @@ export class CategoryService {
 
     async getMyCategories(restaurantId: string) {
 
-        return await this.model.findMany({ where: { restaurantId } })
+        return await this.model.find({ restaurantId })
     }
 
-    async updateCategory( restaurantId:string, id: string,dto: UpdateCategoryDto) {
-        const categoryMenuRegisterInDb = await this.model.findFirst({ where: { id,restaurantId } })
+    async updateCategory(restaurantId: string, _id: string, dto: UpdateCategoryDto) {
+        const categoryMenuRegisterInDb = await this.model.findOne({ _id, restaurantId })
 
         if (!categoryMenuRegisterInDb) {
             throw new NotFoundException(ResponsesEnum.CATEGORY_NOT_FOUND)
@@ -55,42 +57,45 @@ export class CategoryService {
             throw new BadRequestException(ResponsesEnum.NOT_HAVE_CHANGES)
         }
 
-        await this.model.update({ where: { id }, data })
+        await this.model.updateOne({ _id }, data)
+
         return { message: ResponsesEnum.UPDATED_INFO }
     }
 
     async deleteCategory(restaurantId: string, dto: DeleteCategoryDto) {
         const { many, id } = dto
         if (many) {
-            await this.model.deleteMany({ where: { restaurantId } })
+            await this.model.deleteMany({ restaurantId })
 
         } else if (id) {
-            const categoryMenuRegisterInDb = await this.model.findFirst({ where: { id, restaurantId } })
+            const categoryMenuRegisterInDb = await this.model.findOne({ _id: id, restaurantId })
 
             if (!categoryMenuRegisterInDb) {
                 throw new NotFoundException(ResponsesEnum.CATEGORY_NOT_FOUND)
             }
+            await this.model.deleteOne({ _id: id, restaurantId })
+
         } else {
             throw new BadRequestException(ResponsesEnum.INVALID_BODY_OF_REQUEST)
         }
-      
+
 
         return { message: ResponsesEnum.CATEGORY_DELETED }
     }
-    async validCategories(restaurantId: string, id: string) {
+    async validCategories(restaurantId: string, _id: string) {
         let valid: boolean = true
-       
-            try {
-           
-                await this.getCategory(restaurantId, id)
-            }
-            catch (err) {
-                valid = false
-              
-                
-            }
-            return valid
+
+        try {
+
+            await this.getCategory(restaurantId, _id)
         }
-    
+        catch (err) {
+            valid = false
+
+
+        }
+        return valid
+    }
+
 
 }

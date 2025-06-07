@@ -28,7 +28,7 @@ export default function MenusList() {
                 callback={refreshMenus} />
 
             {menus.map((menuData,i) =>
-                <Link key={i} href={`menu/${menuData.id}${!isMe?'?filter=realtime':''}`} className="bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-105">
+                <Link key={i} href={`menu/${menuData._id}${!isMe?'?filter=realtime':''}`} className="bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-105">
                     <div className="text-gray-800 font-semibold">{menuData.name}</div>
                 </Link>
 

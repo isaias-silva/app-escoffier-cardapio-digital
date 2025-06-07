@@ -6,10 +6,10 @@ export interface IRestaurant {
     profile: string
     background: string
     pallete: {
-        main: string
-        primary: string
-        secondary: string
-        font: string
+        main: String
+        primary: String
+        secondary: String
+        font: String
     }
     rule: 'NORMAL' | 'ADMIN'
 

@@ -3,6 +3,7 @@ import * as nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { FileService } from '../file/file.service';
 import { MessageMailEnum, SubjectMailEnum } from '../../enums/email.templates.enum';
+import { ConfigService } from '@nestjs/config';
 
 @Global()
 @Injectable()
@@ -10,13 +11,13 @@ export class MailService implements OnModuleInit {
     private logger = new Logger(MailService.name)
     private transport: nodemailer.Transporter<SMTPTransport.SentMessageInfo>
 
-    constructor(private fileService: FileService) { }
+    constructor(private configService: ConfigService, private fileService: FileService) { }
     async onModuleInit() {
         try {
-            const user = process.env.OAUTH_CLIENT_MAIL
-            const clientId = process.env.OAUTH_CLIENTID
-            const clientSecret = process.env.OAUTH_CLIENT_SECRET
-            const refreshToken = process.env.OAUTH_REFRESH_TOKEN
+            const user = this.configService.get("OAUTH_CLIENT_MAIL")
+            const clientId = this.configService.get("OAUTH_CLIENTID")
+            const clientSecret = this.configService.get("OAUTH_CLIENT_SECRET")
+            const refreshToken = this.configService.get("OAUTH_REFRESH_TOKEN")
 
             if (!user || !clientId || !refreshToken || !clientSecret) {
                 throw new Error('invalid credentials')
@@ -68,9 +69,9 @@ export class MailService implements OnModuleInit {
             .replace(/\[SUBJECT]/g, subject)
             .replace(/\[MESSAGE]/g, message)
             .replace(/\[CODE]/g, code)
-            .replace(/\[FRONT-LINK]/, process.env.FRONT_LINK + "verify?email=" + (pastMail || email))
+            .replace(/\[FRONT-LINK]/, this.configService.get('FRONT_LINK') + "verify?email=" + (pastMail || email))
 
-        this.logger.debug(process.env.FRONT_LINK)
+        this.logger.debug(this.configService.get('FRONT_LINK'))
         this.sendHtmlMail(email, subject, content)
     }
 }

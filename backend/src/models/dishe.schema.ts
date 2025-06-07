@@ -32,3 +32,4 @@ export class Dishe implements IDishe {
     galery: string[];
 }
 
+export const DisheSchema = SchemaFactory.createForClass(Dishe)

@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { IRestaurant } from "../interfaces/restaurant.interface";
 
 @Schema()
@@ -15,9 +15,19 @@ export class Restaurant implements IRestaurant {
     profile: string;
     @Prop()
     background: string;
-    @Prop()
-    pallete: { main: string; primary: string; secondary: string; font: string; };
+    @Prop({ type: Object })
+    pallete: { 
+        main: String; 
+        primary: String; 
+        secondary: String; 
+        font: String; 
+    };
     @Prop()
     rule: "NORMAL" | "ADMIN";
+     @Prop()
+     createdAt:String
 
 }
+
+
+export const RestaurantSchema = SchemaFactory.createForClass(Restaurant)
