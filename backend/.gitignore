@@ -1,0 +1,4 @@
+.idea
+docker/rabbitmq-data
+docker/volumes-db
+.*env

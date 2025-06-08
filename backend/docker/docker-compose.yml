@@ -1,0 +1,20 @@
+services:
+
+  queues-manager:
+    build: ./images/rabbitmq
+    restart: always
+    hostname: escoffier.queue
+    ports:
+      - "15673:15672"
+      - "5673:5672"
+
+    environment:
+      RABBITMQ_DEFAULT_USER: ${MQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${MQ_PASS}
+    networks:
+      - escoffier.network
+
+
+networks:
+  escoffier.network:
+    driver: bridge

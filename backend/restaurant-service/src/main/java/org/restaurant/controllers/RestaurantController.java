@@ -23,33 +23,23 @@ public class RestaurantController {
 	public RestaurantDTO getMyRestaurant() throws Exception {
 
 		return new RestaurantDTO("my restaurant", "", "", "");
-
-
 	}
-
-
 	@GET()
 	public RestaurantDTO getRestaurant(@QueryParam("id") String id) {
 
 		return new RestaurantDTO("example", "", "", "");
 	}
-
-
 	@POST()
 	@Path("register")
 	public DefaultResponse registerRestaurant() {
-
 		return DefaultResponses.RESTAURANT_CREATED.getResponse();
 	}
-
 
 	@PUT()
 	@Path("update")
 	public DefaultResponse updateRestaurant() {
-
 		return DefaultResponses.RESTAURANT_UPDATED.getResponse();
 	}
-
 
 	@DELETE()
 	@Path("remove")
