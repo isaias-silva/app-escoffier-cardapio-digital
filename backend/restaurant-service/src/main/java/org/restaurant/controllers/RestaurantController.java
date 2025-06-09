@@ -3,7 +3,11 @@ package org.restaurant.controllers;
 import org.restaurant.dto.DefaultResponse;
 import org.restaurant.dto.DefaultResponses;
 import org.restaurant.dto.RestaurantDTO;
+import org.restaurant.services.RestaurantService;
 
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -18,22 +22,32 @@ import jakarta.ws.rs.core.MediaType;
 
 public class RestaurantController {
 
+	@Inject
+	private RestaurantService restaurantService;
+
+
 	@GET()
 	@Path("me")
 	public RestaurantDTO getMyRestaurant() throws Exception {
 
-		return new RestaurantDTO("my restaurant", "", "", "");
+		throw new Exception("not implemented");
 	}
-	@GET()
-	public RestaurantDTO getRestaurant(@QueryParam("id") String id) {
 
-		return new RestaurantDTO("example", "", "", "");
+
+	@GET()
+	public RestaurantDTO getRestaurant(@QueryParam("id") String id) throws Exception {
+		throw new Exception("not implemented");
+
 	}
+
+
 	@POST()
 	@Path("register")
-	public DefaultResponse registerRestaurant() {
+	public DefaultResponse registerRestaurant(@Valid  RestaurantDTO data) {
+		restaurantService.register(data);
 		return DefaultResponses.RESTAURANT_CREATED.getResponse();
 	}
+
 
 	@PUT()
 	@Path("update")
@@ -41,11 +55,12 @@ public class RestaurantController {
 		return DefaultResponses.RESTAURANT_UPDATED.getResponse();
 	}
 
+
 	@DELETE()
 	@Path("remove")
-	public String deleteRestaurant() {
+	public DefaultResponse deleteRestaurant() {
 
-		return "";
+		return DefaultResponses.RESTAURANT_DELETED.getResponse();
 	}
 
 }

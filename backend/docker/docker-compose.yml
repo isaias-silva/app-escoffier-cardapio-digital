@@ -14,7 +14,28 @@ services:
     networks:
       - escoffier.network
 
+  db-restaurant-service:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DBR_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DBR_PASS}
+      MONGO_INITDB_DATABASE: ${DBR_NAME}
+    volumes:
+      - ./volumes-db/db-restaurants:/data/db
+
+    networks:
+      - escoffier.restaurant.network
+
 
 networks:
   escoffier.network:
     driver: bridge
+  escoffier.restaurant.network:
+    driver: bridge
+
+
+volumes:
+  mongo-data:
