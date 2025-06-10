@@ -26,11 +26,11 @@ public class RestaurantEntity extends PanacheMongoEntity {
 	}
 
 
-	public RestaurantEntity(String title, String email, String description, String password, @Nullable String profileUrl) {
+	public RestaurantEntity(String title, String email, String description, String password ) {
 		this.title = title;
 		this.email = email;
 		this.description = description;
-		this.profileUrl = profileUrl;
+
 		this.password = password;
 	}
 
@@ -87,7 +87,7 @@ public class RestaurantEntity extends PanacheMongoEntity {
 
 	public static RestaurantEntity fromDto(RestaurantDTO dto) {
 
-		return new RestaurantEntity(dto.title(), dto.email(), dto.description(), dto.password(), dto.profile());
+		return new RestaurantEntity(dto.title(), dto.email(), dto.description(), dto.password());
 	}
 
 }

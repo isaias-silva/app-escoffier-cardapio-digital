@@ -7,7 +7,6 @@ import org.restaurant.services.RestaurantService;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -43,6 +42,7 @@ public class RestaurantController {
 
 	@POST()
 	@Path("register")
+
 	public DefaultResponse registerRestaurant(@Valid  RestaurantDTO data) {
 		restaurantService.register(data);
 		return DefaultResponses.RESTAURANT_CREATED.getResponse();
