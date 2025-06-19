@@ -1,7 +1,7 @@
 package org.restaurant.controllers;
 
-import org.restaurant.dto.DefaultResponse;
-import org.restaurant.dto.DefaultResponses;
+import org.restaurant.dto.DefaultResponseDTO;
+import org.restaurant.enums.DefaultResponses;
 import org.restaurant.dto.RestaurantDTO;
 import org.restaurant.services.RestaurantService;
 
@@ -42,8 +42,7 @@ public class RestaurantController {
 
 	@POST()
 	@Path("register")
-
-	public DefaultResponse registerRestaurant(@Valid  RestaurantDTO data) {
+	public DefaultResponseDTO registerRestaurant(@Valid RestaurantDTO data) {
 		restaurantService.register(data);
 		return DefaultResponses.RESTAURANT_CREATED.getResponse();
 	}
@@ -51,14 +50,14 @@ public class RestaurantController {
 
 	@PUT()
 	@Path("update")
-	public DefaultResponse updateRestaurant() {
+	public DefaultResponseDTO updateRestaurant() {
 		return DefaultResponses.RESTAURANT_UPDATED.getResponse();
 	}
 
 
 	@DELETE()
 	@Path("remove")
-	public DefaultResponse deleteRestaurant() {
+	public DefaultResponseDTO deleteRestaurant() {
 
 		return DefaultResponses.RESTAURANT_DELETED.getResponse();
 	}
