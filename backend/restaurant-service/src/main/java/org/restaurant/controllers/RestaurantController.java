@@ -1,10 +1,14 @@
 package org.restaurant.controllers;
 
 import org.restaurant.dto.DefaultResponseDTO;
-import org.restaurant.enums.DefaultResponses;
 import org.restaurant.dto.RestaurantDTO;
+import org.restaurant.enums.DefaultResponses;
+import org.restaurant.dto.RestaurantCreateDTO;
+import org.restaurant.enums.RulesConstants;
 import org.restaurant.services.RestaurantService;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
@@ -24,25 +28,27 @@ public class RestaurantController {
 	@Inject
 	private RestaurantService restaurantService;
 
+	@Inject
+	private JsonWebToken jsonWebToken;
+
 
 	@GET()
 	@Path("me")
+	@RolesAllowed({RulesConstants.RESTAURANT, RulesConstants.ADM})
 	public RestaurantDTO getMyRestaurant() throws Exception {
-
-		throw new Exception("not implemented");
+		String id = jsonWebToken.getSubject();
+		return restaurantService.get(id);
 	}
-
 
 	@GET()
 	public RestaurantDTO getRestaurant(@QueryParam("id") String id) throws Exception {
-		throw new Exception("not implemented");
-
+		return restaurantService.get(id);
 	}
 
 
 	@POST()
 	@Path("register")
-	public DefaultResponseDTO registerRestaurant(@Valid RestaurantDTO data) {
+	public DefaultResponseDTO registerRestaurant(@Valid RestaurantCreateDTO data) {
 		restaurantService.register(data);
 		return DefaultResponses.RESTAURANT_CREATED.getResponse();
 	}
@@ -50,13 +56,16 @@ public class RestaurantController {
 
 	@PUT()
 	@Path("update")
+	@RolesAllowed({RulesConstants.RESTAURANT, RulesConstants.ADM})
 	public DefaultResponseDTO updateRestaurant() {
+
 		return DefaultResponses.RESTAURANT_UPDATED.getResponse();
 	}
 
 
 	@DELETE()
 	@Path("remove")
+	@RolesAllowed({RulesConstants.ADM})
 	public DefaultResponseDTO deleteRestaurant() {
 
 		return DefaultResponses.RESTAURANT_DELETED.getResponse();

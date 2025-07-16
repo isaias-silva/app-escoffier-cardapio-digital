@@ -1,7 +1,8 @@
 package org.restaurant.enums;
 
 public enum Rules {
-	ADMIN("admin"), RESTAURANT("restaurant"), BANNED("banned");
+
+	ADMIN(RulesConstants.ADM), RESTAURANT(RulesConstants.RESTAURANT), BANNED(RulesConstants.BANNED);
 
 	private final String value;
 

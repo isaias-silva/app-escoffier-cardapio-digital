@@ -25,17 +25,27 @@ services:
       MONGO_INITDB_DATABASE: ${DBR_NAME}
     volumes:
       - ./volumes-db/db-restaurants:/data/db
-
     networks:
+      - escoffier.restaurant.network
+
+
+  db-interface-development:
+      image: mongo-express:latest
+      ports:
+        - "3002:8081"
+      environment:
+        ME_CONFIG_BASICAUTH_USERNAME: ${DBR_USER}
+        ME_CONFIG_BASICAUTH_PASSWORD: ${DBR_PASS}
+        ME_CONFIG_MONGODB_ADMINUSERNAME: ${DBR_USER}
+        ME_CONFIG_MONGODB_ADMINPASSWORD: ${DBR_PASS}
+        ME_CONFIG_MONGODB_SERVER: db-restaurant-service
+      networks:
       - escoffier.restaurant.network
 
 
 networks:
   escoffier.network:
     driver: bridge
+
   escoffier.restaurant.network:
     driver: bridge
-
-
-volumes:
-  mongo-data:

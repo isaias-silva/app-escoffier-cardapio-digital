@@ -1,5 +1,7 @@
 package org.restaurant.services;
 
+import org.bson.types.ObjectId;
+import org.restaurant.dto.RestaurantCreateDTO;
 import org.restaurant.dto.RestaurantDTO;
 import org.restaurant.models.RestaurantEntity;
 import org.restaurant.repositories.RestaurantRepository;
@@ -8,6 +10,7 @@ import org.restaurant.tools.CryptUtils;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 
 @ApplicationScoped
 public class RestaurantService {
@@ -15,8 +18,8 @@ public class RestaurantService {
 	@Inject
 	RestaurantRepository restaurantRepository;
 
-	
-	public void register(RestaurantDTO data) {
+
+	public void register(final RestaurantCreateDTO data) {
 		final RestaurantEntity restaurantExists = restaurantRepository.find("email", data.email()).firstResult();
 
 		if (restaurantExists != null) {
@@ -28,5 +31,20 @@ public class RestaurantService {
 		restaurant.setPassword(hashPassword);
 
 		restaurant.persist();
+	}
+
+
+	public RestaurantDTO get(final String id) {
+
+		try {
+			ObjectId objectId = new ObjectId(id);
+			final RestaurantEntity find = restaurantRepository.findById(objectId);
+			return find.toDto();
+
+
+		} catch (Exception e) {
+			throw new NotFoundException("restaurante não encontrado");
+		}
+
 	}
 }

@@ -3,11 +3,9 @@ package org.restaurant.services;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
-import java.util.List;
 
 import org.restaurant.dto.AuthResponseDTO;
 import org.restaurant.dto.LoginRequestDTO;
-import org.restaurant.enums.Rules;
 import org.restaurant.models.RestaurantEntity;
 import org.restaurant.repositories.RestaurantRepository;
 import org.restaurant.tools.CryptUtils;
@@ -34,9 +32,9 @@ public class AuthService {
 			throw new NotAuthorizedException("senha incorreta");
 		}
 		try {
-			String token = Jwt.issuer("http://auth-service").subject(restaurant.getEmail())
-				.groups(new HashSet<>(List.of(Rules.RESTAURANT.getValue())))
-				.expiresAt(Instant.now().plus(1, ChronoUnit.HOURS)).sign();
+			String token = Jwt.issuer("http://auth-service").subject(restaurant.id.toString())
+				.groups(new HashSet<>(restaurant.getRules())).expiresAt(Instant.now().plus(1, ChronoUnit.HOURS))
+				.sign();
 			return new AuthResponseDTO(token, "restaurante logado com sucesso");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
