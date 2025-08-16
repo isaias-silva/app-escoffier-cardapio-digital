@@ -1,4 +1,4 @@
-package org.restaurant.models;
+package org.restaurant.entities;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,11 +7,13 @@ import org.restaurant.dto.RestaurantCreateDTO;
 import org.restaurant.dto.RestaurantDTO;
 import org.restaurant.enums.Rules;
 
-import io.quarkus.mongodb.panache.PanacheMongoEntity;
-import io.quarkus.mongodb.panache.common.MongoEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
-@MongoEntity(collection = "restaurants")
-public class RestaurantEntity extends PanacheMongoEntity {
+@Entity
+@Table(name = "restaurants")
+public class RestaurantEntity extends PanacheEntity {
 
 	private String email;
 

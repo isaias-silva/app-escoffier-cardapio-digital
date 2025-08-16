@@ -1,5 +1,7 @@
 package org.restaurant.dto;
 
-public record ListCountResponseDTO() {
+import java.util.List;
+
+public record ListCountResponseDTO<T>(int pages, long total, List<T> list) {
 
 }

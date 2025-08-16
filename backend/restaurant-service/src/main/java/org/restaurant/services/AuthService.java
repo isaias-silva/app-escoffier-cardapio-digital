@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 import org.restaurant.dto.AuthResponseDTO;
 import org.restaurant.dto.LoginRequestDTO;
-import org.restaurant.models.RestaurantEntity;
+import org.restaurant.entities.RestaurantEntity;
 import org.restaurant.repositories.RestaurantRepository;
 import org.restaurant.tools.CryptUtils;
 
