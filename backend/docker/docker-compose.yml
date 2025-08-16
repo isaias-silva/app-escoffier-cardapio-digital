@@ -1,7 +1,10 @@
 services:
 
   queues-manager:
-    build: ./images/rabbitmq
+    image: isaias10/rabbit-easy
+    container_name: queue-manager
+    volumes:
+      - ./queue-config.json:/config.json
     restart: always
     hostname: escoffier.queue
     ports:
@@ -14,32 +17,20 @@ services:
     networks:
       - escoffier.network
 
-  db-restaurant-service:
-    image: mongo:6.0
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
+  restaurant-db:
+    image: postgres:15
+    container_name: restaurant-db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DBR_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${DBR_PASS}
-      MONGO_INITDB_DATABASE: ${DBR_NAME}
+      POSTGRES_USER: ${DBR_USER}
+      POSTGRES_PASSWORD: ${DBR_PASS}
+      POSTGRES_DB: ${DBR_NAME}
+    ports:
+      - "5432:5432"
     volumes:
-      - ./volumes-db/db-restaurants:/data/db
+      - ./restaurant-db:/var/lib/postgresql/data
+    restart: always
+
     networks:
-      - escoffier.restaurant.network
-
-
-  db-interface-development:
-      image: mongo-express:latest
-      ports:
-        - "3002:8081"
-      environment:
-        ME_CONFIG_BASICAUTH_USERNAME: ${DBR_USER}
-        ME_CONFIG_BASICAUTH_PASSWORD: ${DBR_PASS}
-        ME_CONFIG_MONGODB_ADMINUSERNAME: ${DBR_USER}
-        ME_CONFIG_MONGODB_ADMINPASSWORD: ${DBR_PASS}
-        ME_CONFIG_MONGODB_SERVER: db-restaurant-service
-      networks:
       - escoffier.restaurant.network
 
 

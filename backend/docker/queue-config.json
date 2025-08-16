@@ -1,0 +1,42 @@
+{
+  "exchanges": [
+    {
+      "name": "restaurant.actions",
+      "type": "topic",
+      "durable": true
+    }
+  ],
+  "queues": [
+    {
+      "name": "mail",
+      "durable": true
+    },
+    {
+      "name": "updates",
+      "durable": true
+    },
+    {
+      "name": "history",
+      "durable": true
+    }
+  ],
+  "bindings": [
+    {
+      "source": "restaurant.actions",
+      "destination": "mail",
+      "routing_key": "action.send"
+    },
+
+    {
+      "source": "restaurant.actions",
+      "destination": "updates",
+      "routing_key": "action.updates"
+    },
+
+    {
+      "source": "restaurant.actions",
+      "destination": "history",
+      "routing_key": "action.*"
+    }
+  ]
+}

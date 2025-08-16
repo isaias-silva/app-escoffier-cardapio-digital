@@ -100,14 +100,15 @@ public class RestaurantEntity extends PanacheMongoEntity {
 	}
 
 
-	public RestaurantDTO toDto(){
-		return new RestaurantDTO(title,email,description);
+	public RestaurantDTO toDto() {
+		return new RestaurantDTO(title, email, description, rules.stream().toList());
 	}
+
+
 	public static RestaurantEntity fromDto(RestaurantCreateDTO dto) {
 
 		return new RestaurantEntity(dto.title(), dto.email(), dto.description(), dto.password(),
-			Set.of(Rules.RESTAURANT.getValue()));
+			Set.of(Rules.UNVERIFIED.getValue()));
 	}
-
 
 }
